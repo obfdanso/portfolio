@@ -6,7 +6,6 @@ import { useState } from "react";
 import {
   AboutIcon,
   CloseIcon,
-  ContactIcon,
   HomeIcon,
   MenuIcon,
   ProjectsIcon,
@@ -21,8 +20,9 @@ const LINKS = [
   { href: "/projects", label: "Projects", Icon: ProjectsIcon },
   { href: "/about", label: "About", Icon: AboutIcon },
   { href: "/resume", label: "Resume", Icon: ResumeIcon },
-  { href: "/contact", label: "Contact", Icon: ContactIcon },
 ] as const;
+// Contact is deliberately absent: the hero's "Get in touch" button is the
+// single route to it, so the sidebar stays about sections of the site.
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
@@ -80,15 +80,7 @@ export function SiteSidebar() {
           <NavList pathname={pathname} />
         </nav>
 
-        <div className="space-y-3">
-          <ThemeToggle />
-          <Link
-            href="/contact"
-            className="block rounded-full bg-accent px-4 py-2.5 text-center text-step-xs font-medium text-ground transition-opacity duration-[--duration-fast] hover:opacity-90"
-          >
-            Get in touch
-          </Link>
-        </div>
+        <ThemeToggle />
       </aside>
 
       {/* Mobile: the same panel collapses to a top bar with a disclosure. */}
@@ -114,15 +106,8 @@ export function SiteSidebar() {
             <nav>
               <NavList pathname={pathname} onNavigate={() => setOpen(false)} />
             </nav>
-            <div className="mt-4 flex items-center gap-3 px-1">
+            <div className="mt-4 px-1">
               <ThemeToggle />
-              <Link
-                href="/contact"
-                onClick={() => setOpen(false)}
-                className="flex-1 rounded-full bg-accent px-4 py-2.5 text-center text-step-xs font-medium text-ground"
-              >
-                Get in touch
-              </Link>
             </div>
           </div>
         )}
