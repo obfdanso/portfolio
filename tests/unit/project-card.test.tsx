@@ -70,6 +70,16 @@ describe("ProjectCard", () => {
     expect(screen.getByAltText("POS cashier screen")).toBeDefined();
   });
 
+  it("renders an h3 by default, for use under a section heading", () => {
+    render(<ProjectCard project={base} />);
+    expect(screen.getByRole("heading", { level: 3, name: "POS" })).toBeDefined();
+  });
+
+  it("renders an h2 when it sits directly under the page heading", () => {
+    render(<ProjectCard project={base} headingLevel={2} />);
+    expect(screen.getByRole("heading", { level: 2, name: "POS" })).toBeDefined();
+  });
+
   it("lists every stack tag", () => {
     render(<ProjectCard project={{ ...base, stack: ["JavaScript", "React"] }} />);
     expect(screen.getByText("JavaScript")).toBeDefined();

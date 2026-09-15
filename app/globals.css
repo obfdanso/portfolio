@@ -40,7 +40,10 @@
   --color-surface: oklch(0.93 0.008 195);
   --color-fg: oklch(0.21 0.015 195);
   --color-fg-muted: oklch(0.44 0.015 195);
-  --color-accent: oklch(0.52 0.12 160);
+  /* 0.52 measured 3.76:1 against the active nav background (bg-fg/8),
+     below the 4.5 minimum. 0.45 gives 4.99 there, 6.32 on the ground
+     and 5.64 on surface. */
+  --color-accent: oklch(0.45 0.12 160);
   --mesh-opacity: 0.45;
 }
 

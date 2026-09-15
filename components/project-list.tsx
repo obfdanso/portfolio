@@ -105,7 +105,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
       >
         {visible.map((project, index) => (
           <li key={project.slug} className="project-rail__item">
-            <ProjectCard project={project} index={index} />
+            <ProjectCard project={project} index={index} headingLevel={2} />
           </li>
         ))}
       </ul>
