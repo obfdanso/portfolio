@@ -9,9 +9,28 @@ test.describe("desktop sidebar", () => {
   test("shows every section link", async ({ page }) => {
     await page.goto("/");
     const nav = page.getByRole("complementary", { name: /main/i });
-    for (const label of ["Home", "Projects", "About", "Resume", "Contact"]) {
+    for (const label of ["Home", "Projects", "About", "Resume"]) {
       await expect(nav.getByRole("link", { name: label, exact: true })).toBeVisible();
     }
+  });
+
+  test("keeps Contact out of the sidebar", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.getByRole("complementary", { name: /main/i });
+    await expect(nav.getByRole("link", { name: /contact/i })).toHaveCount(0);
+    await expect(nav.getByRole("link", { name: /get in touch/i })).toHaveCount(0);
+  });
+
+  test("routes to contact from the hero call to action", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("main").getByRole("link", { name: /get in touch/i }).click();
+    await expect(page).toHaveURL(/\/contact$/);
+  });
+
+  test("leaves only the theme control at the foot of the sidebar", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.getByRole("complementary", { name: /main/i });
+    await expect(nav.getByRole("button", { name: /theme/i })).toBeVisible();
   });
 
   test("marks the current section and only that section", async ({ page }) => {
