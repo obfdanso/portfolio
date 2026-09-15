@@ -5,3 +5,5 @@ node_modules/
 docs/superpowers/
 next-env.d.ts
 *.tsbuildinfo
+test-results/
+playwright-report/
