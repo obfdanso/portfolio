@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooter } from "@/components/site-footer";
+import { JsonLd } from "@/components/json-ld";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
 import "./globals.css";
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${sans.variable} ${mono.variable}`}
     >
       <body className="min-h-dvh bg-ground text-fg antialiased">
+        <JsonLd />
         <ThemeProvider>
           <a href="#main" className="skip-link">
             Skip to content
