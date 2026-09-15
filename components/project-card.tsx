@@ -33,7 +33,7 @@ export function ProjectCard({ project, index = 0 }: { project: Project; index?: 
     <Reveal
       as="article"
       delay={index * 40}
-      className="card-lift relative flex flex-col rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
+      className="card-lift relative flex h-full flex-col rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
     >
       <Image
         src={project.cover.src}
@@ -69,7 +69,9 @@ export function ProjectCard({ project, index = 0 }: { project: Project; index?: 
         ))}
       </ul>
 
-      <DemoLinks demo={project.demo} />
+      <div className="mt-auto">
+        <DemoLinks demo={project.demo} />
+      </div>
     </Reveal>
   );
 }

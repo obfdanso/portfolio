@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteSidebar } from "@/components/site-sidebar";
+import { SiteFooter } from "@/components/site-footer";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
 import "./globals.css";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main id="main" tabIndex={-1}>
               {children}
             </main>
+            <SiteFooter />
           </div>
         </ThemeProvider>
       </body>
