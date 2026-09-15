@@ -392,6 +392,8 @@ p {
 
 .project-rail__item {
   scroll-snap-align: start;
+  /* Lets the card stretch to the tallest in the row, so demo links line up. */
+  display: grid;
 }
 
 @media (min-width: 768px) {
