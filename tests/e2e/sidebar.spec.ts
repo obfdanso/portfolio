@@ -33,6 +33,30 @@ test.describe("desktop sidebar", () => {
     await expect(nav.getByRole("button", { name: /theme/i })).toBeVisible();
   });
 
+  test("the theme menu opens fully inside the viewport", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /theme/i }).click();
+
+    const menu = page.getByRole("menu");
+    await expect(menu).toBeVisible();
+
+    // Regression: the menu used to open downward from a control pinned to the
+    // bottom of the sidebar, so it rendered past the fold and was unreachable.
+    const box = await menu.boundingBox();
+    const viewport = page.viewportSize();
+    expect(box).not.toBeNull();
+    expect(box!.y).toBeGreaterThanOrEqual(0);
+    expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height);
+  });
+
+  test("every theme option is clickable once open", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /theme/i }).click();
+    for (const option of ["light", "dark", "system"]) {
+      await expect(page.getByRole("menuitem", { name: new RegExp(`^${option}$`, "i") })).toBeVisible();
+    }
+  });
+
   test("marks the current section and only that section", async ({ page }) => {
     await page.goto("/projects");
     const nav = page.getByRole("complementary", { name: /main/i });

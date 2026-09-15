@@ -3,25 +3,28 @@ import Link from "next/link";
 import type { Project } from "@/lib/content";
 import { Reveal } from "@/components/ui/reveal";
 
+// Pills, matching the stack tags above them. Accent-bordered for the primary
+// action, muted for the source link.
+const PILL = "relative z-10 rounded-full border px-3 py-1 text-step-xs transition-colors";
+const PILL_PRIMARY = `${PILL} border-accent/50 text-accent hover:border-accent`;
+const PILL_MUTED = `${PILL} border-fg-muted/25 text-fg-muted hover:border-fg-muted/50 hover:text-fg`;
+
 function DemoLinks({ demo }: { demo: Project["demo"] }) {
   // The discriminated union is what guarantees there is no dead "Live site"
   // button: a repo-only project has no url field to render.
   return (
-    <div className="mt-4 flex flex-wrap gap-4 text-step-xs">
+    <div className="mt-5 flex flex-wrap gap-2">
       {demo.kind === "live" && (
-        <a href={demo.url} className="relative z-10 text-accent underline underline-offset-4">
+        <a href={demo.url} className={PILL_PRIMARY}>
           Live site
         </a>
       )}
       {demo.kind === "recording" && (
-        <a href={demo.videoSrc} className="relative z-10 text-accent underline underline-offset-4">
+        <a href={demo.videoSrc} className={PILL_PRIMARY}>
           Demo video
         </a>
       )}
-      <a
-        href={demo.repoUrl}
-        className="relative z-10 text-fg-muted underline underline-offset-4 hover:text-fg"
-      >
+      <a href={demo.repoUrl} className={PILL_MUTED}>
         Source
       </a>
     </div>
@@ -71,7 +74,7 @@ export function ProjectCard({
 
       <p className="mt-2 text-step-xs text-fg-muted">{project.summary}</p>
 
-      <p className="mt-3 font-mono text-step-xs text-fg-muted">
+      <p className="mt-3 text-step-xs text-fg-muted">
         {project.timeframe} · {project.contribution}
       </p>
 
@@ -79,7 +82,7 @@ export function ProjectCard({
         {project.stack.map((tech) => (
           <li
             key={tech}
-            className="rounded-full border border-fg-muted/20 px-2.5 py-0.5 font-mono text-step-xs"
+            className="rounded-full border border-fg-muted/20 px-3 py-1 text-step-xs text-fg-muted"
           >
             {tech}
           </li>
