@@ -15,10 +15,10 @@
   --duration-base: 240ms;
   --duration-slow: 400ms;
 
-  --mesh-opacity: 0.55;
+  --mesh-opacity: 0.85;
 
-  --font-display: var(--font-display-src), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-body-src), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-sans-src), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-src), ui-monospace, monospace;
 
   /* 1.25 modular scale, fluid between 360px and 1280px viewports.
@@ -30,6 +30,8 @@
   --text-step-3: clamp(1.95rem, 1.7rem + 1.1vw, 2.66rem);
   --text-step-4: clamp(2.44rem, 2.03rem + 1.75vw, 3.55rem);
   --text-step-5: clamp(3.05rem, 2.41rem + 2.72vw, 4.73rem);
+
+  --sidebar-width: 17rem;
 }
 
 /* Light theme: same token names, different values. One system, two value sets. */
@@ -39,7 +41,7 @@
   --color-fg: oklch(0.21 0.015 195);
   --color-fg-muted: oklch(0.44 0.015 195);
   --color-accent: oklch(0.52 0.12 160);
-  --mesh-opacity: 0.28;
+  --mesh-opacity: 0.45;
 }
 
 html {
@@ -70,8 +72,10 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
+  font-weight: 700;
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  /* Apple's display type sits tight. Inter needs this to read the same way. */
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
@@ -87,8 +91,13 @@ p {
 
 /* ---------------------------------------------------------------------------
    Mesh gradient
-   Three blurred radial blobs, animated on the compositor only.
-   No JavaScript: this renders before React hydrates.
+
+   Composition follows the Apple Music reference: near-black at the top
+   bleeding into a smooth saturated wash across the bottom, edge to edge.
+   The base vertical wash lives on the container and does the structural
+   work; three blurred blobs sit low and wide to break up the banding and
+   give it organic variation. Blobs animate on the compositor only, so this
+   costs no layout and no JavaScript — it renders before React hydrates.
 --------------------------------------------------------------------------- */
 
 .mesh {
@@ -100,50 +109,59 @@ p {
   filter: hue-rotate(var(--mesh-hue, 0deg));
   opacity: var(--mesh-opacity);
   contain: strict;
-  /* Without this the gradient ends on a hard horizontal seam at the
-     section boundary. Fades only the last 14%, so the blobs' brightest
-     region is preserved. */
-  mask-image: linear-gradient(to bottom, #000 0%, #000 86%, transparent 100%);
+  /* The structural wash. Dark at top, saturated toward the bottom. */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklch, var(--color-teal) 16%, transparent) 34%,
+    color-mix(in oklch, var(--color-teal) 46%, transparent) 56%,
+    color-mix(in oklch, var(--color-emerald) 60%, transparent) 72%,
+    color-mix(in oklch, var(--color-emerald) 34%, transparent) 90%,
+    transparent 100%
+  );
+  /* Peak saturation sits at ~72% and dissolves from there, so the wash
+     bleeds up from below rather than ending on a visible band. */
+  mask-image: linear-gradient(to bottom, #000 0%, #000 74%, transparent 100%);
 }
 
 .mesh__blob {
   position: absolute;
   display: block;
   border-radius: 50%;
-  /* Blur cost scales with blurred area, so keep elements modest and let
-     scale() do the enlarging. */
-  filter: blur(80px);
+  /* Wide and heavily blurred so the three read as one continuous wash
+     rather than as separate lights. */
+  filter: blur(110px);
   will-change: transform;
   transform: translate3d(0, 0, 0);
 }
 
-/* Deep teal carries the mass. */
+/* Deep teal carries the mass, low and left. */
 .mesh__blob--teal {
-  left: -8%;
-  bottom: -18%;
-  width: 62vmax;
-  height: 62vmax;
-  background: radial-gradient(circle at 50% 50%, var(--color-teal) 0%, transparent 68%);
+  left: -25%;
+  bottom: -40%;
+  width: 95vmax;
+  height: 70vmax;
+  background: radial-gradient(ellipse at 50% 50%, var(--color-teal) 0%, transparent 70%);
   animation: mesh-drift-a 26s var(--ease-brand) infinite alternate;
 }
 
-/* Emerald is the mid tone. */
+/* Emerald is the mid tone, low and right, overlapping the teal. */
 .mesh__blob--emerald {
-  right: -6%;
-  bottom: -10%;
-  width: 50vmax;
-  height: 50vmax;
-  background: radial-gradient(circle at 50% 50%, var(--color-emerald) 0%, transparent 66%);
+  right: -25%;
+  bottom: -34%;
+  width: 90vmax;
+  height: 62vmax;
+  background: radial-gradient(ellipse at 50% 50%, var(--color-emerald) 0%, transparent 68%);
   animation: mesh-drift-b 22s var(--ease-brand) infinite alternate;
 }
 
 /* Lime is a highlight only — roughly a tenth of the area, never behind text. */
 .mesh__blob--lime {
-  left: 42%;
-  bottom: -26%;
-  width: 24vmax;
-  height: 24vmax;
-  background: radial-gradient(circle at 50% 50%, var(--color-lime) 0%, transparent 62%);
+  left: 34%;
+  bottom: -30%;
+  width: 40vmax;
+  height: 30vmax;
+  background: radial-gradient(ellipse at 50% 50%, var(--color-lime) 0%, transparent 66%);
   animation: mesh-drift-c 29s var(--ease-brand) infinite alternate;
 }
 
@@ -153,7 +171,7 @@ p {
     transform: translate3d(0, 0, 0) scale(1);
   }
   to {
-    transform: translate3d(6%, -4%, 0) scale(1.12);
+    transform: translate3d(5%, -3%, 0) scale(1.1);
   }
 }
 
@@ -162,7 +180,7 @@ p {
     transform: translate3d(0, 0, 0) scale(1.06);
   }
   to {
-    transform: translate3d(-7%, -6%, 0) scale(0.94);
+    transform: translate3d(-6%, -5%, 0) scale(0.96);
   }
 }
 
@@ -171,7 +189,7 @@ p {
     transform: translate3d(0, 0, 0) scale(0.92);
   }
   to {
-    transform: translate3d(-4%, -9%, 0) scale(1.18);
+    transform: translate3d(-4%, -8%, 0) scale(1.15);
   }
 }
 
@@ -190,4 +208,30 @@ p {
 .mesh-host > *:not(.mesh) {
   position: relative;
   z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Chrome
+--------------------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  translate: -50% -120%;
+  z-index: 100;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: var(--color-surface);
+  padding: 0.75rem 1.25rem;
+  transition: translate var(--duration-fast) var(--ease-brand);
+}
+
+.skip-link:focus-visible {
+  translate: -50% 0;
+}
+
+.container-page {
+  margin-inline: auto;
+  max-width: 62rem;
+  padding-inline: 1.5rem;
 }

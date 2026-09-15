@@ -1,22 +1,39 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
-import { body, display, mono } from "@/lib/fonts";
+import { SiteSidebar } from "@/components/site-sidebar";
+import { mono, sans } from "@/lib/fonts";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Danso Daniel Kwaku Arnan",
-  description: "Frontend engineer.",
+  metadataBase: new URL(SITE.url),
+  title: { default: `${SITE.name} — ${SITE.role}`, template: `%s — ${SITE.shortName}` },
+  description: "Frontend engineer building fast, accessible interfaces.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // `data-scroll-behavior="smooth"`: Next 16 stopped overriding a global
+  // `scroll-behavior: smooth` during route changes, so navigations would
+  // smoothly crawl to the top instead of jumping. This opts back in.
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      data-scroll-behavior="smooth"
+      className={`${sans.variable} ${mono.variable}`}
     >
       <body className="min-h-dvh bg-ground text-fg antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <a href="#main" className="skip-link">
+            Skip to content
+          </a>
+          <SiteSidebar />
+          <div className="md:pl-[calc(var(--sidebar-width)+1.5rem)]">
+            <main id="main" tabIndex={-1}>
+              {children}
+            </main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
