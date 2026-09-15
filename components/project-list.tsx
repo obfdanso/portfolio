@@ -58,7 +58,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             aria-pressed={filter === tag}
             onClick={() => setFilter(tag)}
             className={cn(
-              "rounded-full border px-3 py-1 font-mono text-step-xs transition-colors",
+              "rounded-full border px-3.5 py-1.5 text-step-xs transition-colors",
               filter === tag
                 ? "border-accent text-accent"
                 : "border-fg-muted/20 text-fg-muted hover:text-fg",
@@ -69,24 +69,6 @@ export function ProjectList({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      <div className="mt-6 flex gap-2">
-        <button
-          type="button"
-          onClick={() => move(-1)}
-          aria-label="Previous project"
-          className="rounded-full border border-fg-muted/20 px-3.5 py-1.5 text-fg-muted hover:text-fg"
-        >
-          &#8592;
-        </button>
-        <button
-          type="button"
-          onClick={() => move(1)}
-          aria-label="Next project"
-          className="rounded-full border border-fg-muted/20 px-3.5 py-1.5 text-fg-muted hover:text-fg"
-        >
-          &#8594;
-        </button>
-      </div>
 
       <ul
         ref={listRef}

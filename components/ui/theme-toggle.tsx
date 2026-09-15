@@ -27,7 +27,10 @@ export function ThemeToggle() {
       {open && (
         <ul
           role="menu"
-          className="absolute right-0 mt-2 w-32 rounded-lg border border-fg-muted/20 bg-surface p-1"
+          // Opens upward: this control sits at the foot of the sidebar, so a
+          // downward menu rendered past the bottom of the panel and could not
+          // be reached.
+          className="absolute bottom-full left-0 z-50 mb-2 w-32 rounded-lg border border-fg-muted/20 bg-surface p-1 shadow-lg"
         >
           {OPTIONS.map((option) => (
             <li key={option}>

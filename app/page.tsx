@@ -54,7 +54,7 @@ export default function HomePage() {
                 <Link href={`/projects/${project.slug}`}>{project.title}</Link>
               </h3>
               <p className="mt-2 text-step-xs text-fg-muted">{project.summary}</p>
-              <p className="mt-3 font-mono text-step-xs text-fg-muted">
+              <p className="mt-3 text-step-xs text-fg-muted">
                 {project.timeframe} · {project.contribution}
               </p>
             </Reveal>

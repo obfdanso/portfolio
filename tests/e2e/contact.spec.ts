@@ -119,5 +119,6 @@ test("the footer offers contact routes on every page", async ({ page }) => {
     const footer = page.getByRole("contentinfo");
     await expect(footer.getByRole("link", { name: /contact/i })).toBeVisible();
     await expect(footer.getByRole("link", { name: /github/i })).toBeVisible();
+    await expect(footer.getByRole("link", { name: /linkedin/i })).toHaveCount(0);
   }
 });
