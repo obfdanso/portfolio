@@ -1,1 +1,54 @@
 @import "tailwindcss";
+
+@theme {
+  --color-ground: oklch(0.15 0.015 195);
+  --color-surface: oklch(0.19 0.018 195);
+  --color-fg: oklch(0.97 0.005 195);
+  --color-fg-muted: oklch(0.72 0.012 195);
+  --color-teal: oklch(0.55 0.11 195);
+  --color-emerald: oklch(0.65 0.13 160);
+  --color-lime: oklch(0.85 0.15 125);
+  --color-accent: var(--color-emerald);
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 240ms;
+  --duration-slow: 400ms;
+
+  --mesh-opacity: 0.55;
+}
+
+/* Light theme: same token names, different values. One system, two value sets. */
+[data-theme="light"] {
+  --color-ground: oklch(0.97 0.005 195);
+  --color-surface: oklch(0.93 0.008 195);
+  --color-fg: oklch(0.21 0.015 195);
+  --color-fg-muted: oklch(0.44 0.015 195);
+  --color-accent: oklch(0.52 0.12 160);
+  --mesh-opacity: 0.28;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-ground);
+  color: var(--color-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
