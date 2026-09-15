@@ -235,3 +235,143 @@ p {
   max-width: 62rem;
   padding-inline: 1.5rem;
 }
+
+/* ---------------------------------------------------------------------------
+   Motion
+
+   Vocabulary is fixed: scroll reveal, card lift, hero mask reveal, route
+   cross-fade, scroll-linked hue shift, and the section numerals. Every
+   animation uses --ease-brand and one of the three durations. Anything not
+   expressible in those tokens does not ship.
+--------------------------------------------------------------------------- */
+
+/* Native scroll-driven animation where supported. No JavaScript at all. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-in var(--duration-slow) var(--ease-brand) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 42%;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+/* Browsers without scroll-driven animations show content immediately.
+   Visible-by-default is the only correct failure mode: never hide content
+   behind an animation that might not run. */
+@supports not (animation-timeline: view()) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Card hover: a 2px lift plus a gradient edge glow. */
+.card-lift {
+  transition:
+    transform var(--duration-base) var(--ease-brand),
+    box-shadow var(--duration-base) var(--ease-brand),
+    border-color var(--duration-base) var(--ease-brand);
+}
+
+.card-lift:hover,
+.card-lift:focus-within {
+  transform: translate3d(0, -2px, 0);
+  border-color: color-mix(in oklch, var(--color-emerald) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--color-emerald) 25%, transparent);
+}
+
+/* Hero mask reveal. */
+.hero-reveal {
+  animation: hero-in var(--duration-slow) var(--ease-brand) both;
+  animation-delay: 80ms;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* A custom property must be registered with a type before it can be
+   animated. Without this @property block the keyframes below do nothing. */
+@property --mesh-hue {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@supports (animation-timeline: scroll()) {
+  .mesh--scroll-linked {
+    animation: mesh-hue-shift linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0% 100%;
+  }
+}
+
+/* Capped at 28deg so the palette stays inside the teal/emerald/lime family.
+   Do not widen this: past roughly 40deg the gradient turns yellow and the
+   visual identity breaks. */
+@keyframes mesh-hue-shift {
+  from {
+    --mesh-hue: 0deg;
+  }
+  to {
+    --mesh-hue: 28deg;
+  }
+}
+
+/* Route transitions. Native, and an instant navigation where unsupported. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .card-lift {
+    transition: none;
+  }
+
+  .card-lift:hover,
+  .card-lift:focus-within {
+    transform: none;
+  }
+
+  .hero-reveal,
+  .mesh--scroll-linked {
+    animation: none;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
