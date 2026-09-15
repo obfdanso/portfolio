@@ -1,0 +1,65 @@
+---
+title: POS
+slug: pos
+summary: An interactive point-of-sale web app with separate interfaces for administrators, managers, and cashiers.
+role: Frontend Developer
+contribution: Frontend only
+timeframe: "2025"
+stack: ["JavaScript", "React"]
+featured: false
+order: 2
+accentHue: 24
+demo:
+  kind: repo-only
+  repoUrl: https://github.com/obfdanso/POS
+cover:
+  src: /projects/pos-cover.png
+  alt: The POS cashier screen during a sale
+---
+
+{/* TO CONFIRM: once POS is deployed, change the frontmatter above to
+    demo.kind: live with its URL. Nothing else needs to change. */}
+
+## Context
+
+A point-of-sale system serves three people with incompatible needs. A cashier
+wants the fastest possible path through a sale. A manager wants stock levels
+and takings. An administrator wants control over users and configuration.
+
+Building one interface that serves all three badly is the common failure. This
+project treats them as three interfaces over shared data instead.
+
+## My role
+
+I built the frontend: all three role-specific interfaces, the component
+structure, and the client-side state.
+
+{/* TO CONFIRM: was this solo or a group project? If a group, who handled the
+    backend, and how many of you were there? */}
+
+## Key decisions
+
+**Separate interfaces rather than permission-gated menus.** Hiding the controls
+a cashier cannot use still leaves them navigating a manager's information
+architecture. Each role gets a layout shaped around its own task instead.
+
+**Speed over completeness on the cashier screen.** That flow runs hundreds of
+times a day, so it is keyboard-driven and reachable in the fewest possible
+interactions — even where that meant leaving features out of that particular
+view.
+
+{/* TO CONFIRM: what did you reject? Naming the alternative you considered and
+    turned down is what makes a decision read as a decision. */}
+
+## The hard part
+
+{/* TO CONFIRM: the bug or design problem that cost you the most time. Symptom,
+    what you thought was wrong, what was actually wrong, and how you found out. */}
+
+## Outcome, and what I would do differently
+
+Built as a student project and complete as an interface.
+
+**I would write it in TypeScript.** It is plain JavaScript, and a domain built
+on prices, quantities and running totals is exactly where a type system earns
+its cost. Porting it is the clearest improvement available.

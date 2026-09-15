@@ -1,0 +1,72 @@
+---
+title: bitby
+slug: bitby
+summary: A mobile UI reconstruction study rebuilding a crypto trading interface to learn dense, real-time layout.
+role: Frontend Developer
+contribution: Frontend only
+timeframe: "2025"
+stack: ["JavaScript", "Java"]
+featured: false
+order: 3
+accentHue: 48
+demo:
+  kind: recording
+  posterSrc: /projects/bitby-poster.png
+  videoSrc: /projects/bitby-demo.mp4
+  repoUrl: https://github.com/obfdanso/bitby
+cover:
+  src: /projects/bitby-cover.png
+  alt: The bitby market list, showing rows of live-style price data
+---
+
+## Context
+
+bitby is a **UI reconstruction study**: an independent learning project that
+rebuilds the interface patterns of the Binance mobile app. It is **not
+affiliated with, endorsed by, or connected to Binance**, reproduces none of
+their trademarks or logos, and is not a working exchange — there is no real
+market data, no accounts, and no trades.
+
+The reason to rebuild a trading interface is that it is genuinely difficult.
+Dense numeric rows, constant updates, tight vertical rhythm, and a hierarchy
+that has to survive being read at a glance are harder problems than most CRUD
+screens ever pose.
+
+## My role
+
+I built the frontend — the screens, the navigation, and the list and chart
+components.
+
+{/* TO CONFIRM: what did the Java portion cover, and was this React Native or
+    native Android? If it was React Native, add it to the `stack` list in the
+    frontmatter above. I left it out rather than guess. */}
+
+## Key decisions
+
+**Rebuilding from observation, not from assets.** Working out the spacing, type
+scale and hierarchy by eye is what made this a study rather than a copy-paste
+exercise, and it is where the learning actually was.
+
+**Treating the market list as a performance problem first.** A list of
+constantly-updating numeric rows punishes naive re-rendering, so the row
+components were built to update in isolation from the start rather than being
+optimised later.
+
+{/* TO CONFIRM: what you rejected. */}
+
+## The hard part
+
+{/* TO CONFIRM: the specific problem — list performance, chart rendering, or
+    navigation state. Symptom, what you thought was wrong, what was actually
+    wrong, and how you found out. */}
+
+## Outcome, and what I would do differently
+
+Not bundled for distribution, so the demo here is a screen recording rather
+than something you can install.
+
+What I took from it was calibration. Matching a production interface by eye
+teaches how much of a polished product is spacing and type discipline rather
+than features.
+
+{/* TO CONFIRM: one specific technical change you would make. */}

@@ -1,0 +1,85 @@
+---
+title: MediSpace
+slug: medispace
+summary: A student-friendly web app for tracking campus medication and dosage, with an AI chatbot for health questions.
+role: Frontend Developer
+contribution: Frontend only
+timeframe: "2025"
+stack: ["TypeScript", "React", "Next.js", "Vercel"]
+featured: true
+order: 1
+accentHue: 0
+demo:
+  kind: repo-only
+  repoUrl: https://github.com/obfdanso/MediSpace
+cover:
+  src: /projects/medispace-cover.png
+  alt: The MediSpace medication schedule, showing a day of doses
+---
+
+{/* TO CONFIRM: MediSpace is deployed on Vercel, but the exact URL was not
+    supplied and I would not guess one — a dead or wrong "Live site" link is
+    worse than none. Send the URL and change the frontmatter above to:
+
+      demo:
+        kind: live
+        url: https://<your-deployment>.vercel.app
+        repoUrl: https://github.com/obfdanso/MediSpace
+
+    No code change is needed; the card and the case study header pick it up. */}
+
+## Context
+
+Students on campus manage their own medication without the routines a clinic
+provides. Doses get skipped, courses get abandoned halfway, and the questions
+that would normally go to a pharmacist go unasked.
+
+MediSpace addresses both halves of that: a schedule that tracks what to take
+and when, and an AI chatbot for the questions students would otherwise search
+for or simply ignore.
+
+## My role
+
+I built the frontend. The interface, state handling, the chat UI, and the
+integration against the team's API were mine. I did not write the backend
+services.
+
+{/* TO CONFIRM: team size, and how long the project ran. */}
+
+## Key decisions
+
+**TypeScript throughout.** Medication data is the kind where a wrong field
+rendering silently as `undefined` is a real problem, not a cosmetic one. Typed
+models meant a mismatch failed at compile time rather than in front of a
+student reading their dose.
+
+**Streaming the chatbot's replies.** A medical question answered after a
+five-second blank pause reads as broken. Rendering tokens as they arrive made
+the same response feel immediate, without making it any faster.
+
+{/* TO CONFIRM: what you rejected here. Did you consider waiting for the full
+    response before rendering? A different state management approach? The
+    alternative you turned down is the part interviewers actually ask about. */}
+
+## The hard part
+
+{/* TO CONFIRM: this is the most valuable section on the page and I cannot
+    write it for you.
+
+    Pick the bug that cost you the most time. Answer four things:
+      1. What was the symptom — what did you see going wrong?
+      2. What did you believe was causing it?
+      3. What was actually causing it?
+      4. How did you find out?
+
+    Two paragraphs. The gap between (2) and (3) is the whole point. */}
+
+## Outcome, and what I would do differently
+
+Deployed on Vercel and usable by students today.
+
+{/* TO CONFIRM: any usage numbers, or feedback you got from people who used it. */}
+
+Given a second pass, I would {/* TO CONFIRM: one specific, technical change — a
+state management choice, a component boundary, a data-fetching pattern. Naming
+a concrete regret reads as far more senior than claiming you have none. */}
