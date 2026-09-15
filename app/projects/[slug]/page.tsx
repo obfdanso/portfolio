@@ -29,7 +29,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <header className="mesh-host relative overflow-hidden py-28 md:rounded-2xl">
         <MeshGradient hue={project.accentHue} />
         <div className="container-page">
-          <p className="font-mono text-step-xs text-fg-muted">
+          <p className="text-step-xs text-fg-muted">
             {project.timeframe} · {project.contribution}
           </p>
           <h1 className="mt-4 text-step-5">{project.title}</h1>
@@ -39,22 +39,25 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             {project.stack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-full border border-fg-muted/25 px-2.5 py-0.5 font-mono text-step-xs"
+                className="rounded-full border border-fg-muted/25 px-3 py-1 text-step-xs"
               >
                 {tech}
               </li>
             ))}
           </ul>
 
-          <div className="mt-8 flex flex-wrap gap-5 text-step-xs">
+          <div className="mt-8 flex flex-wrap gap-2">
             {project.demo.kind === "live" && (
-              <a href={project.demo.url} className="text-accent underline underline-offset-4">
+              <a
+                href={project.demo.url}
+                className="rounded-full border border-accent/50 px-4 py-1.5 text-step-xs text-accent transition-colors hover:border-accent"
+              >
                 Live site
               </a>
             )}
             <a
               href={project.demo.repoUrl}
-              className="text-fg-muted underline underline-offset-4 hover:text-fg"
+              className="rounded-full border border-fg-muted/30 px-4 py-1.5 text-step-xs text-fg-muted transition-colors hover:text-fg"
             >
               Source
             </a>

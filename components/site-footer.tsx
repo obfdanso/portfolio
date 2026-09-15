@@ -15,9 +15,6 @@ export function SiteFooter() {
           <a href={SITE.github} className="hover:text-fg">
             GitHub
           </a>
-          <a href={SITE.linkedin} className="hover:text-fg">
-            LinkedIn
-          </a>
           <a href={`mailto:${SITE.email}`} className="hover:text-fg">
             Email
           </a>

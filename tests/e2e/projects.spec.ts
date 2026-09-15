@@ -27,12 +27,6 @@ test.describe("project index", () => {
     await expect(all).toHaveAttribute("aria-pressed", "false");
   });
 
-  test("exposes visible previous and next controls", async ({ page }) => {
-    await page.goto("/projects");
-    await expect(page.getByRole("button", { name: /previous project/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: /next project/i })).toBeVisible();
-  });
-
   test("moves focus through the rail with the arrow keys", async ({ page }) => {
     await page.goto("/projects");
 
@@ -44,6 +38,23 @@ test.describe("project index", () => {
 
     await page.keyboard.press("ArrowLeft");
     await expect(firstCardLink).toBeFocused();
+  });
+
+  test("reaches every card by tabbing", async ({ page }) => {
+    await page.goto("/projects");
+    const first = page.getByRole("article").nth(0).getByRole("link").first();
+    await first.focus();
+
+    // Tab must walk into the later cards: with the arrow buttons gone this is
+    // the primary keyboard route through the rail. Stop as soon as focus
+    // lands in the last card rather than tabbing a fixed count past it.
+    const last = page.getByRole("article").nth(2);
+    let reached = false;
+    for (let i = 0; i < 12 && !reached; i += 1) {
+      await page.keyboard.press("Tab");
+      reached = await last.evaluate((el) => el.contains(document.activeElement));
+    }
+    expect(reached).toBe(true);
   });
 
   test("does not run off the ends of the rail", async ({ page }) => {
