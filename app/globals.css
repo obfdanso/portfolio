@@ -16,6 +16,20 @@
   --duration-slow: 400ms;
 
   --mesh-opacity: 0.55;
+
+  --font-display: var(--font-display-src), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-body-src), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-src), ui-monospace, monospace;
+
+  /* 1.25 modular scale, fluid between 360px and 1280px viewports.
+     Sizes outside this scale are not permitted. */
+  --text-step-xs: clamp(0.83rem, 0.79rem + 0.18vw, 0.94rem);
+  --text-step-0: clamp(1rem, 0.95rem + 0.24vw, 1.13rem);
+  --text-step-1: clamp(1.25rem, 1.16rem + 0.42vw, 1.5rem);
+  --text-step-2: clamp(1.56rem, 1.41rem + 0.69vw, 2rem);
+  --text-step-3: clamp(1.95rem, 1.7rem + 1.1vw, 2.66rem);
+  --text-step-4: clamp(2.44rem, 2.03rem + 1.75vw, 3.55rem);
+  --text-step-5: clamp(3.05rem, 2.41rem + 2.72vw, 4.73rem);
 }
 
 /* Light theme: same token names, different values. One system, two value sets. */
@@ -46,9 +60,130 @@ html {
 body {
   background-color: var(--color-ground);
   color: var(--color-fg);
+  font-family: var(--font-body);
+  font-size: var(--text-step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+  max-width: 68ch;
 }
 
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Mesh gradient
+   Three blurred radial blobs, animated on the compositor only.
+   No JavaScript: this renders before React hydrates.
+--------------------------------------------------------------------------- */
+
+.mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  filter: hue-rotate(var(--mesh-hue, 0deg));
+  opacity: var(--mesh-opacity);
+  contain: strict;
+}
+
+.mesh__blob {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  /* Blur cost scales with blurred area, so keep elements modest and let
+     scale() do the enlarging. */
+  filter: blur(80px);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Deep teal carries the mass. */
+.mesh__blob--teal {
+  left: -8%;
+  bottom: -18%;
+  width: 62vmax;
+  height: 62vmax;
+  background: radial-gradient(circle at 50% 50%, var(--color-teal) 0%, transparent 68%);
+  animation: mesh-drift-a 26s var(--ease-brand) infinite alternate;
+}
+
+/* Emerald is the mid tone. */
+.mesh__blob--emerald {
+  right: -6%;
+  bottom: -10%;
+  width: 50vmax;
+  height: 50vmax;
+  background: radial-gradient(circle at 50% 50%, var(--color-emerald) 0%, transparent 66%);
+  animation: mesh-drift-b 22s var(--ease-brand) infinite alternate;
+}
+
+/* Lime is a highlight only — roughly a tenth of the area, never behind text. */
+.mesh__blob--lime {
+  left: 42%;
+  bottom: -26%;
+  width: 24vmax;
+  height: 24vmax;
+  background: radial-gradient(circle at 50% 50%, var(--color-lime) 0%, transparent 62%);
+  animation: mesh-drift-c 29s var(--ease-brand) infinite alternate;
+}
+
+/* transform and opacity only — never layout or paint properties. */
+@keyframes mesh-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6%, -4%, 0) scale(1.12);
+  }
+}
+
+@keyframes mesh-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+  to {
+    transform: translate3d(-7%, -6%, 0) scale(0.94);
+  }
+}
+
+@keyframes mesh-drift-c {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.92);
+  }
+  to {
+    transform: translate3d(-4%, -9%, 0) scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh__blob {
+    animation: none;
+  }
+}
+
+/* Content over a gradient must establish its own stacking context. */
+.mesh-host {
+  position: relative;
+  isolation: isolate;
+}
+
+.mesh-host > *:not(.mesh) {
+  position: relative;
+  z-index: 1;
 }
