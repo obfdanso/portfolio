@@ -28,7 +28,24 @@ function DemoLinks({ demo }: { demo: Project["demo"] }) {
   );
 }
 
-export function ProjectCard({ project, index = 0 }: { project: Project; index?: number }) {
+/**
+ * `headingLevel` exists because the same card appears in two places with
+ * different ancestry: on the home page it sits under a "Selected work" h2, so
+ * it must be an h3; on /projects it sits directly under the page h1, so an h3
+ * would skip a level. Heading order is a real screen-reader navigation aid,
+ * not a formality.
+ */
+export function ProjectCard({
+  project,
+  index = 0,
+  headingLevel = 3,
+}: {
+  project: Project;
+  index?: number;
+  headingLevel?: 2 | 3;
+}) {
+  const Heading = headingLevel === 2 ? "h2" : "h3";
+
   return (
     <Reveal
       as="article"
@@ -44,13 +61,13 @@ export function ProjectCard({ project, index = 0 }: { project: Project; index?: 
         sizes="(max-width: 768px) 100vw, 480px"
       />
 
-      <h3 className="text-step-1">
+      <Heading className="text-step-1">
         {/* The stretched link makes the whole card clickable; the demo links
             above sit on z-10 so they stay individually reachable. */}
         <Link href={`/projects/${project.slug}`} className="after:absolute after:inset-0">
           {project.title}
         </Link>
-      </h3>
+      </Heading>
 
       <p className="mt-2 text-step-xs text-fg-muted">{project.summary}</p>
 
