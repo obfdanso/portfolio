@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   return (
     <div className="container-page py-24">
-      <h1 className="text-step-4">Projects</h1>
+      <h1 className="enter enter--solid text-step-4">Projects</h1>
       <p className="mt-4 max-w-2xl text-fg-muted">
         Three projects, each with a written case study covering the decisions I made and what I
         would change.
