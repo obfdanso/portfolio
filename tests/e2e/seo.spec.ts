@@ -30,6 +30,7 @@ test("embeds Person structured data", async ({ page }) => {
   const data = JSON.parse(json ?? "{}");
 
   expect(data["@type"]).toBe("Person");
+  expect(data.email).toBe("mailto:ddanso3000@gmail.com");
   expect(data.jobTitle).toBe("Frontend Engineer");
   expect(data.jobTitle).not.toMatch(/full[- ]stack/i);
 });
