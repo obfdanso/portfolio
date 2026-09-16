@@ -78,7 +78,21 @@ test("surfaces the rate limit message", async ({ page }) => {
 
 test("always shows the direct email address", async ({ page }) => {
   await page.goto("/contact");
-  await expect(page.getByRole("link", { name: /@/ }).first()).toBeVisible();
+  const mailto = page.getByRole("link", { name: "ddanso3000@gmail.com" });
+  await expect(mailto).toBeVisible();
+  await expect(mailto).toHaveAttribute("href", "mailto:ddanso3000@gmail.com");
+});
+
+test("no page exposes the old university address", async ({ page }) => {
+  for (const route of ["/", "/projects", "/about", "/resume", "/contact"]) {
+    await page.goto(route);
+    await expect(page.getByText(/st\.knust\.edu\.gh/i)).toHaveCount(0);
+  }
+});
+
+test("the resume page carries no contact block", async ({ page }) => {
+  await page.goto("/resume");
+  await expect(page.getByText(/prefer to talk/i)).toHaveCount(0);
 });
 
 test("posts to the api without javascript", async ({ browser }) => {
