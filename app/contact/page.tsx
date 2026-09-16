@@ -28,10 +28,6 @@ export default function ContactPage() {
         Also on{" "}
         <a href={SITE.github} className="link-grow text-accent">
           GitHub
-        </a>{" "}
-        and{" "}
-        <a href={SITE.linkedin} className="link-grow text-accent">
-          LinkedIn
         </a>
         .
       </p>
