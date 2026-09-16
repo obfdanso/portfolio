@@ -19,14 +19,14 @@ export default function AboutPage() {
       <section className="mesh-host relative overflow-hidden py-24 md:rounded-2xl">
         <MeshGradient hue={90} />
         <div className="container-page">
-          <h1 className="text-step-5">About</h1>
+          <h1 className="enter enter--solid text-step-5">About</h1>
         </div>
       </section>
 
       <div className="container-page grid gap-12 py-16 md:grid-cols-[1fr_17rem]">
         <div>
           <p className="text-step-1">
-            I am {SITE.name}, a frontend engineer studying computer science at KNUST in Ghana.
+            I am {SITE.name}, a frontend engineer based in Accra, Ghana.
           </p>
           <p className="mt-5 text-fg-muted">
             I build web interfaces in TypeScript and React. The work I am proudest of is the
@@ -44,13 +44,13 @@ export default function AboutPage() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="rounded-full bg-accent px-5 py-2.5 text-step-xs font-medium text-ground"
+              className="btn btn-solid rounded-full bg-accent px-5 py-2.5 text-step-xs font-medium text-ground"
             >
               Get in touch
             </Link>
             <Link
               href="/projects"
-              className="rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
+              className="btn btn-outline rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
             >
               See the work
             </Link>
@@ -72,7 +72,7 @@ export default function AboutPage() {
               <p className="mt-3 font-mono text-step-xs text-fg-muted">
                 {SITE.role}
                 <br />
-                Kumasi, Ghana
+                Accra, Ghana
               </p>
             </div>
           )}

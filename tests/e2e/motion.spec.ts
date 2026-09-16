@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+// Entrance animations are covered in animation.spec.ts, across every route.
+// This file covers the scroll-driven reveal and content-without-JS guarantees.
+
 test("reveals are visible under reduced motion", async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
@@ -11,19 +14,6 @@ test("reveals are visible under reduced motion", async ({ browser }) => {
     .evaluate((el) => getComputedStyle(el).opacity);
 
   expect(opacity).toBe("1");
-  await context.close();
-});
-
-test("the hero mask reveal is disabled under reduced motion", async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: "reduce" });
-  const page = await context.newPage();
-  await page.goto("/");
-
-  const animationName = await page
-    .locator(".hero-reveal")
-    .evaluate((el) => getComputedStyle(el).animationName);
-
-  expect(animationName).toBe("none");
   await context.close();
 });
 

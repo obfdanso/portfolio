@@ -9,13 +9,13 @@ export function SiteFooter() {
           {SITE.name} — {SITE.role}
         </p>
         <nav aria-label="Footer" className="flex flex-wrap gap-6">
-          <Link href="/contact" className="hover:text-fg">
+          <Link href="/contact" className="link-grow hover:text-fg">
             Contact
           </Link>
-          <a href={SITE.github} className="hover:text-fg">
+          <a href={SITE.github} className="link-grow hover:text-fg">
             GitHub
           </a>
-          <a href={`mailto:${SITE.email}`} className="hover:text-fg">
+          <a href={`mailto:${SITE.email}`} className="link-grow hover:text-fg">
             Email
           </a>
         </nav>

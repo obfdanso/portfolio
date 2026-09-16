@@ -41,8 +41,7 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-step-0 transition-colors",
-                "duration-[--duration-fast] ease-(--ease-brand)",
+                "nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-step-0",
                 active
                   ? "bg-fg/8 font-medium text-accent"
                   : "text-fg-muted hover:bg-fg/5 hover:text-fg",
@@ -67,7 +66,7 @@ export function SiteSidebar() {
       {/* Desktop: a fixed panel, inset from the window edges. */}
       <aside
         aria-label="Main"
-        className="fixed inset-y-3 left-3 z-50 hidden w-(--sidebar-width) flex-col rounded-2xl border border-fg-muted/12 bg-surface/70 p-4 backdrop-blur-xl md:flex"
+        className="enter enter--left fixed inset-y-3 left-3 z-50 hidden w-(--sidebar-width) flex-col rounded-2xl border border-fg-muted/12 bg-surface/70 p-4 backdrop-blur-xl md:flex"
       >
         <Link href="/" className="block rounded-lg px-3 py-2">
           <span className="block font-display text-step-1 font-semibold tracking-tight">
@@ -95,7 +94,7 @@ export function SiteSidebar() {
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
-            className="rounded-lg border border-fg-muted/20 p-2"
+            className="btn rounded-lg border border-fg-muted/20 p-2"
           >
             {open ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
           </button>
