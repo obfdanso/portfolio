@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { resume, type Entry } from "@/content/resume";
-import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Resume", description: resume.summary };
 
@@ -55,13 +54,6 @@ export default function ResumePage() {
           ))}
         </dl>
       </section>
-
-      <p className="mt-14 text-step-xs text-fg-muted">
-        Prefer to talk?{" "}
-        <a href={`mailto:${SITE.email}`} className="link-grow text-accent">
-          {SITE.email}
-        </a>
-      </p>
     </div>
   );
 }
