@@ -90,6 +90,22 @@ test("no page exposes the old university address", async ({ page }) => {
   }
 });
 
+test("links to no LinkedIn profile anywhere", async ({ page }) => {
+  // The URL was a guess and was removed. Structured data is read by search
+  // engines, so a wrong profile is worse than none.
+  for (const route of ["/", "/projects", "/about", "/resume", "/contact"]) {
+    await page.goto(route);
+    await expect(page.locator('a[href*="linkedin.com"]')).toHaveCount(0);
+  }
+});
+
+test("claims no unverified profile in structured data", async ({ page }) => {
+  await page.goto("/");
+  const json = await page.locator('script[type="application/ld+json"]').first().textContent();
+  const data = JSON.parse(json ?? "{}");
+  expect(data.sameAs).toEqual(["https://github.com/obfdanso"]);
+});
+
 test("the resume page carries no contact block", async ({ page }) => {
   await page.goto("/resume");
   await expect(page.getByText(/prefer to talk/i)).toHaveCount(0);

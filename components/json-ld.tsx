@@ -8,7 +8,7 @@ export function JsonLd() {
     jobTitle: SITE.role,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
-    sameAs: [SITE.github, SITE.linkedin],
+    sameAs: [SITE.github],
   };
 
   return (
