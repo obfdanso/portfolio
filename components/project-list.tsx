@@ -58,10 +58,10 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             aria-pressed={filter === tag}
             onClick={() => setFilter(tag)}
             className={cn(
-              "rounded-full border px-3.5 py-1.5 text-step-xs transition-colors",
+              "pill rounded-full border px-3.5 py-1.5 text-step-xs",
               filter === tag
-                ? "border-accent text-accent"
-                : "border-fg-muted/20 text-fg-muted hover:text-fg",
+                ? "pill-primary border-accent text-accent"
+                : "pill-muted border-fg-muted/20 text-fg-muted",
             )}
           >
             {tag}

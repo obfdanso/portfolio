@@ -5,9 +5,9 @@ import { Reveal } from "@/components/ui/reveal";
 
 // Pills, matching the stack tags above them. Accent-bordered for the primary
 // action, muted for the source link.
-const PILL = "relative z-10 rounded-full border px-3 py-1 text-step-xs transition-colors";
-const PILL_PRIMARY = `${PILL} border-accent/50 text-accent hover:border-accent`;
-const PILL_MUTED = `${PILL} border-fg-muted/25 text-fg-muted hover:border-fg-muted/50 hover:text-fg`;
+const PILL = "pill relative z-10 rounded-full border px-3 py-1 text-step-xs";
+const PILL_PRIMARY = `${PILL} pill-primary border-accent/50 text-accent`;
+const PILL_MUTED = `${PILL} pill-muted border-fg-muted/25 text-fg-muted`;
 
 function DemoLinks({ demo }: { demo: Project["demo"] }) {
   // The discriminated union is what guarantees there is no dead "Live site"
@@ -55,14 +55,16 @@ export function ProjectCard({
       delay={index * 40}
       className="card-lift relative flex h-full flex-col rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
     >
-      <Image
-        src={project.cover.src}
-        alt={project.cover.alt}
-        width={1200}
-        height={630}
-        className="mb-6 aspect-[1200/630] w-full rounded-lg object-cover"
-        sizes="(max-width: 768px) 100vw, 480px"
-      />
+      <div className="card-media mb-6 rounded-lg">
+        <Image
+          src={project.cover.src}
+          alt={project.cover.alt}
+          width={1200}
+          height={630}
+          className="aspect-[1200/630] w-full object-cover"
+          sizes="(max-width: 768px) 100vw, 480px"
+        />
+      </div>
 
       <Heading className="text-step-1">
         {/* The stretched link makes the whole card clickable; the demo links

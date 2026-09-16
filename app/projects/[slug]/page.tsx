@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProject, loadProjects } from "@/lib/content";
@@ -29,17 +30,24 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <header className="mesh-host relative overflow-hidden py-28 md:rounded-2xl">
         <MeshGradient hue={project.accentHue} />
         <div className="container-page">
-          <p className="text-step-xs text-fg-muted">
+          <p className="enter text-step-xs text-fg-muted">
             {project.timeframe} · {project.contribution}
           </p>
-          <h1 className="mt-4 text-step-5">{project.title}</h1>
-          <p className="mt-5 max-w-2xl text-step-1 text-fg-muted">{project.summary}</p>
+          <h1 className="enter enter--solid mt-4 text-step-5" style={{ "--enter-delay": "80ms" } as CSSProperties}>
+            {project.title}
+          </h1>
+          <p
+            className="enter mt-5 max-w-2xl text-step-1 text-fg-muted"
+            style={{ "--enter-delay": "160ms" } as CSSProperties}
+          >
+            {project.summary}
+          </p>
 
           <ul className="mt-6 flex flex-wrap gap-2">
             {project.stack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-full border border-fg-muted/25 px-3 py-1 text-step-xs"
+                className="pill pill-muted rounded-full border border-fg-muted/25 px-3 py-1 text-step-xs"
               >
                 {tech}
               </li>
@@ -50,14 +58,14 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             {project.demo.kind === "live" && (
               <a
                 href={project.demo.url}
-                className="rounded-full border border-accent/50 px-4 py-1.5 text-step-xs text-accent transition-colors hover:border-accent"
+                className="pill pill-primary rounded-full border border-accent/50 px-4 py-1.5 text-step-xs text-accent"
               >
                 Live site
               </a>
             )}
             <a
               href={project.demo.repoUrl}
-              className="rounded-full border border-fg-muted/30 px-4 py-1.5 text-step-xs text-fg-muted transition-colors hover:text-fg"
+              className="pill pill-muted rounded-full border border-fg-muted/30 px-4 py-1.5 text-step-xs text-fg-muted"
             >
               Source
             </a>

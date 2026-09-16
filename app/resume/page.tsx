@@ -30,13 +30,13 @@ function Section({ title, entries }: { title: string; entries: Entry[] }) {
 export default function ResumePage() {
   return (
     <div className="container-page py-24">
-      <h1 className="text-step-4">Resume</h1>
+      <h1 className="enter enter--solid text-step-4">Resume</h1>
       <p className="mt-5 max-w-2xl text-fg-muted">{resume.summary}</p>
 
       <a
         href={resume.pdfPath}
         download
-        className="mt-8 inline-block rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs hover:border-accent hover:text-accent"
+        className="btn btn-outline mt-8 inline-block rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
       >
         Download PDF
       </a>
@@ -58,7 +58,7 @@ export default function ResumePage() {
 
       <p className="mt-14 text-step-xs text-fg-muted">
         Prefer to talk?{" "}
-        <a href={`mailto:${SITE.email}`} className="text-accent underline underline-offset-4">
+        <a href={`mailto:${SITE.email}`} className="link-grow text-accent">
           {SITE.email}
         </a>
       </p>

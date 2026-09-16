@@ -5,7 +5,10 @@ import tseslint from "typescript-eslint";
 // core-web-vitals includes the base config plus performance rules that catch
 // raw <img> tags and sync scripts — both of which would cost us the budget.
 export default tseslint.config(
-  { ignores: [".next/**", "node_modules/**", "docs/**", "playwright-report/**"] },
+    // .kilo/worktrees holds git worktrees created by other tooling. They are
+  // full copies of the repo, so linting them double-reports every file and
+  // misses the tests/** overrides (which resolve from the config root).
+  { ignores: [".next/**", "node_modules/**", "docs/**", "playwright-report/**", ".kilo/**"] },
   ...nextCoreWebVitals,
   ...tseslint.configs.recommended,
   {

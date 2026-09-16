@@ -20,7 +20,7 @@ export function ThemeToggle() {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="rounded-full border border-fg-muted/30 px-3 py-1.5 text-sm"
+        className="btn btn-outline rounded-full border border-fg-muted/30 px-3 py-1.5 text-sm"
       >
         Theme
       </button>
@@ -30,7 +30,7 @@ export function ThemeToggle() {
           // Opens upward: this control sits at the foot of the sidebar, so a
           // downward menu rendered past the bottom of the panel and could not
           // be reached.
-          className="absolute bottom-full left-0 z-50 mb-2 w-32 rounded-lg border border-fg-muted/20 bg-surface p-1 shadow-lg"
+          className="menu-pop absolute bottom-full left-0 z-50 mb-2 w-32 rounded-lg border border-fg-muted/20 bg-surface p-1 shadow-lg"
         >
           {OPTIONS.map((option) => (
             <li key={option}>
@@ -42,7 +42,7 @@ export function ThemeToggle() {
                   setTheme(option);
                   setOpen(false);
                 }}
-                className="w-full rounded px-2 py-1.5 text-left text-sm capitalize hover:bg-ground aria-[current]:text-accent"
+                className="nav-item w-full rounded px-2 py-1.5 text-left text-sm capitalize hover:bg-ground aria-[current]:text-accent"
               >
                 {option}
               </button>
