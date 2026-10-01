@@ -23,7 +23,10 @@ test.describe("desktop sidebar", () => {
 
   test("routes to contact from the hero call to action", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("main").getByRole("link", { name: /get in touch/i }).click();
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: /get in touch/i })
+      .click();
     await expect(page).toHaveURL(/\/contact$/);
   });
 
@@ -53,7 +56,9 @@ test.describe("desktop sidebar", () => {
     await page.goto("/");
     await page.getByRole("button", { name: /theme/i }).click();
     for (const option of ["light", "dark", "system"]) {
-      await expect(page.getByRole("menuitem", { name: new RegExp(`^${option}$`, "i") })).toBeVisible();
+      await expect(
+        page.getByRole("menuitem", { name: new RegExp(`^${option}$`, "i") }),
+      ).toBeVisible();
     }
   });
 

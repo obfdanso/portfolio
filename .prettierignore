@@ -1,0 +1,9 @@
+# Generated or hand-authored; formatting would churn them for no gain.
+package-lock.json
+AGENTS.md
+CLAUDE.md
+
+# Prettier reflows prose and can mangle MDX comments.
+content/**/*.mdx
+
+public/

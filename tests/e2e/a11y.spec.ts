@@ -62,8 +62,9 @@ test("the contact form's error state is accessible", async ({ page }) => {
 test("every page has exactly one h1", async ({ page }) => {
   for (const route of ROUTES) {
     await page.goto(route);
-    await expect(page.getByRole("heading", { level: 1 }), `${route} should have one h1`).toHaveCount(
-      1,
-    );
+    await expect(
+      page.getByRole("heading", { level: 1 }),
+      `${route} should have one h1`,
+    ).toHaveCount(1);
   }
 });
