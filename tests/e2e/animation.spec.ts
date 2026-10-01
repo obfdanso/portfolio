@@ -47,10 +47,15 @@ test("the transition uses the brand easing and a permitted duration", async ({ p
 
   // toHaveCSS retries until styles settle. A one-shot evaluate() read raced
   // stylesheet application under full parallel load and saw the initial "ease".
-  await expect(button).toHaveCSS("transition-timing-function", /cubic-bezier\(0\.22, 1, 0\.36, 1\)/);
+  await expect(button).toHaveCSS(
+    "transition-timing-function",
+    /cubic-bezier\(0\.22, 1, 0\.36, 1\)/,
+  );
 
   const durations = await button.evaluate((el) =>
-    getComputedStyle(el).transitionDuration.split(",").map((d) => d.trim()),
+    getComputedStyle(el)
+      .transitionDuration.split(",")
+      .map((d) => d.trim()),
   );
   // Only the three interaction tokens are permitted.
   for (const d of durations) {
@@ -122,28 +127,26 @@ test("no page heading fades in from transparent", async ({ page }) => {
   for (const route of ROUTES) {
     await page.goto(route);
 
-    const animatesOpacity = await page
-      .getByRole("heading", { level: 1 })
-      .evaluate((el) => {
-        const name = getComputedStyle(el).animationName;
-        if (name === "none") return false;
+    const animatesOpacity = await page.getByRole("heading", { level: 1 }).evaluate((el) => {
+      const name = getComputedStyle(el).animationName;
+      if (name === "none") return false;
 
-        for (const sheet of Array.from(document.styleSheets)) {
-          let rules: CSSRuleList;
-          try {
-            rules = sheet.cssRules;
-          } catch {
-            continue;
-          }
-          for (const rule of Array.from(rules)) {
-            if (!(rule instanceof CSSKeyframesRule) || rule.name !== name) continue;
-            for (const frame of Array.from(rule.cssRules)) {
-              if (/[{;\s]opacity\s*:/.test(frame.cssText)) return true;
-            }
+      for (const sheet of Array.from(document.styleSheets)) {
+        let rules: CSSRuleList;
+        try {
+          rules = sheet.cssRules;
+        } catch {
+          continue;
+        }
+        for (const rule of Array.from(rules)) {
+          if (!(rule instanceof CSSKeyframesRule) || rule.name !== name) continue;
+          for (const frame of Array.from(rule.cssRules)) {
+            if (/[{;\s]opacity\s*:/.test(frame.cssText)) return true;
           }
         }
-        return false;
-      });
+      }
+      return false;
+    });
 
     expect(animatesOpacity, `${route}: h1 must not fade in — it costs LCP`).toBe(false);
   }

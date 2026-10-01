@@ -4,10 +4,7 @@ import { useState } from "react";
 import { contactSchema } from "@/lib/contact-schema";
 
 type Status =
-  | { kind: "idle" }
-  | { kind: "sending" }
-  | { kind: "sent" }
-  | { kind: "error"; message: string };
+  { kind: "idle" } | { kind: "sending" } | { kind: "sent" } | { kind: "error"; message: string };
 
 const FIELD =
   "mt-1.5 w-full rounded-lg border border-fg-muted/25 bg-surface/50 px-3 py-2.5 text-step-0 " +

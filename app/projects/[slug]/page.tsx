@@ -34,7 +34,10 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           <p className="enter text-step-xs text-fg-muted">
             {project.timeframe} · {project.contribution}
           </p>
-          <h1 className="enter enter--solid mt-4 text-step-5" style={{ "--enter-delay": "80ms" } as CSSProperties}>
+          <h1
+            className="enter enter--solid mt-4 text-step-5"
+            style={{ "--enter-delay": "80ms" } as CSSProperties}
+          >
             {project.title}
           </h1>
           <p

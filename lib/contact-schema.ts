@@ -10,4 +10,3 @@ export const contactSchema = z.object({
   // Honeypot: real people never see this field, so any value means a bot.
   website: z.string().max(0).optional(),
 });
-
