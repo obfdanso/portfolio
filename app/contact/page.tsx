@@ -12,12 +12,12 @@ export default function ContactPage() {
     <div className="container-page py-24">
       <h1 className="enter enter--solid text-step-4">Contact</h1>
       <p className="mt-5 max-w-xl text-fg-muted">
-        I am looking for frontend roles and internships. Send a message below, or email me directly
+        I am looking for software engineering roles and internships. Send a message below, or email me directly
         at{" "}
         <a href={`mailto:${SITE.email}`} className="link-grow text-accent">
           {SITE.email}
         </a>
-        . The direct address always works, even if the form does not.
+        .
       </p>
 
       <div className="mt-12">
@@ -34,3 +34,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

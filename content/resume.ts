@@ -17,13 +17,11 @@ export type Resume = {
  * The /resume page renders entirely from this object, so updating the resume
  * is an edit to one data file with no layout work. Keep public/resume.pdf in
  * sync when this changes.
- *
- * TO CONFIRM (Danso): education dates and programme are assumed from context
- * and must be corrected before launch.
  */
+
 export const resume: Resume = {
   summary:
-    "Frontend engineer building typed, accessible web interfaces in TypeScript and React. Frontend contributor on three projects, including a deployed medication-tracking app with an AI assistant.",
+    "Software engineer building scalable applications, robust databases, and typed web interfaces. Key contributor on three projects, including a deployed medication-tracking app with an AI assistant.",
 
   education: [
     {
@@ -46,11 +44,11 @@ export const resume: Resume = {
       ],
     },
     {
-      title: "Frontend Developer",
+      title: "Developer, solo build",
       org: "POS",
       period: "2025",
       points: [
-        "Built three role-specific interfaces — administrator, manager, and cashier — over shared data.",
+        "Built three role-specific interfaces, for administrator, manager, and cashier, over shared data.",
         "Optimised the cashier flow for speed and keyboard operation, the path used most often.",
       ],
     },
@@ -69,7 +67,9 @@ export const resume: Resume = {
     { group: "Languages", items: ["TypeScript", "JavaScript", "HTML", "CSS"] },
     { group: "Frameworks", items: ["React", "Next.js", "React Native"] },
     { group: "Tooling", items: ["Git", "Vercel", "Vite"] },
+    { group: "Core & AI", items: ["Database Design", "System Analysis", "Networking", "AI Tools"] },
   ],
 
-  pdfPath: "/resume.pdf",
+  pdfPath: "/Danso_Daniel.pdf",
 };
+

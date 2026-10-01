@@ -23,7 +23,7 @@ cover:
 
 bitby is a **UI reconstruction study**: an independent learning project that
 rebuilds the interface patterns of the Binance mobile app.
-It is **not affiliated with, endorsed by, or connected to Binance**, reproduces none of their trademarks or logos, and is not a working exchange — there is no real market data, no accounts, and no trades.
+It is **not affiliated with, endorsed by, or connected to Binance**, reproduces none of their trademarks or logos, and is not a working exchange, with no real market data, no accounts, and no trades.
 
 The reason to rebuild a trading interface is that it is genuinely difficult.
 Dense numeric rows, constant updates, tight vertical rhythm, and a hierarchy
@@ -32,8 +32,8 @@ screens ever pose.
 
 ## My role
 
-I built the frontend — the screens, the navigation, and the list and chart
-components.
+I built the frontend, including the screens, the navigation, and the list and
+chart components.
 
 It is a React Native app. The backend was written in Java by someone else;
 the `stack` listed above is deliberately limited to what I actually built,
@@ -50,7 +50,7 @@ constantly-updating numeric rows punishes naive re-rendering, so the row
 components were built to update in isolation from the start rather than being
 optimised later.
 
-{/* TO CONFIRM: what you rejected. */}
+
 
 ## The hard part
 
@@ -67,4 +67,5 @@ What I took from it was calibration. Matching a production interface by eye
 teaches how much of a polished product is spacing and type discipline rather
 than features.
 
-{/* TO CONFIRM: one specific technical change you would make. */}
+While I don't have any major regrets about how it turned out, if I were to build this again today, I would apply much stronger design patterns and architectural knowledge from the very beginning to keep the frontend logic even cleaner.
+

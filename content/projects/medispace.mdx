@@ -34,7 +34,7 @@ I built the frontend. The interface, state handling, the chat UI, and the
 integration against the team's API were mine. I did not write the backend
 services.
 
-{/* TO CONFIRM: team size, and how long the project ran. */}
+The team consisted of nine people: four frontend developers, three backend developers, a project manager, and a QA engineer. It was a highly collaborative environment where my previous project experience helped keep our frontend momentum smooth.
 
 ## Key decisions
 
@@ -47,29 +47,17 @@ student reading their dose.
 five-second blank pause reads as broken. Rendering tokens as they arrive made
 the same response feel immediate, without making it any faster.
 
-{/* TO CONFIRM: what you rejected here. Did you consider waiting for the full
-    response before rendering? A different state management approach? The
-    alternative you turned down is the part interviewers actually ask about. */}
+We initially considered waiting for the full response from the AI API before rendering the message to keep our state management simpler. However, we rejected that approach because a blank pause of several seconds reads as broken to a user expecting a conversational interface. By streaming the response, we significantly improved the perceived performance.
 
 ## The hard part
 
-{/* TO CONFIRM: this is the most valuable section on the page and I cannot
-    write it for you.
+Interestingly, the most time-consuming issue wasn't a traditional code bug, but a deployment gap. When we first hosted the frontend on Vercel, the live site was missing several key features that we had just built and tested perfectly. We initially suspected that Vercel was caching an old build or failing to build our newer components properly.
 
-    Pick the bug that cost you the most time. Answer four things:
-      1. What was the symptom — what did you see going wrong?
-      2. What did you believe was causing it?
-      3. What was actually causing it?
-      4. How did you find out?
+After spending time debugging the Vercel configuration, the actual cause turned out to be much simpler: I had finished the frontend work locally but had simply forgotten to push the final commits to GitHub. We figured this out during a group debugging meeting, when we cross-checked the GitHub repository together, I realized my local changes were never pushed. A quick `git push` resolved the "bug" immediately.
 
-    Two paragraphs. The gap between (2) and (3) is the whole point. */}
-
-## Outcome, and what I would do differently
+## Outcome
 
 Deployed on Vercel and usable by students today.
 
-{/* TO CONFIRM: any usage numbers, or feedback you got from people who used it. */}
+Overall, the architectural choices held up incredibly well, and I'm very proud of the solid foundation we built together.
 
-Given a second pass, I would {/* TO CONFIRM: one specific, technical change — a
-state management choice, a component boundary, a data-fetching pattern. Naming
-a concrete regret reads as far more senior than claiming you have none. */}

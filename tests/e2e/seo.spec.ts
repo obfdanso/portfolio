@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { SITE } from "@/lib/site";
 
 test("serves a sitemap listing every project", async ({ request }) => {
   const response = await request.get("/sitemap.xml");
@@ -31,7 +32,7 @@ test("embeds Person structured data", async ({ page }) => {
 
   expect(data["@type"]).toBe("Person");
   expect(data.email).toBe("mailto:ddanso3000@gmail.com");
-  expect(data.jobTitle).toBe("Frontend Engineer");
+  expect(data.jobTitle).toBe(SITE.role);
   expect(data.jobTitle).not.toMatch(/full[- ]stack/i);
 });
 

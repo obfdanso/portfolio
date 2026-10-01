@@ -6,7 +6,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `${SITE.name}, frontend engineer.`,
+  description: `${SITE.name}, software engineer.`,
 };
 
 // Set to a real path once the photo exists. Until then the typographic
@@ -26,20 +26,17 @@ export default function AboutPage() {
       <div className="container-page grid gap-12 py-16 md:grid-cols-[1fr_17rem]">
         <div>
           <p className="text-step-1">
-            I am {SITE.name}, a frontend engineer based in Accra, Ghana.
+            I am {SITE.name}, a software engineer based in Accra, Ghana.
           </p>
           <p className="mt-5 text-fg-muted">
-            I build web interfaces in TypeScript and React. The work I am proudest of is the
+            I build scalable full-stack applications, blending strong database and networking fundamentals with modern AI tooling. The work I am proudest of is the
             unglamorous part: typed data models that fail at compile time instead of in front of a
             user, loading states that tell the truth, and interfaces that work from the keyboard.
           </p>
           <p className="mt-5 text-fg-muted">
-            I have been the frontend developer on three projects — a medication tracker with an AI
+            I have been a key developer on three projects: a medication tracker with an AI
             chatbot, a multi-role point-of-sale system, and a mobile UI reconstruction study. Each
             has a written case study covering what I decided and what I would change.
-          </p>
-          <p className="mt-5 text-fg-muted">
-            I am currently looking for frontend roles and internships.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -81,3 +78,4 @@ export default function AboutPage() {
     </>
   );
 }
+
