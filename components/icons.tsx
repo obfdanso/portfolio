@@ -1,4 +1,4 @@
-// Inline SVGs rather than an icon package: five icons do not justify a
+// Inline SVGs rather than an icon package: a handful of icons do not justify a
 // dependency, and these ship as markup with zero JavaScript.
 
 type IconProps = { className?: string };
@@ -53,14 +53,6 @@ export function ResumeIcon({ className }: IconProps) {
   );
 }
 
-export function ContactIcon({ className }: IconProps) {
-  return (
-    <svg {...base} className={className}>
-      <rect x="2.75" y="5" width="18.5" height="14" rx="2" />
-      <path d="m3.5 6.5 8.5 6.25L20.5 6.5" />
-    </svg>
-  );
-}
 
 export function MenuIcon({ className }: IconProps) {
   return (

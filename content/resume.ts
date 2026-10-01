@@ -5,7 +5,7 @@ export type Entry = {
   points: string[];
 };
 
-export type Resume = {
+type Resume = {
   summary: string;
   education: Entry[];
   experience: Entry[];
