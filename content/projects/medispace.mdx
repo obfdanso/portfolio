@@ -53,11 +53,15 @@ We initially considered waiting for the full response from the AI API before ren
 
 Interestingly, the most time-consuming issue wasn't a traditional code bug, but a deployment gap. When we first hosted the frontend on Vercel, the live site was missing several key features that we had just built and tested perfectly. We initially suspected that Vercel was caching an old build or failing to build our newer components properly.
 
-After spending time debugging the Vercel configuration, the actual cause turned out to be much simpler: I had finished the frontend work locally but had simply forgotten to push the final commits to GitHub. We figured this out during a group debugging meeting, when we cross-checked the GitHub repository together, I realized my local changes were never pushed. A quick `git push` resolved the "bug" immediately.
+After spending time debugging the Vercel configuration, the actual cause turned out to be much simpler: I had finished the frontend work locally but had simply forgotten to push the final commits to GitHub. We found it during a group debugging meeting: when we cross-checked the GitHub repository together, I realized my local changes had never been pushed. A quick `git push` resolved the "bug" immediately.
 
-## Outcome
+## Outcome, and what I would do differently
 
 Deployed on Vercel and usable by students today.
 
 Overall, the architectural choices held up incredibly well, and I'm very proud of the solid foundation we built together.
+
+If I built it again, the part I would change is the chatbot's interface. The
+streaming worked, but the UI around the conversation is where I would spend my
+time on a second pass.
 
