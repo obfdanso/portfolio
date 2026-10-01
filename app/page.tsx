@@ -24,11 +24,11 @@ export default function HomePage() {
           </p>
 
           <h1 className="enter enter--solid mt-6 max-w-[15ch] text-step-5" style={stagger(80)}>
-            Frontend engineer building fast, accessible interfaces.
+            Software engineer building scalable systems and accessible interfaces.
           </h1>
 
           <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(160)}>
-            I build web interfaces in TypeScript and React. Below is the work, with a written case
+            I build full-stack applications with expertise in databases, system analysis, and AI. Below is the work, with a written case
             study for each project.
           </p>
 
@@ -68,8 +68,8 @@ export default function HomePage() {
           <SectionNumber value={2} /> About
         </h2>
         <p className="mt-8 max-w-2xl text-step-1 text-fg-muted">
-          I am a frontend developer studying at KNUST. I care about interfaces that stay fast and
-          usable — which mostly means typed data, honest loading states, and keyboard support.
+          I am a software engineering student at KNUST. I care about interfaces that stay fast and
+          usable, which mostly means typed data, honest loading states, and keyboard support.
         </p>
         <Link href="/about" className="link-grow mt-6 inline-block text-accent">
           More about me
@@ -78,3 +78,4 @@ export default function HomePage() {
     </>
   );
 }
+

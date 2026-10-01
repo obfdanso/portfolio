@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { SITE } from "@/lib/site";
 
 const FILLED = {
   name: "Ama",
@@ -129,18 +130,28 @@ test("hides the honeypot from assistive technology", async ({ page }) => {
   await expect(honeypot).toHaveAttribute("tabindex", "-1");
 });
 
-test("offers a downloadable resume", async ({ page }) => {
+test("offers a resume that actually downloads", async ({ page, request }) => {
   await page.goto("/resume");
-  await expect(page.getByRole("link", { name: /download pdf/i })).toHaveAttribute(
-    "href",
-    "/resume.pdf",
-  );
+  const link = page.getByRole("link", { name: /download pdf/i });
+
+  const href = await link.getAttribute("href");
+  expect(href).toBeTruthy();
+
+  // The link pointed at a 620-byte placeholder for a while: a 200 is not
+  // enough, so assert it is a real PDF of plausible size.
+  const response = await request.get(href!);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("pdf");
+
+  const body = await response.body();
+  expect(body.byteLength).toBeGreaterThan(20_000);
 });
 
 test("the about page renders without a photo", async ({ page }) => {
   await page.goto("/about");
   await expect(page.getByRole("heading", { level: 1, name: "About" })).toBeVisible();
-  await expect(page.getByText("Frontend Engineer").first()).toBeVisible();
+  // The typographic stand-in renders the role; assert that, not a fixed title.
+  await expect(page.getByText(SITE.role).first()).toBeVisible();
 });
 
 test("the footer offers contact routes on every page", async ({ page }) => {
