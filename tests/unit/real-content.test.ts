@@ -29,9 +29,9 @@ describe("real project content", () => {
   });
 
   it("never offers a live link for bitby, which is not deployed", () => {
-    // repo-only until the screen recording exists; then it becomes "recording".
+    // "recording-pending" until the screen recording exists, then "recording".
     const kind = projects.find((p) => p.slug === "bitby")?.demo.kind;
-    expect(["repo-only", "recording"]).toContain(kind);
+    expect(["recording-pending", "recording"]).toContain(kind);
   });
 
   it("points every cover and recording at a file that exists", () => {

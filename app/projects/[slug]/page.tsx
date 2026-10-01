@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getProject, loadProjects } from "@/lib/content";
 import { Mdx } from "@/components/mdx";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
+import { RecordingSoon } from "@/components/recording-soon";
 
 export function generateStaticParams() {
   return loadProjects().map((project) => ({ slug: project.slug }));
@@ -86,6 +87,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             <source src={project.demo.videoSrc} type="video/mp4" />
             Your browser does not support embedded video. Use the Source link to view the code.
           </video>
+        </div>
+      )}
+
+      {project.demo.kind === "recording-pending" && (
+        <div className="container-page mt-10">
+          <RecordingSoon hue={project.accentHue} repoUrl={project.demo.repoUrl} />
         </div>
       )}
 

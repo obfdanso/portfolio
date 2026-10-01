@@ -34,7 +34,10 @@ I built the frontend. The interface, state handling, the chat UI, and the
 integration against the team's API were mine. I did not write the backend
 services.
 
-The team consisted of nine people: four frontend developers, three backend developers, a project manager, and a QA engineer. It was a highly collaborative environment where my previous project experience helped keep our frontend momentum smooth.
+The team had nine people: four frontend developers, three backend developers,
+a project manager and a QA engineer. I had already worked on a large team
+project before this one, and that experience helped me keep the frontend work
+on track.
 
 ## Key decisions
 
@@ -43,25 +46,31 @@ rendering silently as `undefined` is a real problem, not a cosmetic one. Typed
 models meant a mismatch failed at compile time rather than in front of a
 student reading their dose.
 
-**Streaming the chatbot's replies.** A medical question answered after a
-five-second blank pause reads as broken. Rendering tokens as they arrive made
-the same response feel immediate, without making it any faster.
-
-We initially considered waiting for the full response from the AI API before rendering the message to keep our state management simpler. However, we rejected that approach because a blank pause of several seconds reads as broken to a user expecting a conversational interface. By streaming the response, we significantly improved the perceived performance.
+**Streaming the chatbot's replies.** We first planned to wait for the full
+answer from the AI API before showing it, because that kept the state simpler.
+We dropped that plan: in a chat, a few seconds of blank screen looks broken.
+Showing the reply as it arrives makes the same answer feel immediate, even
+though it takes just as long.
 
 ## The hard part
 
-Interestingly, the most time-consuming issue wasn't a traditional code bug, but a deployment gap. When we first hosted the frontend on Vercel, the live site was missing several key features that we had just built and tested perfectly. We initially suspected that Vercel was caching an old build or failing to build our newer components properly.
+The problem that cost us the most time was not a bug in the code. When we
+first put the frontend on Vercel, the live site was missing features we had
+just built and tested. We assumed Vercel was serving an old build, or failing
+to build the new components.
 
-After spending time debugging the Vercel configuration, the actual cause turned out to be much simpler: I had finished the frontend work locally but had simply forgotten to push the final commits to GitHub. We found it during a group debugging meeting: when we cross-checked the GitHub repository together, I realized my local changes had never been pushed. A quick `git push` resolved the "bug" immediately.
+We spent a while going through the Vercel settings before finding the real
+cause. I had finished the work on my machine but never pushed the last commits
+to GitHub, so Vercel was building an older version of the code. We caught it in
+a group debugging session, when we compared the GitHub repository with what I
+had locally. One `git push` fixed it.
 
 ## Outcome, and what I would do differently
 
-Deployed on Vercel and usable by students today.
+MediSpace is deployed on Vercel and students can use it today. The structure
+we chose held up well, and I am proud of what the team built.
 
-Overall, the architectural choices held up incredibly well, and I'm very proud of the solid foundation we built together.
-
-If I built it again, the part I would change is the chatbot's interface. The
-streaming worked, but the UI around the conversation is where I would spend my
-time on a second pass.
+If I built it again, I would change the chatbot's interface. The streaming
+worked, but the chat screen around it is where I would put my time on a second
+pass.
 
