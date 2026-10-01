@@ -7,7 +7,7 @@ import { z } from "zod";
  * without it a repo-only project could carry a stray `url` that a template
  * might pick up.
  */
-export const demoSchema = z.discriminatedUnion("kind", [
+const demoSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     kind: z.literal("live"),
     url: z.url(),
@@ -52,5 +52,4 @@ export const projectFrontmatterSchema = z.object({
   }),
 });
 
-export type Demo = z.infer<typeof demoSchema>;
 export type ProjectFrontmatter = z.infer<typeof projectFrontmatterSchema>;

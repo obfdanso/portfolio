@@ -11,4 +11,3 @@ export const contactSchema = z.object({
   website: z.string().max(0).optional(),
 });
 
-export type ContactInput = z.infer<typeof contactSchema>;
