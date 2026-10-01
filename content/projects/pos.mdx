@@ -2,8 +2,8 @@
 title: POS
 slug: pos
 summary: An interactive point-of-sale web app with separate interfaces for administrators, managers, and cashiers.
-role: Frontend Developer
-contribution: Frontend only
+role: Developer, solo build
+contribution: Frontend and backend integration
 timeframe: "2025"
 stack: ["JavaScript", "React"]
 featured: false
@@ -17,8 +17,7 @@ cover:
   alt: The POS cashier screen during a sale
 ---
 
-{/* TO CONFIRM: once POS is deployed, change the frontmatter above to
-    demo.kind: live with its URL. Nothing else needs to change. */}
+
 
 ## Context
 
@@ -31,11 +30,7 @@ project treats them as three interfaces over shared data instead.
 
 ## My role
 
-I built the frontend: all three role-specific interfaces, the component
-structure, and the client-side state.
-
-{/* TO CONFIRM: was this solo or a group project? If a group, who handled the
-    backend, and how many of you were there? */}
+This was a solo school project. Because I was building it alone, I had the freedom to own the entire application lifecycle, from designing the role-specific interfaces to handling the backend integration.
 
 ## Key decisions
 
@@ -45,16 +40,16 @@ architecture. Each role gets a layout shaped around its own task instead.
 
 **Speed over completeness on the cashier screen.** That flow runs hundreds of
 times a day, so it is keyboard-driven and reachable in the fewest possible
-interactions — even where that meant leaving features out of that particular
+interactions, even where that meant leaving features out of that particular
 view.
 
-{/* TO CONFIRM: what did you reject? Naming the alternative you considered and
-    turned down is what makes a decision read as a decision. */}
+I initially thought of using a more conventional tablet-style UI layout that heavily relied on point-and-click menus. I ended up rejecting it because, while it might look more modern, a highly optimized keyboard-driven flow is much faster for a cashier in the real world.
 
 ## The hard part
 
-{/* TO CONFIRM: the bug or design problem that cost you the most time. Symptom,
-    what you thought was wrong, what was actually wrong, and how you found out. */}
+The most stubborn problem I faced actually happened on the backend. During development, all the product images in the POS system suddenly stopped rendering. My immediate assumption was that the image assets hadn't been uploaded or were somehow deleted from the database.
+
+However, after checking the file system, I found that the images were all there, just accidentally placed in the wrong directory where the backend server couldn't serve them statically. The fix was as simple as moving the folder into the correct directory and restarting the backend server.
 
 ## Outcome, and what I would do differently
 
@@ -63,3 +58,4 @@ Built as a student project and complete as an interface.
 **I would write it in TypeScript.** It is plain JavaScript, and a domain built
 on prices, quantities and running totals is exactly where a type system earns
 its cost. Porting it is the clearest improvement available.
+

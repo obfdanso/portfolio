@@ -5,12 +5,13 @@ import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: { default: `${SITE.name} — ${SITE.role}`, template: `%s — ${SITE.shortName}` },
-  description: "Frontend engineer building fast, accessible interfaces.",
+  description: "Software engineer building scalable systems and fast, accessible interfaces.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-scroll-behavior="smooth"
       className={`${sans.variable} ${mono.variable}`}
     >
-      <body className="min-h-dvh bg-ground text-fg antialiased">
+      <body className="min-h-dvh bg-ground text-fg antialiased" suppressHydrationWarning>
         <JsonLd />
         <ThemeProvider>
           <a href="#main" className="skip-link">
@@ -38,7 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SiteFooter />
           </div>
         </ThemeProvider>
+        {/* Vercel serves /_vercel/insights/script.js itself, so anywhere else
+            the script 404s: a console error that costs the Best Practices
+            score locally and in CI. VERCEL is set only on their builders. */}
+        {process.env.VERCEL === "1" && <Analytics />}
       </body>
     </html>
   );
 }
+
