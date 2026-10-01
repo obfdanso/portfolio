@@ -54,6 +54,28 @@ describe("projectFrontmatterSchema", () => {
     expect(result.success).toBe(true);
   });
 
+  it("accepts a recording that is still on its way", () => {
+    const result = projectFrontmatterSchema.safeParse({
+      ...valid,
+      demo: { kind: "recording-pending", repoUrl: "https://github.com/obfdanso/bitby" },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a pending recording that already names a video file", () => {
+    // Pending means there is nothing to play. A videoSrc here would let a
+    // template render a player that cannot play.
+    const result = projectFrontmatterSchema.safeParse({
+      ...valid,
+      demo: {
+        kind: "recording-pending",
+        repoUrl: "https://github.com/obfdanso/bitby",
+        videoSrc: "/projects/bitby-demo.mp4",
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
   it("rejects an unknown demo kind", () => {
     const result = projectFrontmatterSchema.safeParse({
       ...valid,

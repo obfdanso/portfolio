@@ -14,6 +14,8 @@
   --duration-fast: 120ms;
   --duration-base: 240ms;
   --duration-slow: 400ms;
+  /* Ambient loops only (never interaction feedback). */
+  --duration-pulse: 2800ms;
 
   --mesh-opacity: 0.85;
 
@@ -622,5 +624,75 @@ p {
   .link-grow:hover,
   .link-grow:focus-visible {
     background-size: 100% 1px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Recording placeholder
+
+   Two rings ripple out from a play disc that breathes slightly, over the
+   drifting mesh. The second ring starts half a cycle late so the motion never
+   pauses. Transform and opacity only.
+--------------------------------------------------------------------------- */
+
+.recording-soon__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.recording-soon__disc {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--color-fg);
+  color: var(--color-ground);
+  box-shadow: 0 10px 30px -10px color-mix(in oklch, var(--color-fg) 55%, transparent);
+  animation: recording-breathe var(--duration-pulse) ease-in-out infinite;
+}
+
+.recording-soon__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1.5px solid color-mix(in oklch, var(--color-fg) 60%, transparent);
+  opacity: 0;
+  animation: recording-ripple var(--duration-pulse) var(--ease-brand) infinite;
+}
+
+.recording-soon__ring--late {
+  animation-delay: calc(var(--duration-pulse) / 2);
+}
+
+@keyframes recording-ripple {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+@keyframes recording-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recording-soon__disc,
+  .recording-soon__ring {
+    animation: none;
   }
 }

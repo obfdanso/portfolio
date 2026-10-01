@@ -45,16 +45,14 @@ test("the transition uses the brand easing and a permitted duration", async ({ p
   await page.goto("/");
   const button = page.getByRole("link", { name: /see the work/i });
 
-  const { easing, durations } = await button.evaluate((el) => {
-    const style = getComputedStyle(el);
-    return {
-      easing: style.transitionTimingFunction,
-      durations: style.transitionDuration.split(",").map((d) => d.trim()),
-    };
-  });
+  // toHaveCSS retries until styles settle. A one-shot evaluate() read raced
+  // stylesheet application under full parallel load and saw the initial "ease".
+  await expect(button).toHaveCSS("transition-timing-function", /cubic-bezier\(0\.22, 1, 0\.36, 1\)/);
 
-  expect(easing).toContain("cubic-bezier(0.22, 1, 0.36, 1)");
-  // Only the three tokens are permitted.
+  const durations = await button.evaluate((el) =>
+    getComputedStyle(el).transitionDuration.split(",").map((d) => d.trim()),
+  );
+  // Only the three interaction tokens are permitted.
   for (const d of durations) {
     expect(["0.12s", "0.24s", "0.4s"]).toContain(d);
   }
