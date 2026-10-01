@@ -34,15 +34,28 @@ test("offers no live link for a repo-only project", async ({ page }) => {
   await expect(page.getByRole("link", { name: /^source$/i }).first()).toBeVisible();
 });
 
-test("shows a recording, not a live link, for bitby", async ({ page }) => {
+test("links bitby to its source, with no live link", async ({ page }) => {
   await page.goto("/projects/bitby");
-  await expect(page.locator("video")).toBeVisible();
   await expect(page.getByRole("link", { name: /live site/i })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /^source$/i }).first()).toHaveAttribute(
+    "href",
+    "https://github.com/obfdanso/bitby",
+  );
 });
 
-test("does not preload the bitby recording", async ({ page }) => {
-  await page.goto("/projects/bitby");
-  await expect(page.locator("video")).toHaveAttribute("preload", "none");
+test("any embedded recording is lazy and actually playable", async ({ page, request }) => {
+  // Holds for whichever project carries a recording, so it keeps working once
+  // bitby's video lands.
+  for (const slug of SLUGS) {
+    await page.goto(`/projects/${slug}`);
+    const video = page.locator("video");
+    if ((await video.count()) === 0) continue;
+
+    await expect(video).toHaveAttribute("preload", "none");
+    const src = await video.locator("source").getAttribute("src");
+    const response = await request.get(src!);
+    expect(response.status(), `${slug} video must exist`).toBe(200);
+  }
 });
 
 test("states bitby's non-affiliation", async ({ page }) => {

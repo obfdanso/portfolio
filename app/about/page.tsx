@@ -29,7 +29,8 @@ export default function AboutPage() {
             I am {SITE.name}, a software engineer based in Accra, Ghana.
           </p>
           <p className="mt-5 text-fg-muted">
-            I build scalable full-stack applications, blending strong database and networking fundamentals with modern AI tooling. The work I am proudest of is the
+            I work on both the frontend and the backend, with a working knowledge of databases,
+            networking and system analysis. The work I am proudest of is the
             unglamorous part: typed data models that fail at compile time instead of in front of a
             user, loading states that tell the truth, and interfaces that work from the keyboard.
           </p>

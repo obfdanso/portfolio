@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadProjects } from "@/lib/content";
 
@@ -26,8 +28,23 @@ describe("real project content", () => {
     }
   });
 
-  it("gives bitby a recording demo, since it is not deployed", () => {
-    expect(projects.find((p) => p.slug === "bitby")?.demo.kind).toBe("recording");
+  it("never offers a live link for bitby, which is not deployed", () => {
+    // repo-only until the screen recording exists; then it becomes "recording".
+    const kind = projects.find((p) => p.slug === "bitby")?.demo.kind;
+    expect(["repo-only", "recording"]).toContain(kind);
+  });
+
+  it("points every cover and recording at a file that exists", () => {
+    // A recording demo with a missing file ships a player that cannot play.
+    // This is what makes flipping bitby to "recording" safe.
+    const pub = (src: string) => path.join(process.cwd(), "public", src);
+    for (const project of projects) {
+      expect(fs.existsSync(pub(project.cover.src)), `${project.slug} cover`).toBe(true);
+      if (project.demo.kind === "recording") {
+        expect(fs.existsSync(pub(project.demo.videoSrc)), `${project.slug} video`).toBe(true);
+        expect(fs.existsSync(pub(project.demo.posterSrc)), `${project.slug} poster`).toBe(true);
+      }
+    }
   });
 
   it("labels bitby as a reconstruction study with no affiliation", () => {

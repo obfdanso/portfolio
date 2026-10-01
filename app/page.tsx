@@ -28,8 +28,9 @@ export default function HomePage() {
           </h1>
 
           <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(160)}>
-            I build full-stack applications with expertise in databases, system analysis, and AI. Below is the work, with a written case
-            study for each project.
+            I work across the frontend and the backend, with a working knowledge of databases,
+            networking and system analysis. Below is the work, with a written case study for each
+            project.
           </p>
 
           <div className="enter mt-10 flex flex-wrap gap-4" style={stagger(240)}>

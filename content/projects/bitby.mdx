@@ -10,19 +10,32 @@ featured: false
 order: 3
 accentHue: 48
 demo:
-  kind: recording
-  posterSrc: /projects/bitby-poster.png
-  videoSrc: /projects/bitby-demo.mp4
+  kind: repo-only
   repoUrl: https://github.com/obfdanso/bitby
 cover:
   src: /projects/bitby-cover.png
   alt: The bitby market list, showing rows of live-style price data
 ---
 
+{/* RECORDING SLOT. When the screen recording exists:
+      1. Save it as public/projects/bitby-demo.mp4
+      2. Save a still frame as public/projects/bitby-poster.png
+      3. Replace the demo block in the frontmatter above with:
+
+         demo:
+           kind: recording
+           posterSrc: /projects/bitby-poster.png
+           videoSrc: /projects/bitby-demo.mp4
+           repoUrl: https://github.com/obfdanso/bitby
+
+    The card then shows a "Demo video" button and this page embeds the player.
+    The tests check that both files exist, so a missing file fails loudly
+    instead of shipping a broken player. */}
+
 ## Context
 
-bitby is a **UI reconstruction study**: an independent learning project that
-rebuilds the interface patterns of the Binance mobile app.
+bitby is a **UI reconstruction study**: a student learning project that rebuilds
+the interface patterns of the Binance mobile app.
 It is **not affiliated with, endorsed by, or connected to Binance**, reproduces none of their trademarks or logos, and is not a working exchange, with no real market data, no accounts, and no trades.
 
 The reason to rebuild a trading interface is that it is genuinely difficult.
@@ -32,12 +45,14 @@ screens ever pose.
 
 ## My role
 
-I built the frontend, including the screens, the navigation, and the list and
-chart components.
+This was my first large project, and I was new to almost everything involved
+in it. It was a team effort: three frontend developers, three backend developers
+and a project manager.
 
-It is a React Native app. The backend was written in Java by someone else;
-the `stack` listed above is deliberately limited to what I actually built,
-which is the same rule every project on this site follows.
+I worked on the frontend, including the screens, the navigation, and the list
+and chart components. The app is built in React Native, and the backend
+developers built the Java backend. The `stack` above lists only what I worked
+on, which is the same rule every project on this site follows.
 
 ## Key decisions
 
@@ -50,22 +65,27 @@ constantly-updating numeric rows punishes naive re-rendering, so the row
 components were built to update in isolation from the start rather than being
 optimised later.
 
-
-
 ## The hard part
 
-{/* TO CONFIRM: the specific problem — list performance, chart rendering, or
-    navigation state. Symptom, what you thought was wrong, what was actually
-    wrong, and how you found out. */}
+The hardest problem came when we connected the frontend to the backend. Each
+side worked perfectly on its own, but once we joined them they would not talk
+to each other, and for a while we honestly did not know why.
+
+The cause was on the frontend. It contained logic that stopped the calls to the
+backend from completing successfully, so the backend never received a request
+it could answer. Removing that logic fixed it. What I took from it is to connect
+the two halves early, rather than assuming that two pieces which each work alone
+will work together.
 
 ## Outcome, and what I would do differently
 
-Not bundled for distribution, so the demo here is a screen recording rather
-than something you can install.
+The app was not bundled for distribution, so there is nothing to install. The
+source is on GitHub.
 
 What I took from it was calibration. Matching a production interface by eye
 teaches how much of a polished product is spacing and type discipline rather
 than features.
 
-While I don't have any major regrets about how it turned out, if I were to build this again today, I would apply much stronger design patterns and architectural knowledge from the very beginning to keep the frontend logic even cleaner.
-
+I do not regret how it turned out, but if I built it again I would approach the
+design differently from the start, bringing in the design patterns and
+architectural knowledge I have now to keep the frontend logic cleaner.
