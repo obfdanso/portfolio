@@ -89,9 +89,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
         ))}
       </ul>
 
-      {visible.length === 0 && (
-        <p className="mt-8 text-fg-muted">No projects use {filter}.</p>
-      )}
+      {visible.length === 0 && <p className="mt-8 text-fg-muted">No projects use {filter}.</p>}
     </div>
   );
 }

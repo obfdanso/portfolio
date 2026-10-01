@@ -111,7 +111,9 @@ describe("projectFrontmatterSchema", () => {
 
   it("rejects a slug that is not lowercase kebab-case", () => {
     expect(projectFrontmatterSchema.safeParse({ ...valid, slug: "MediSpace" }).success).toBe(false);
-    expect(projectFrontmatterSchema.safeParse({ ...valid, slug: "medi space" }).success).toBe(false);
+    expect(projectFrontmatterSchema.safeParse({ ...valid, slug: "medi space" }).success).toBe(
+      false,
+    );
   });
 
   it("rejects a non-integer order", () => {

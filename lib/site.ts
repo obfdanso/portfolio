@@ -6,4 +6,3 @@ export const SITE = {
   github: "https://github.com/obfdanso",
   url: "https://danso.dev",
 } as const;
-

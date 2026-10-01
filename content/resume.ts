@@ -72,4 +72,3 @@ export const resume: Resume = {
 
   pdfPath: "/Danso_Daniel.pdf",
 };
-
