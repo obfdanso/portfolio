@@ -436,15 +436,6 @@ p {
   }
 }
 
-@keyframes enter-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .enter {
   animation: enter-rise var(--duration-slow) var(--ease-brand) both;
   animation-delay: var(--enter-delay, 0ms);
@@ -470,10 +461,6 @@ p {
 
 .enter--solid {
   animation-name: enter-rise-solid;
-}
-
-.enter--fade {
-  animation-name: enter-fade;
 }
 
 /* ---------------------------------------------------------------------------

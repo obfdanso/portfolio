@@ -36,10 +36,8 @@ export function ProjectList({ projects }: { projects: Project[] }) {
     const focused = document.activeElement;
     const current = cards.findIndex((card) => card.contains(focused));
 
-    // Nothing focused yet (the prev/next buttons were clicked): start at the
-    // first card rather than jumping to the end.
-    const next =
-      current === -1 ? 0 : Math.min(Math.max(current + direction, 0), cards.length - 1);
+    // Clamped, so the ends of the rail hold rather than wrap.
+    const next = Math.min(Math.max(current + direction, 0), cards.length - 1);
 
     const target = cards[next];
     if (!target) return;
@@ -68,7 +66,6 @@ export function ProjectList({ projects }: { projects: Project[] }) {
           </button>
         ))}
       </div>
-
 
       <ul
         ref={listRef}
