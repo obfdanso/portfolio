@@ -43,6 +43,33 @@ test("links bitby to its source, with no live link", async ({ page }) => {
   );
 });
 
+test("bitby shows a coming-soon panel in place of a player", async ({ page }) => {
+  await page.goto("/projects/bitby");
+  await expect(page.getByText(/screen recording coming soon/i)).toBeVisible();
+  await expect(page.locator("video")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /view the source/i })).toHaveAttribute(
+    "href",
+    "https://github.com/obfdanso/bitby",
+  );
+});
+
+test("the coming-soon panel animates", async ({ page }) => {
+  await page.goto("/projects/bitby");
+  const ring = page.locator(".recording-soon__ring").first();
+  await expect(ring).toHaveCSS("animation-name", "recording-ripple");
+});
+
+test.describe("coming-soon panel, reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("holds still and stays readable", async ({ page }) => {
+    await page.goto("/projects/bitby");
+    await expect(page.locator(".recording-soon__ring").first()).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".recording-soon__disc")).toHaveCSS("animation-name", "none");
+    await expect(page.getByText(/screen recording coming soon/i)).toBeVisible();
+  });
+});
+
 test("any embedded recording is lazy and actually playable", async ({ page, request }) => {
   // Holds for whichever project carries a recording, so it keeps working once
   // bitby's video lands.

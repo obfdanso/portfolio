@@ -23,6 +23,12 @@ export const demoSchema = z.discriminatedUnion("kind", [
     videoSrc: z.string().min(1),
     repoUrl: z.url(),
   }),
+  // A recording is planned but does not exist yet. The case study shows a
+  // "coming soon" panel; the card offers only the source link.
+  z.strictObject({
+    kind: z.literal("recording-pending"),
+    repoUrl: z.url(),
+  }),
 ]);
 
 export const projectFrontmatterSchema = z.object({

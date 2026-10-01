@@ -1,7 +1,15 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const ROUTES = ["/", "/projects", "/projects/medispace", "/about", "/resume", "/contact"];
+const ROUTES = [
+  "/",
+  "/projects",
+  "/projects/medispace",
+  "/projects/bitby",
+  "/about",
+  "/resume",
+  "/contact",
+];
 // "best-practice" is included deliberately: heading-order lives there
 // rather than under a wcag tag, and Lighthouse checks it. Without this
 // the sweep passed while Lighthouse failed.
