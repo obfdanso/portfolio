@@ -21,7 +21,7 @@ export type Resume = {
 
 export const resume: Resume = {
   summary:
-    "Software engineer building scalable applications, robust databases, and typed web interfaces. Key contributor on three projects, including a deployed medication-tracking app with an AI assistant.",
+    "Software engineer working across the frontend and the backend, with a working knowledge of databases, networking and system analysis. Key contributor on three projects, including a deployed medication-tracking app with an AI assistant.",
 
   education: [
     {
