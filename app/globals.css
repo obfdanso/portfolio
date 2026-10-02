@@ -89,6 +89,16 @@ p {
   max-width: 68ch;
 }
 
+/* A tap on a control is never the first half of a double-tap zoom, so the
+   browser can act on it immediately instead of waiting to see if a second tap
+   follows. Pinch zoom is unaffected. */
+a,
+button,
+[role="button"],
+[role="menuitem"] {
+  touch-action: manipulation;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
@@ -488,6 +498,48 @@ p {
 
 .enter--solid {
   animation-name: enter-rise-solid;
+}
+
+/* After the first in-app navigation, pages swap in quickly: a 4px rise and
+   fade over --duration-fast with no stagger, so a page settles almost as soon
+   as it appears. The full staggered entrance above is kept for a fresh visit,
+   where it is part of the first impression rather than something that sits
+   between a click and its result. data-navigated is set by NavigationState at
+   the moment of the click, before the next page renders.
+
+   Inside no-preference so it can never switch an animation back on under
+   reduced motion: these selectors outrank the reduced-motion reset. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-navigated] .enter {
+    animation-name: enter-quick;
+    animation-duration: var(--duration-fast);
+    animation-delay: 0ms;
+  }
+
+  /* Headings still travel without fading; see .enter--solid. */
+  [data-navigated] .enter.enter--solid {
+    animation-name: enter-quick-solid;
+  }
+}
+
+@keyframes enter-quick {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes enter-quick-solid {
+  from {
+    transform: translate3d(0, 4px, 0);
+  }
+  to {
+    transform: none;
+  }
 }
 
 /* ---------------------------------------------------------------------------
