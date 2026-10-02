@@ -65,3 +65,15 @@ test("the gradient animates only transform, never layout properties", async ({ p
 
   expect(forbidden).toEqual([]);
 });
+
+test("the blobs are soft without a blur filter", async ({ page }) => {
+  // filter: blur(110px) on the blobs doubled the paint cost of every tap and
+  // dropped GPU-less phones to about 12 frames a second. The softness now
+  // comes from eased gradient stops, which cost nothing to animate.
+  await page.goto("/");
+  const filters = await page
+    .locator(".mesh__blob")
+    .evaluateAll((els) => els.map((el) => getComputedStyle(el).filter));
+  expect(filters.length).toBe(3);
+  for (const f of filters) expect(f).toBe("none");
+});

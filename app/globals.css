@@ -100,7 +100,7 @@ p {
    Composition follows the Apple Music reference: near-black at the top
    bleeding into a smooth saturated wash across the bottom, edge to edge.
    The base vertical wash lives on the container and does the structural
-   work; three blurred blobs sit low and wide to break up the banding and
+   work; three soft blobs sit low and wide to break up the banding and
    give it organic variation. Blobs animate on the compositor only, so this
    costs no layout and no JavaScript — it renders before React hydrates.
 --------------------------------------------------------------------------- */
@@ -132,51 +132,78 @@ p {
 .mesh__blob {
   position: absolute;
   display: block;
-  border-radius: 50%;
-  /* Wide and heavily blurred so the three read as one continuous wash
-     rather than as separate lights. */
-  filter: blur(110px);
   will-change: transform;
   transform: translate3d(0, 0, 0);
+  /* Softness comes from the falloff, not a blur filter. filter: blur(110px)
+     doubled the paint cost of every tap and dropped GPU-less phones to about
+     12 frames a second.
+
+     The stops follow a smoothstep curve, 1 - (3t^2 - 2t^3), the S-shaped fade
+     a blur produces, and reach transparent exactly at the box's closest side.
+     That last part matters: a gradient still faintly coloured where the box
+     ends shows a hard oval edge, which the blur used to hide. Each blob is
+     sized so its fade covers the distance the blurred original reached, and
+     dimmed with opacity, which is free to composite. Tuned against captures of
+     the blurred original. */
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklch, var(--blob-color) 95%, transparent) 0%,
+    color-mix(in oklch, var(--blob-color) 91%, transparent) 12.5%,
+    color-mix(in oklch, var(--blob-color) 80%, transparent) 25%,
+    color-mix(in oklch, var(--blob-color) 65%, transparent) 37.5%,
+    color-mix(in oklch, var(--blob-color) 47.5%, transparent) 50%,
+    color-mix(in oklch, var(--blob-color) 30%, transparent) 62.5%,
+    color-mix(in oklch, var(--blob-color) 15%, transparent) 75%,
+    color-mix(in oklch, var(--blob-color) 4%, transparent) 87.5%,
+    transparent 100%
+  );
 }
 
 /* Deep teal carries the mass, low and left. */
 .mesh__blob--teal {
-  left: -25%;
-  bottom: -40%;
-  width: 95vmax;
-  height: 70vmax;
-  background: radial-gradient(ellipse at 50% 50%, var(--color-teal) 0%, transparent 70%);
+  left: calc(-25% - 10.25vmax);
+  bottom: calc(-40% - 7.55vmax);
+  width: 115.5vmax;
+  height: 85.1vmax;
+  opacity: 0.86;
+  --blob-color: var(--color-teal);
   animation: mesh-drift-a 26s var(--ease-brand) infinite alternate;
 }
 
 /* Emerald is the mid tone, low and right, overlapping the teal. */
 .mesh__blob--emerald {
-  right: -25%;
-  bottom: -34%;
-  width: 90vmax;
-  height: 62vmax;
-  background: radial-gradient(ellipse at 50% 50%, var(--color-emerald) 0%, transparent 68%);
+  right: calc(-25% - 8.45vmax);
+  bottom: calc(-34% - 5.85vmax);
+  width: 106.9vmax;
+  height: 73.7vmax;
+  opacity: 0.86;
+  --blob-color: var(--color-emerald);
   animation: mesh-drift-b 22s var(--ease-brand) infinite alternate;
 }
 
-/* Lime is a highlight only — roughly a tenth of the area, never behind text. */
+/* Lime is a highlight only, roughly a tenth of the area, never behind text.
+   The smallest blob, so the old blur diffused it the most; it is sized up and
+   dimmed further than the others to match that wide, faint glow. */
 .mesh__blob--lime {
-  left: 34%;
-  bottom: -30%;
-  width: 40vmax;
-  height: 30vmax;
-  background: radial-gradient(ellipse at 50% 50%, var(--color-lime) 0%, transparent 66%);
+  left: calc(34% - 14.8vmax);
+  bottom: calc(-30% - 11.1vmax);
+  width: 69.6vmax;
+  height: 52.2vmax;
+  opacity: 0.42;
+  --blob-color: var(--color-lime);
   animation: mesh-drift-c 29s var(--ease-brand) infinite alternate;
 }
 
-/* transform and opacity only — never layout or paint properties. */
+/* transform and opacity only, never layout or paint properties.
+   Translations are a percentage of each blob's own size, so they are scaled
+   down in step with the enlarged blobs: the drift covers the same distance
+   on screen as it did before. */
 @keyframes mesh-drift-a {
   from {
     transform: translate3d(0, 0, 0) scale(1);
   }
   to {
-    transform: translate3d(5%, -3%, 0) scale(1.1);
+    transform: translate3d(4.1%, -2.47%, 0) scale(1.1);
   }
 }
 
@@ -185,7 +212,7 @@ p {
     transform: translate3d(0, 0, 0) scale(1.06);
   }
   to {
-    transform: translate3d(-6%, -5%, 0) scale(0.96);
+    transform: translate3d(-5.05%, -4.21%, 0) scale(0.96);
   }
 }
 
@@ -194,7 +221,7 @@ p {
     transform: translate3d(0, 0, 0) scale(0.92);
   }
   to {
-    transform: translate3d(-4%, -8%, 0) scale(1.15);
+    transform: translate3d(-2.3%, -4.6%, 0) scale(1.15);
   }
 }
 
