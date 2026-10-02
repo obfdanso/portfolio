@@ -281,10 +281,13 @@ button,
 /* ---------------------------------------------------------------------------
    Motion
 
-   Vocabulary is fixed: scroll reveal, card lift, hero mask reveal, route
-   cross-fade, scroll-linked hue shift, and the section numerals. Every
-   animation uses --ease-brand and one of the three durations. Anything not
-   expressible in those tokens does not ship.
+   Everything that responds to the visitor uses --ease-brand and one of the
+   three durations: the staggered page entrance, scroll reveals, card lift,
+   button and pill press, underline grow, sidebar nudge, the theme menu and
+   the section numerals. Anything not expressible in those tokens does not
+   ship. Ambient loops, which respond to nothing, run on their own slow
+   timings: the mesh drift, the scroll-linked hue shift, and the recording
+   placeholder's ripple (--duration-pulse).
 --------------------------------------------------------------------------- */
 
 /* Native scroll-driven animation where supported. No JavaScript at all. */
@@ -361,7 +364,10 @@ button,
   }
 }
 
-/* Route transitions. Native, and an instant navigation where unsupported. */
+/* Cross-fade for full page loads only. In-app clicks are client-side
+   navigations, which never trigger this; the staggered entrance does that
+   job. It still applies when a link is followed before the JavaScript has
+   loaded, or with JavaScript off, and costs nothing otherwise. */
 @view-transition {
   navigation: auto;
 }
