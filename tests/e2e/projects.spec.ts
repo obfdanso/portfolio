@@ -45,9 +45,9 @@ test.describe("project index", () => {
     const first = page.getByRole("article").nth(0).getByRole("link").first();
     await first.focus();
 
-    // Tab must walk into the later cards: with the arrow buttons gone this is
-    // the primary keyboard route through the rail. Stop as soon as focus
-    // lands in the last card rather than tabbing a fixed count past it.
+    // Tab must walk into the later cards: the rail has no previous/next
+    // buttons, so this is the primary keyboard route through it. Stop as soon
+    // as focus lands in the last card rather than tabbing a fixed count past it.
     const last = page.getByRole("article").nth(2);
     let reached = false;
     for (let i = 0; i < 12 && !reached; i += 1) {
@@ -78,7 +78,7 @@ test.describe("project index", () => {
 test.describe("project index, narrow", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test("collapses to a vertical grid", async ({ page }) => {
+  test("collapses to a vertical grid on a narrow screen", async ({ page }) => {
     await page.goto("/projects");
     const overflow = await page
       .getByRole("list", { name: /projects/i })
@@ -90,7 +90,7 @@ test.describe("project index, narrow", () => {
 test.describe("project index, reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
-  test("collapses to a vertical grid", async ({ page }) => {
+  test("collapses to a vertical grid under reduced motion", async ({ page }) => {
     await page.goto("/projects");
     const snap = await page
       .getByRole("list", { name: /projects/i })

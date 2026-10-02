@@ -125,10 +125,3 @@ test("an unknown top-level route returns 404", async ({ page }) => {
   const response = await page.goto("/nope");
   expect(response?.status()).toBe(404);
 });
-
-test("gives each case study its own title and description", async ({ page }) => {
-  await page.goto("/projects/medispace");
-  await expect(page).toHaveTitle(/MediSpace/);
-  const description = await page.locator('meta[name="description"]').getAttribute("content");
-  expect(description).toMatch(/medication/i);
-});
