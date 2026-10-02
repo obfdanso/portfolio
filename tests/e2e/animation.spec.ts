@@ -184,3 +184,108 @@ test("entrance animations never shift layout", async ({ page }) => {
 
   expect(props).toEqual([]);
 });
+
+test.describe("entrance on navigation", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  async function clickSidebar(page: import("@playwright/test").Page, label: string, path: RegExp) {
+    await page
+      .getByRole("complementary", { name: /main/i })
+      .getByRole("link", { name: label, exact: true })
+      .click();
+    await expect(page).toHaveURL(path);
+  }
+
+  test("a fresh visit keeps the full staggered entrance", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("html")).not.toHaveAttribute("data-navigated");
+    const delays = await page
+      .locator("main .enter")
+      .evaluateAll((els) => els.map((el) => getComputedStyle(el).animationDelay));
+    expect(new Set(delays).size).toBeGreaterThan(1);
+  });
+
+  test("pages reached by a click swap in quickly, with no stagger", async ({ page }) => {
+    await page.goto("/");
+    await clickSidebar(page, "About", /\/about$/);
+    await expect(page.locator("html")).toHaveAttribute("data-navigated", "");
+
+    const timing = await page.locator("main .enter").evaluateAll((els) =>
+      els.map((el) => {
+        const s = getComputedStyle(el);
+        return { delay: s.animationDelay, duration: s.animationDuration };
+      }),
+    );
+    expect(timing.length).toBeGreaterThan(0);
+    for (const t of timing) {
+      expect(t.delay).toBe("0s");
+      expect(t.duration).toBe("0.12s");
+    }
+  });
+
+  test("headings still travel without fading after a navigation", async ({ page }) => {
+    await page.goto("/");
+    await clickSidebar(page, "Resume", /\/resume$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCSS(
+      "animation-name",
+      "enter-quick-solid",
+    );
+  });
+
+  test("the back button counts as a navigation", async ({ page }) => {
+    await page.goto("/");
+    await clickSidebar(page, "Projects", /\/projects$/);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/$/);
+    // Every entry, not just the first: the first one has no stagger delay
+    // anyway, so checking it alone passed before this was implemented.
+    const delays = await page
+      .locator("main .enter")
+      .evaluateAll((els) => els.map((el) => getComputedStyle(el).animationDelay));
+    expect(delays.length).toBeGreaterThan(1);
+    expect(new Set(delays)).toEqual(new Set(["0s"]));
+  });
+
+  test("a reload restores the full entrance", async ({ page }) => {
+    await page.goto("/");
+    await clickSidebar(page, "About", /\/about$/);
+    await expect(page.locator("html")).toHaveAttribute("data-navigated", "");
+    await page.goto("/");
+    await expect(page.locator("html")).not.toHaveAttribute("data-navigated");
+  });
+
+  test("an external or in-page link does not count as a navigation", async ({ page }) => {
+    await page.goto("/");
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Enter"); // the skip link, an in-page anchor
+    await expect(page.locator("html")).not.toHaveAttribute("data-navigated");
+  });
+});
+
+test.describe("entrance on navigation, reduced motion", () => {
+  test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
+
+  test("stays off after a navigation", async ({ page }) => {
+    await page.goto("/");
+    await page
+      .getByRole("complementary", { name: /main/i })
+      .getByRole("link", { name: "About", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/about$/);
+    await expect(page.locator("main .enter").first()).toHaveCSS("animation-name", "none");
+  });
+});
+
+test.describe("taps on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test("links and buttons skip the double-tap-to-zoom wait", async ({ page }) => {
+    // touch-action: manipulation tells the browser a tap is never the first
+    // half of a double-tap zoom, so it can act on the tap immediately.
+    await page.goto("/");
+    const actions = await page
+      .locator("a, button")
+      .evaluateAll((els) => [...new Set(els.map((el) => getComputedStyle(el).touchAction))]);
+    expect(actions).toEqual(["manipulation"]);
+  });
+});

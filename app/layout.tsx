@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
+import { NavigationState } from "@/components/navigation-state";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/react";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-dvh bg-ground text-fg antialiased" suppressHydrationWarning>
         <JsonLd />
+        <NavigationState />
         <ThemeProvider>
           <a href="#main" className="skip-link">
             Skip to content
