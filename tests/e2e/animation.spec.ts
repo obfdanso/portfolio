@@ -188,6 +188,9 @@ test("entrance animations never shift layout", async ({ page }) => {
 test.describe("entrance on navigation", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
+  // Danso's call, 2026-10-02: every page gets the full staggered fade-in, not
+  // only a fresh visit. A quick swap on navigation was faster but read as
+  // dull. These pin that preference so it is not optimised away again.
   async function clickSidebar(page: import("@playwright/test").Page, label: string, path: RegExp) {
     await page
       .getByRole("complementary", { name: /main/i })
@@ -196,31 +199,20 @@ test.describe("entrance on navigation", () => {
     await expect(page).toHaveURL(path);
   }
 
-  test("a fresh visit keeps the full staggered entrance", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.locator("html")).not.toHaveAttribute("data-navigated");
-    const delays = await page
-      .locator("main .enter")
-      .evaluateAll((els) => els.map((el) => getComputedStyle(el).animationDelay));
-    expect(new Set(delays).size).toBeGreaterThan(1);
-  });
-
-  test("pages reached by a click swap in quickly, with no stagger", async ({ page }) => {
+  test("pages reached by a click get the full staggered entrance", async ({ page }) => {
     await page.goto("/");
     await clickSidebar(page, "About", /\/about$/);
-    await expect(page.locator("html")).toHaveAttribute("data-navigated", "");
+    await clickSidebar(page, "Home", /\/$/);
 
     const timing = await page.locator("main .enter").evaluateAll((els) =>
       els.map((el) => {
         const s = getComputedStyle(el);
-        return { delay: s.animationDelay, duration: s.animationDuration };
+        return { delay: s.animationDelay, duration: s.animationDuration, name: s.animationName };
       }),
     );
-    expect(timing.length).toBeGreaterThan(0);
-    for (const t of timing) {
-      expect(t.delay).toBe("0s");
-      expect(t.duration).toBe("0.12s");
-    }
+    expect(new Set(timing.map((t) => t.delay)).size).toBeGreaterThan(1);
+    for (const t of timing) expect(t.duration).toBe("0.4s");
+    expect(timing.some((t) => t.name === "enter-rise")).toBe(true);
   });
 
   test("headings still travel without fading after a navigation", async ({ page }) => {
@@ -228,37 +220,8 @@ test.describe("entrance on navigation", () => {
     await clickSidebar(page, "Resume", /\/resume$/);
     await expect(page.getByRole("heading", { level: 1 })).toHaveCSS(
       "animation-name",
-      "enter-quick-solid",
+      "enter-rise-solid",
     );
-  });
-
-  test("the back button counts as a navigation", async ({ page }) => {
-    await page.goto("/");
-    await clickSidebar(page, "Projects", /\/projects$/);
-    await page.goBack();
-    await expect(page).toHaveURL(/\/$/);
-    // Every entry, not just the first: the first one has no stagger delay
-    // anyway, so checking it alone passed before this was implemented.
-    const delays = await page
-      .locator("main .enter")
-      .evaluateAll((els) => els.map((el) => getComputedStyle(el).animationDelay));
-    expect(delays.length).toBeGreaterThan(1);
-    expect(new Set(delays)).toEqual(new Set(["0s"]));
-  });
-
-  test("a reload restores the full entrance", async ({ page }) => {
-    await page.goto("/");
-    await clickSidebar(page, "About", /\/about$/);
-    await expect(page.locator("html")).toHaveAttribute("data-navigated", "");
-    await page.goto("/");
-    await expect(page.locator("html")).not.toHaveAttribute("data-navigated");
-  });
-
-  test("an external or in-page link does not count as a navigation", async ({ page }) => {
-    await page.goto("/");
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Enter"); // the skip link, an in-page anchor
-    await expect(page.locator("html")).not.toHaveAttribute("data-navigated");
   });
 });
 
