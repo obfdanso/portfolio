@@ -105,7 +105,7 @@ test("states the contribution scope on every case study", async ({ page }) => {
   // "frontend only" there would contradict its own case study.
   const SCOPE: Record<string, RegExp> = {
     medispace: /frontend only/i,
-    pos: /frontend and backend integration/i,
+    pos: /solo build, frontend, backend and database/i,
     bitby: /frontend only/i,
   };
 
