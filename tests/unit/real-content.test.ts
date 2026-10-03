@@ -7,16 +7,24 @@ describe("real project content", () => {
   const projects = loadProjects();
 
   it("loads and validates all three launch projects", () => {
-    expect(projects.map((p) => p.slug)).toEqual(["medispace", "pos", "bitby"]);
+    expect(projects.map((p) => p.slug)).toEqual([
+      "medispace",
+      "pos",
+      "bitby",
+      "intercli",
+      "smartsocket",
+    ]);
   });
 
   it("features MediSpace", () => {
     expect(projects.find((p) => p.slug === "medispace")?.featured).toBe(true);
   });
 
-  it("states a frontend-only contribution on every project", () => {
+  it("states an explicit contribution on every project", () => {
+    // Scope varies (frontend only, solo build, the apps on a team), but every
+    // project must say what Danso did rather than leave it to be assumed.
     for (const project of projects) {
-      expect(project.contribution.toLowerCase()).toContain("frontend");
+      expect(project.contribution.trim().length, project.slug).toBeGreaterThan(5);
     }
   });
 

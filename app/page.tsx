@@ -69,7 +69,7 @@ export default function HomePage() {
           <SectionNumber value={2} /> About
         </h2>
         <p className="mt-8 max-w-2xl text-step-1 text-fg-muted">
-          I am a software engineering student at KNUST. I care about interfaces that stay fast and
+          I am a computer science student at KNUST. I care about interfaces that stay fast and
           usable, which mostly means typed data, honest loading states, and keyboard support.
         </p>
         <Link href="/about" className="link-grow mt-6 inline-block text-accent">

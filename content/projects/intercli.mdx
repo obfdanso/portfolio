@@ -1,0 +1,74 @@
+---
+title: intercli
+slug: intercli
+summary: A command-line chat in C++ where many clients connect to one server and message each other, by name or to everyone, over encrypted connections.
+role: Developer, solo build
+contribution: Solo build
+timeframe: "2025–2026"
+stack: ["C++", "OpenSSL", "CMake"]
+featured: false
+order: 4
+accentHue: 72
+demo:
+  kind: repo-only
+  repoUrl: https://github.com/obfdanso/intercli
+cover:
+  src: /projects/intercli-cover.png
+  alt: Title card reading intercli, encrypted client-server chat in C++
+---
+
+## Context
+
+intercli is a command-line chat written in C++. A server runs, clients connect to
+it, and they talk to each other: to one person by name, or to everyone at once.
+Everything that passes between a client and the server is encrypted.
+
+It started much smaller. The first goal was simply to get one client to connect
+to the server and send one message. Once that worked, I kept going until several
+clients could connect at the same time and message each other through the
+server.
+
+## My role
+
+This was a solo project. I built the server, the client, the encryption layer
+and the tests for them, working with an AI coding assistant throughout.
+
+## Key decisions
+
+**The server relays every message.** Clients never talk to each other directly.
+Each one registers a name with the server, and the server routes every message,
+either to a single client by name or to everyone. It also keeps a list of who is
+online and announces when someone joins or leaves. That keeps each client
+simple: it only ever needs to know how to reach the server.
+
+**Encrypted, with keys that keep changing.** Messages are encrypted with
+AES-256-GCM, which also detects if anything has been tampered with on the way.
+The client and server agree on their keys with a Diffie-Hellman exchange, so the
+keys themselves are never sent over the network. Each direction of a
+conversation has its own key. Each side replaces its sending key after every 10
+messages and announces the change in the same stream, so both sides switch at
+exactly the same point.
+
+## The hard part
+
+The hardest part at first was getting a client to connect to the server at all.
+When I finally got it to connect, the connection would drop shortly after, even
+though the server was still running. For a while I did not know what was
+causing it.
+
+I worked through it by testing cases one at a time, and the cause turned out to
+be in how the session was set up. The client was working out its keys from its
+own session ID instead of the server's, and the server was changing keys every
+10 messages without telling the client. Either way, the two sides soon stopped
+being able to read each other's messages, and the connection fell over. Once
+both sides used the same session values and changed keys together, the
+connection held. Each fix now has a test, so it stays fixed.
+
+## Outcome, and what I would do differently
+
+intercli works: several clients can connect to one server and chat, directly or
+to everyone, with every message encrypted. A test runs three clients against one
+server to check it.
+
+If I built it again, I would give the server files that clients can browse and
+download, and add uploads, so it could share more than messages.

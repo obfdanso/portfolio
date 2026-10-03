@@ -6,7 +6,7 @@ test("serves a sitemap listing every project", async ({ request }) => {
   expect(response.status()).toBe(200);
 
   const body = await response.text();
-  for (const slug of ["medispace", "pos", "bitby"]) {
+  for (const slug of ["medispace", "pos", "bitby", "intercli", "smartsocket"]) {
     expect(body).toContain(`/projects/${slug}`);
   }
 });

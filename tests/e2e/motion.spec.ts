@@ -45,4 +45,6 @@ test("every project from the content directory is listed", async ({ page }) => {
   await expect(page.getByRole("link", { name: "MediSpace" })).toBeVisible();
   await expect(page.getByRole("link", { name: "POS" })).toBeVisible();
   await expect(page.getByRole("link", { name: "bitby" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "intercli" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Smart Socket" })).toBeVisible();
 });
