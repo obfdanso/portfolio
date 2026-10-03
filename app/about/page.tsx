@@ -35,9 +35,10 @@ export default function AboutPage() {
             tell the truth, and interfaces that work from the keyboard.
           </p>
           <p className="mt-5 text-fg-muted">
-            I have been a key developer on three projects: a medication tracker with an AI chatbot,
-            a multi-role point-of-sale system, and a mobile UI reconstruction study. Each has a
-            written case study covering what I decided and what I would change.
+            I have been a key developer on five projects: a medication tracker with an AI chatbot, a
+            multi-role point-of-sale system, a mobile UI reconstruction study, an encrypted chat
+            server in C++, and the apps for a smart wall socket. Each has a written case study
+            covering what I decided and what I would change.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link

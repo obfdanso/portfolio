@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const SLUGS = ["medispace", "pos", "bitby"];
+const SLUGS = ["medispace", "pos", "bitby", "intercli", "smartsocket"];
 
 test("renders the MediSpace case study with all five sections", async ({ page }) => {
   await page.goto("/projects/medispace");
@@ -107,6 +107,8 @@ test("states the contribution scope on every case study", async ({ page }) => {
     medispace: /frontend only/i,
     pos: /solo build, frontend, backend and database/i,
     bitby: /frontend only/i,
+    intercli: /solo build/i,
+    smartsocket: /the web, android and windows apps/i,
   };
 
   for (const slug of SLUGS) {
