@@ -27,7 +27,7 @@ export const resume: Resume = {
     {
       title: "BSc, Computer Science",
       org: "Kwame Nkrumah University of Science and Technology",
-      period: "2023 — present",
+      period: "Final year, graduating 2027",
       points: ["Coursework in software engineering, data structures, and web development."],
     },
   ],
@@ -50,6 +50,7 @@ export const resume: Resume = {
       points: [
         "Built three role-specific interfaces, for administrator, manager, and cashier, over shared data.",
         "Optimised the cashier flow for speed and keyboard operation, the path used most often.",
+        "Built the backend in Node.js and Express on a PostgreSQL database.",
       ],
     },
     {
@@ -57,8 +58,7 @@ export const resume: Resume = {
       org: "bitby",
       period: "2025",
       points: [
-        "Built the React Native frontend for an independent UI reconstruction study of a crypto trading interface.",
-        "Built list rows to update in isolation, keeping a frequently-updating market list responsive.",
+        "Built the React Native frontend for a student UI reconstruction study of a crypto trading interface, as one of three frontend developers on a seven-person team.",
       ],
     },
   ],
@@ -66,6 +66,7 @@ export const resume: Resume = {
   skills: [
     { group: "Languages", items: ["TypeScript", "JavaScript", "HTML", "CSS"] },
     { group: "Frameworks", items: ["React", "Next.js", "React Native"] },
+    { group: "Backend", items: ["Node.js", "Express", "PostgreSQL"] },
     { group: "Tooling", items: ["Git", "Vercel", "Vite"] },
     { group: "Core & AI", items: ["Database Design", "System Analysis", "Networking", "AI Tools"] },
   ],
