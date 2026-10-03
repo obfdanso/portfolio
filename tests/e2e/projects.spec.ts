@@ -1,21 +1,38 @@
+import fs from "node:fs";
 import { expect, test } from "@playwright/test";
+
+// Read from the content folder, so adding a project needs no test edits.
+const PROJECT_COUNT = fs
+  .readdirSync("content/projects")
+  .filter((file) => file.endsWith(".mdx")).length;
 
 test.describe("project index", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("lists every project", async ({ page }) => {
     await page.goto("/projects");
-    await expect(page.getByRole("article")).toHaveCount(3);
+    await expect(page.getByRole("article")).toHaveCount(PROJECT_COUNT);
   });
 
   test("filters by stack tag and can be cleared", async ({ page }) => {
     await page.goto("/projects");
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
-    await expect(page.getByRole("article")).toHaveCount(1);
-    await expect(page.getByRole("article")).toContainText("MediSpace");
+    // Every remaining card uses the tag, and some were filtered out.
+    const shown = page.getByRole("article");
+    const count = await shown.count();
+    expect(count).toBeGreaterThan(0);
+    expect(count).toBeLessThan(PROJECT_COUNT);
+    for (let i = 0; i < count; i += 1) {
+      await expect(
+        shown
+          .nth(i)
+          .getByRole("listitem")
+          .filter({ hasText: /^TypeScript$/ }),
+      ).toHaveCount(1);
+    }
 
     await page.getByRole("button", { name: "All", exact: true }).click();
-    await expect(page.getByRole("article")).toHaveCount(3);
+    await expect(page.getByRole("article")).toHaveCount(PROJECT_COUNT);
   });
 
   test("marks the active filter for assistive technology", async ({ page }) => {
@@ -48,9 +65,9 @@ test.describe("project index", () => {
     // Tab must walk into the later cards: the rail has no previous/next
     // buttons, so this is the primary keyboard route through it. Stop as soon
     // as focus lands in the last card rather than tabbing a fixed count past it.
-    const last = page.getByRole("article").nth(2);
+    const last = page.getByRole("article").last();
     let reached = false;
-    for (let i = 0; i < 12 && !reached; i += 1) {
+    for (let i = 0; i < 25 && !reached; i += 1) {
       await page.keyboard.press("Tab");
       reached = await last.evaluate((el) => el.contains(document.activeElement));
     }

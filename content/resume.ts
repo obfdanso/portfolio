@@ -21,7 +21,7 @@ type Resume = {
 
 export const resume: Resume = {
   summary:
-    "Software engineer working across the frontend and the backend, with a working knowledge of databases, networking and system analysis. Key contributor on three projects, including a deployed medication-tracking app with an AI assistant.",
+    "Software engineer working across the frontend and the backend, with a working knowledge of databases, networking and system analysis. Key contributor on five projects, including a deployed medication-tracking app with an AI assistant.",
 
   education: [
     {
@@ -61,13 +61,34 @@ export const resume: Resume = {
         "Built the React Native frontend for a student UI reconstruction study of a crypto trading interface, as one of three frontend developers on a seven-person team.",
       ],
     },
+    {
+      title: "Developer, solo build",
+      org: "intercli",
+      period: "2025–2026",
+      points: [
+        "Built a C++ chat server and client where many named clients message each other directly or all at once.",
+        "Encrypted every message with AES-256-GCM, with keys agreed by Diffie-Hellman and rotated every 10 messages in each direction.",
+      ],
+    },
+    {
+      title: "App developer",
+      org: "Smart Socket",
+      period: "2026",
+      points: [
+        "Built the Android, Windows and web apps for an Arduino smart socket that cuts power once a device is fully charged, connecting to it over Bluetooth.",
+        "Gave all three apps the same screens, wording and behaviour, plus a simulator for working without the hardware, on a ten-person team.",
+      ],
+    },
   ],
 
   skills: [
-    { group: "Languages", items: ["TypeScript", "JavaScript", "HTML", "CSS"] },
-    { group: "Frameworks", items: ["React", "Next.js", "React Native"] },
+    {
+      group: "Languages",
+      items: ["TypeScript", "JavaScript", "C++", "Kotlin", "C#", "HTML", "CSS"],
+    },
+    { group: "Frameworks", items: ["React", "Next.js", "React Native", "Jetpack Compose", "WPF"] },
     { group: "Backend", items: ["Node.js", "Express", "PostgreSQL"] },
-    { group: "Tooling", items: ["Git", "Vercel", "Vite"] },
+    { group: "Tooling", items: ["Git", "Vercel", "Vite", "CMake", "OpenSSL"] },
     { group: "Core & AI", items: ["Database Design", "System Analysis", "Networking", "AI Tools"] },
   ],
 
