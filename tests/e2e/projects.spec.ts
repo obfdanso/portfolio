@@ -37,7 +37,7 @@ test.describe("project index", () => {
       await expect(
         shown
           .nth(i)
-          .getByRole("listitem")
+          .getByRole("listitem", { includeHidden: true })
           .filter({ hasText: /^TypeScript$/ }),
       ).toHaveCount(1);
     }
