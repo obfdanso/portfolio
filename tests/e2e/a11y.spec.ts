@@ -8,6 +8,7 @@ const ROUTES = [
   "/projects/bitby",
   "/about",
   "/resume",
+  "/skills",
   "/contact",
 ];
 // "best-practice" is included deliberately: heading-order lives there

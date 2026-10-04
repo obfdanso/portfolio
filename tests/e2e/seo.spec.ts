@@ -9,6 +9,7 @@ test("serves a sitemap listing every project", async ({ request }) => {
   for (const slug of ["medispace", "pos", "bitby", "intercli", "smartsocket"]) {
     expect(body).toContain(`/projects/${slug}`);
   }
+  expect(body).toContain(`${SITE.url}/skills`);
 });
 
 test("serves robots.txt pointing at the sitemap", async ({ request }) => {

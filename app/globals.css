@@ -276,6 +276,13 @@ button,
     animation-range: entry 0% entry 42%;
     animation-delay: var(--reveal-delay, 0ms);
   }
+
+  /* Transform only, for blocks of reading text. A fade leaves whatever sits
+     at the fold half transparent on load, and the contrast audit measures it
+     there. Same reasoning as .enter--solid on headings. */
+  .reveal--solid {
+    animation-name: reveal-in-solid;
+  }
 }
 
 /* Browsers without scroll-driven animations show content immediately.
@@ -295,6 +302,15 @@ button,
   }
   to {
     opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes reveal-in-solid {
+  from {
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
     transform: translate3d(0, 0, 0);
   }
 }
