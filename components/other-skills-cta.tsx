@@ -14,13 +14,13 @@ export function OtherSkillsCta({ className }: { className?: string }) {
   return (
     <Reveal
       className={cn(
-        "reveal--solid flex flex-col items-start gap-5 rounded-2xl border border-fg-muted/15 bg-surface/40 p-6 sm:flex-row sm:items-center sm:justify-between",
+        "spotlight relative reveal--solid flex flex-col items-start gap-5 rounded-2xl border border-fg-muted/15 bg-surface/40 p-6 sm:flex-row sm:items-center sm:justify-between",
         className,
       )}
     >
       <p className="max-w-xl text-fg-muted">
-        Front end is my focus, but I also know my way around backends, databases, networking and some AI
-        tools.
+        Front end is my focus, but I also know my way around backends, databases, networking and
+        some AI tools.
       </p>
       <Link
         href="/skills"

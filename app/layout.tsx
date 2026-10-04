@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooter } from "@/components/site-footer";
+import { SpotlightTracker } from "@/components/spotlight-tracker";
 import { JsonLd } from "@/components/json-ld";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Skip to content
           </a>
           <SiteSidebar />
+          <SpotlightTracker />
           <div className="md:pl-[calc(var(--sidebar-width)+1.5rem)]">
             <main id="main" tabIndex={-1}>
               {children}
