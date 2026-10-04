@@ -11,7 +11,7 @@ function Section({ title, entries }: { title: string; entries: Entry[] }) {
         {entries.map((entry) => (
           <li key={`${entry.org}-${entry.title}`}>
             <h3 className="text-step-1">
-              {entry.title} — {entry.org}
+              {entry.title} · {entry.org}
             </h3>
             <p className="mt-1 font-mono text-step-xs text-fg-muted">{entry.period}</p>
             <ul className="mt-3 list-disc space-y-1.5 pl-5 text-fg-muted">
