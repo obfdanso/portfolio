@@ -57,7 +57,7 @@ export function ProjectCard({
     <Reveal
       as="article"
       delay={index * 40}
-      className="card-lift relative flex h-full flex-col rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
+      className="spotlight card-lift relative flex h-full flex-col rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
     >
       {/* Named so the cover morphs into the case study's showcase, and the
           title into its heading. default="none" keeps them still on every
