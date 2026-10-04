@@ -45,6 +45,10 @@ export const projectFrontmatterSchema = z.object({
   featured: z.boolean(),
   order: z.number().int().nonnegative(),
   accentHue: z.number().min(0).max(360),
+  // Required, not defaulted: a new project without it fails the build rather
+  // than landing on the wrong page silently. "frontend" projects appear on the
+  // home and Projects pages; "other" ones only through the skills page.
+  category: z.enum(["frontend", "other"]),
   demo: demoSchema,
   cover: z.strictObject({
     src: z.string().min(1),

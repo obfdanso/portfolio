@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { loadProjects } from "@/lib/content";
+import { getFrontendProjects, loadProjects } from "@/lib/content";
 
 describe("real project content", () => {
   const projects = loadProjects();
@@ -12,6 +12,15 @@ describe("real project content", () => {
       "pos",
       "bitby",
       "intercli",
+      "smartsocket",
+    ]);
+  });
+
+  it("keeps intercli off the front-end pages and the other four on them, in order", () => {
+    expect(getFrontendProjects().map((p) => p.slug)).toEqual([
+      "medispace",
+      "pos",
+      "bitby",
       "smartsocket",
     ]);
   });

@@ -1,6 +1,11 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { getFeaturedProjects, getProject, loadProjects } from "@/lib/content";
+import {
+  getFeaturedProjects,
+  getFrontendProjects,
+  getProject,
+  loadProjects,
+} from "@/lib/content";
 
 const FIXTURES = path.join(process.cwd(), "tests/fixtures/projects");
 const VALID = path.join(FIXTURES, "valid");
@@ -44,5 +49,12 @@ describe("getProject", () => {
 describe("getFeaturedProjects", () => {
   it("returns only featured projects", () => {
     expect(getFeaturedProjects(VALID).map((p) => p.slug)).toEqual(["alpha"]);
+  });
+});
+
+describe("getFrontendProjects", () => {
+  it("returns only front-end projects", () => {
+    // beta is "other", alpha is "frontend".
+    expect(getFrontendProjects(VALID).map((p) => p.slug)).toEqual(["alpha"]);
   });
 });
