@@ -652,6 +652,71 @@ button,
 }
 
 /* ---------------------------------------------------------------------------
+   Stack disclosure
+
+   The card's tags fold behind a "Stack" pill. Opening it turns the chevron
+   and pops the tags in one after another, 40ms apart. Where the browser can
+   animate <details> content, the height opens and closes smoothly too.
+--------------------------------------------------------------------------- */
+
+.stack-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.stack-disclosure__chevron {
+  transition: transform var(--duration-base) var(--ease-brand);
+}
+
+.stack-disclosure[open] .stack-disclosure__chevron {
+  transform: rotate(180deg);
+}
+
+.stack-disclosure[open] .stack-disclosure__tag {
+  animation: tag-pop var(--duration-base) var(--ease-brand) both;
+  animation-delay: calc(var(--tag-index, 0) * 40ms);
+}
+
+@keyframes tag-pop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports selector(::details-content) {
+  .stack-disclosure {
+    interpolate-size: allow-keywords;
+  }
+
+  .stack-disclosure::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size var(--duration-base) var(--ease-brand),
+      content-visibility var(--duration-base) allow-discrete;
+  }
+
+  .stack-disclosure[open]::details-content {
+    block-size: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-disclosure__chevron,
+  .stack-disclosure::details-content {
+    transition: none;
+  }
+
+  .stack-disclosure[open] .stack-disclosure__tag {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Recording placeholder
 
    Two rings ripple out from a play disc that breathes slightly, over the

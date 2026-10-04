@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/lib/content";
 import { Reveal } from "@/components/ui/reveal";
+import { StackDisclosure } from "@/components/stack-disclosure";
 
 // Pills, matching the stack tags above them. Accent-bordered for the primary
 // action, muted for the source link.
@@ -81,16 +82,7 @@ export function ProjectCard({
         {project.timeframe} · {project.contribution}
       </p>
 
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {project.stack.map((tech) => (
-          <li
-            key={tech}
-            className="rounded-full border border-fg-muted/20 px-3 py-1 text-step-xs text-fg-muted"
-          >
-            {tech}
-          </li>
-        ))}
-      </ul>
+      <StackDisclosure stack={project.stack} />
 
       <div className="mt-auto">
         <DemoLinks project={project} />
