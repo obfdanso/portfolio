@@ -69,12 +69,6 @@ export const skills: SkillSection[] = [
       "I use AI coding tools to work faster, and I check what they produce the way I'd check a teammate's code. I built this site with Claude Code. I made the design calls and sent back the changes I didn't like.",
     tags: ["Claude Code", "Cursor", "GitHub Copilot", "Gemini"],
     evidence: [
-      {
-        kind: "link",
-        href: "https://github.com/obfdanso/portfolio",
-        label: "This site",
-        note: "Built with Claude Code, credited on every commit",
-      },
       { kind: "project", slug: "intercli", note: "Built with an AI assistant throughout" },
       { kind: "project", slug: "smartsocket", note: "Polished with an AI assistant" },
     ],

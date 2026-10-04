@@ -21,7 +21,7 @@ describe("site copy", () => {
     expect(JSON.stringify({ resume, skills })).not.toMatch(/—/);
   });
 
-  it("groups the resume skills as the spec sets out", () => {
+  it("groups the resume skills as Danso set them out", () => {
     expect(resume.skills.map((g) => g.group)).toEqual([
       "Front-end",
       "Mobile and desktop",
@@ -30,7 +30,6 @@ describe("site copy", () => {
       "Databases",
       "Networking",
       "AI tools",
-      "Tooling",
     ]);
   });
 });
