@@ -358,10 +358,10 @@ button,
   }
 }
 
-/* Cross-fade for full page loads only. In-app clicks are client-side
-   navigations, which never trigger this; the staggered entrance does that
-   job. It still applies when a link is followed before the JavaScript has
-   loaded, or with JavaScript off, and costs nothing otherwise. */
+/* View transitions. Full page loads cross-fade the root (navigation: auto).
+   In-app navigations from a project card morph its cover and title into the
+   case study's showcase and heading (React <ViewTransition>, share="morph").
+   The overlay lets clicks through, so nothing is lost mid-transition. */
 @view-transition {
   navigation: auto;
 }
@@ -369,6 +369,15 @@ button,
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-brand);
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-group(.morph) {
+  animation-duration: var(--duration-slow);
   animation-timing-function: var(--ease-brand);
 }
 
@@ -392,9 +401,11 @@ button,
     animation: none;
   }
 
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }
 
