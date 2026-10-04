@@ -147,4 +147,18 @@ test.describe("skills page, reduced motion", () => {
     expect(opacities).toHaveLength(SECTIONS.length);
     expect(new Set(opacities)).toEqual(new Set(["1"]));
   });
+
+  test("sections hold still under reduced motion", async ({ page }) => {
+    // Opacity alone cannot catch this: the solid reveal never fades, so it
+    // reads "1" whether or not the reduced-motion rule wins the cascade.
+    await page.goto("/skills");
+    const states = await page.locator("main .reveal").evaluateAll((els) =>
+      els.map((el) => {
+        const style = getComputedStyle(el);
+        return `${style.animationName}|${style.transform}`;
+      }),
+    );
+    expect(states).toHaveLength(SECTIONS.length);
+    expect(new Set(states)).toEqual(new Set(["none|none"]));
+  });
 });
