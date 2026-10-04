@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { ViewTransition, type CSSProperties } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProject, loadProjects } from "@/lib/content";
@@ -6,6 +6,7 @@ import { Mdx } from "@/components/mdx";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { RecordingSoon } from "@/components/recording-soon";
 import { ProjectShowcase } from "@/components/project-showcase";
+import { projectTransitionName } from "@/lib/transitions";
 
 export function generateStaticParams() {
   return loadProjects().map((project) => ({ slug: project.slug }));
@@ -35,12 +36,18 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           <p className="enter text-step-xs text-fg-muted">
             {project.timeframe} · {project.contribution}
           </p>
-          <h1
-            className="enter enter--solid mt-4 text-step-5"
-            style={{ "--enter-delay": "80ms" } as CSSProperties}
+          <ViewTransition
+            name={projectTransitionName(project.slug, "title")}
+            share="morph"
+            default="none"
           >
-            {project.title}
-          </h1>
+            <h1
+              className="enter enter--solid mt-4 text-step-5"
+              style={{ "--enter-delay": "80ms" } as CSSProperties}
+            >
+              {project.title}
+            </h1>
+          </ViewTransition>
           <p
             className="enter mt-5 max-w-2xl text-step-1 text-fg-muted"
             style={{ "--enter-delay": "160ms" } as CSSProperties}
