@@ -14,6 +14,7 @@ const base: Project = {
   featured: false,
   order: 2,
   accentHue: 24,
+  category: "frontend",
   demo: { kind: "repo-only", repoUrl: "https://github.com/obfdanso/POS" },
   cover: { src: "/projects/pos-cover.png", alt: "POS cashier screen" },
   body: "",
