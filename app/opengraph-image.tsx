@@ -3,7 +3,7 @@ import { SITE } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${SITE.name} — ${SITE.role}`;
+export const alt = `${SITE.name} · ${SITE.role}`;
 
 // Hex rather than the OKLCH theme tokens: Satori does not resolve CSS custom
 // properties, so the palette is restated here.

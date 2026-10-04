@@ -10,7 +10,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: { default: `${SITE.name} — ${SITE.role}`, template: `%s — ${SITE.shortName}` },
+  title: { default: `${SITE.name} · ${SITE.role}`, template: `%s · ${SITE.shortName}` },
   description: "Front-end developer building fast, accessible interfaces.",
 };
 
