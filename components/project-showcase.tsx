@@ -24,13 +24,18 @@ export function ProjectShowcase({ project }: { project: Project }) {
       <div className="project-showcase overflow-hidden rounded-xl border border-fg-muted/15">
         {media.kind === "video" ? (
           // preload="none" with a poster: the recording costs nothing until
-          // someone presses play, which protects the performance budget.
+          // someone presses play, which protects the performance budget. The
+          // fixed 1200×630 frame matches the cover: no layout shift when the
+          // poster loads, and a portrait phone recording letterboxes instead
+          // of towering over the page.
           <video
             controls
             preload="none"
             poster={media.poster}
             aria-label={media.alt}
-            className="block w-full"
+            width={1200}
+            height={630}
+            className="block aspect-[1200/630] w-full bg-surface object-contain"
           >
             <source src={media.src} type="video/mp4" />
             Your browser does not support embedded video. Use the Source link to view the code.
