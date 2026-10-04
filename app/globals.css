@@ -764,6 +764,68 @@ button,
 }
 
 /* ---------------------------------------------------------------------------
+   Scroll-driven effects
+
+   Reading progress on case studies, and a wipe that unveils card covers as
+   they enter the viewport. Both are scroll-driven CSS: no JavaScript, and
+   nothing at all where the browser can't drive them. The case study showcase
+   never wipes, because it is the page's Largest Contentful Paint image.
+--------------------------------------------------------------------------- */
+
+.reading-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    display: block;
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 60;
+    height: 2px;
+    background: var(--color-accent);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    animation: reading-progress var(--duration-slow) linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes reading-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .card-media {
+    animation: media-wipe var(--duration-slow) var(--ease-brand) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+
+@keyframes media-wipe {
+  from {
+    clip-path: inset(100% 0 0 0 round 0.5rem);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress {
+    display: none;
+  }
+
+  .card-media {
+    animation: none;
+    clip-path: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Recording placeholder
 
    Two rings ripple out from a play disc that breathes slightly, over the

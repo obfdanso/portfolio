@@ -7,6 +7,7 @@ import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { RecordingSoon } from "@/components/recording-soon";
 import { ProjectShowcase } from "@/components/project-showcase";
 import { projectTransitionName } from "@/lib/transitions";
+import { ReadingProgress } from "@/components/reading-progress";
 
 export function generateStaticParams() {
   return loadProjects().map((project) => ({ slug: project.slug }));
@@ -30,6 +31,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <article>
+      <ReadingProgress />
       <header className="mesh-host relative overflow-hidden py-28 md:rounded-2xl">
         <MeshGradient hue={project.accentHue} />
         <div className="container-page">
