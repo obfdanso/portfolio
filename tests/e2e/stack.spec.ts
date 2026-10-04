@@ -88,3 +88,22 @@ test.describe("stack disclosure, reduced motion", () => {
     );
   });
 });
+
+test.describe("stack disclosure and the card link", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("the empty space beside Stack still opens the case study", async ({ page }) => {
+    await page.goto("/projects");
+    const smart = card(page, "Smart Socket");
+    // Smart Socket is the last card in the sideways rail; bring it into view.
+    await smart.locator("details").scrollIntoViewIfNeeded();
+    const summary = await smart.locator("summary").boundingBox();
+    const details = await smart.locator("details").boundingBox();
+    // A point on the disclosure's row, well to the right of the "Stack" pill.
+    await page.mouse.click(
+      (summary!.x + summary!.width + details!.x + details!.width) / 2,
+      summary!.y + summary!.height / 2,
+    );
+    await expect(page).toHaveURL(/\/projects\/smartsocket$/);
+  });
+});
