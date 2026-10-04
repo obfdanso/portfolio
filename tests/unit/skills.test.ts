@@ -20,41 +20,16 @@ const section = (evidence: SkillSection["evidence"]): SkillSection => ({
 describe("resolveEvidence", () => {
   it("takes a project's title and URL from the content, not the skills file", () => {
     const [card] = resolveEvidence(
-      section([{ kind: "project", slug: "pos", note: "Backend built solo" }]),
+      section([{ slug: "pos", note: "Backend built solo" }]),
       PROJECTS,
     );
-    expect(card).toEqual({
-      href: "/projects/pos",
-      title: "POS",
-      note: "Backend built solo",
-      external: false,
-    });
-  });
-
-  it("passes an external link through and marks it external", () => {
-    const [card] = resolveEvidence(
-      section([
-        {
-          kind: "link",
-          href: "https://github.com/obfdanso/portfolio",
-          label: "This site",
-          note: "Built with Claude Code",
-        },
-      ]),
-      PROJECTS,
-    );
-    expect(card).toEqual({
-      href: "https://github.com/obfdanso/portfolio",
-      title: "This site",
-      note: "Built with Claude Code",
-      external: true,
-    });
+    expect(card).toEqual({ href: "/projects/pos", title: "POS", note: "Backend built solo" });
   });
 
   it("fails loudly on an unknown slug, naming the slug and the section", () => {
-    expect(() =>
-      resolveEvidence(section([{ kind: "project", slug: "nope", note: "x" }]), PROJECTS),
-    ).toThrowError(/"nope".*"backend"/);
+    expect(() => resolveEvidence(section([{ slug: "nope", note: "x" }]), PROJECTS)).toThrowError(
+      /"nope".*"backend"/,
+    );
   });
 });
 
