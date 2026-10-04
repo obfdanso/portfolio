@@ -12,6 +12,7 @@ const valid = {
   featured: true,
   order: 1,
   accentHue: 0,
+  category: "frontend",
   demo: {
     kind: "live",
     url: "https://medispace.vercel.app",
@@ -118,5 +119,23 @@ describe("projectFrontmatterSchema", () => {
 
   it("rejects a non-integer order", () => {
     expect(projectFrontmatterSchema.safeParse({ ...valid, order: 1.5 }).success).toBe(false);
+  });
+
+  it("requires a category, so a new project cannot land on the wrong page", () => {
+    const withoutCategory: Partial<typeof valid> = { ...valid };
+    delete withoutCategory.category;
+    const result = projectFrontmatterSchema.safeParse(withoutCategory);
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(["category"]);
+  });
+
+  it("rejects an unknown category", () => {
+    expect(projectFrontmatterSchema.safeParse({ ...valid, category: "backend" }).success).toBe(
+      false,
+    );
+  });
+
+  it("accepts the other category", () => {
+    expect(projectFrontmatterSchema.safeParse({ ...valid, category: "other" }).success).toBe(true);
   });
 });
