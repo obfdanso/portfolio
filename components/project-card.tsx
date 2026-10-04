@@ -9,9 +9,10 @@ const PILL = "pill relative z-10 rounded-full border px-3 py-1 text-step-xs";
 const PILL_PRIMARY = `${PILL} pill-primary border-accent/50 text-accent`;
 const PILL_MUTED = `${PILL} pill-muted border-fg-muted/25 text-fg-muted`;
 
-function DemoLinks({ demo }: { demo: Project["demo"] }) {
+function DemoLinks({ project }: { project: Project }) {
   // The discriminated union is what guarantees there is no dead "Live site"
   // button: a repo-only project has no url field to render.
+  const { demo, showcase } = project;
   return (
     <div className="mt-5 flex flex-wrap gap-2">
       {demo.kind === "live" && (
@@ -19,8 +20,8 @@ function DemoLinks({ demo }: { demo: Project["demo"] }) {
           Live site
         </a>
       )}
-      {demo.kind === "recording" && (
-        <a href={demo.videoSrc} className={PILL_PRIMARY}>
+      {showcase?.kind === "video" && (
+        <a href={showcase.src} className={PILL_PRIMARY}>
           Demo video
         </a>
       )}
@@ -92,7 +93,7 @@ export function ProjectCard({
       </ul>
 
       <div className="mt-auto">
-        <DemoLinks demo={project.demo} />
+        <DemoLinks project={project} />
       </div>
     </Reveal>
   );

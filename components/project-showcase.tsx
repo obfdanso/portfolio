@@ -1,0 +1,45 @@
+import Image from "next/image";
+import type { Project } from "@/lib/content";
+
+/**
+ * What a case study opens with: the project's own photo or video, or its
+ * cover until one exists. It is usually the largest thing on screen, so it
+ * loads eagerly and never animates in from hidden.
+ */
+export function ProjectShowcase({ project }: { project: Project }) {
+  const media = project.showcase ?? {
+    kind: "image" as const,
+    src: project.cover.src,
+    alt: project.cover.alt,
+  };
+
+  return (
+    <div className="project-showcase overflow-hidden rounded-xl border border-fg-muted/15">
+      {media.kind === "video" ? (
+        // preload="none" with a poster: the recording costs nothing until
+        // someone presses play, which protects the performance budget.
+        <video
+          controls
+          preload="none"
+          poster={media.poster}
+          aria-label={media.alt}
+          className="block w-full"
+        >
+          <source src={media.src} type="video/mp4" />
+          Your browser does not support embedded video. Use the Source link to view the code.
+        </video>
+      ) : (
+        <Image
+          src={media.src}
+          alt={media.alt}
+          width={1200}
+          height={630}
+          loading="eager"
+          fetchPriority="high"
+          sizes="(max-width: 1024px) 100vw, 59rem"
+          className="block aspect-[1200/630] w-full object-cover"
+        />
+      )}
+    </div>
+  );
+}

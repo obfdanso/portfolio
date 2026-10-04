@@ -17,17 +17,30 @@ const demoSchema = z.discriminatedUnion("kind", [
     kind: z.literal("repo-only"),
     repoUrl: z.url(),
   }),
-  z.strictObject({
-    kind: z.literal("recording"),
-    posterSrc: z.string().min(1),
-    videoSrc: z.string().min(1),
-    repoUrl: z.url(),
-  }),
   // A recording is planned but does not exist yet. The case study shows a
   // "coming soon" panel; the card offers only the source link.
   z.strictObject({
     kind: z.literal("recording-pending"),
     repoUrl: z.url(),
+  }),
+]);
+
+/**
+ * What a case study opens with. Absent means the cover image. A video
+ * showcase also gives the card a "Demo video" pill, the job the old
+ * `recording` demo kind used to do.
+ */
+const showcaseSchema = z.discriminatedUnion("kind", [
+  z.strictObject({
+    kind: z.literal("image"),
+    src: z.string().min(1),
+    alt: z.string().min(1, "showcase images require alt text"),
+  }),
+  z.strictObject({
+    kind: z.literal("video"),
+    src: z.string().min(1),
+    poster: z.string().min(1),
+    alt: z.string().min(1, "showcase videos require a description"),
   }),
 ]);
 
@@ -54,6 +67,7 @@ export const projectFrontmatterSchema = z.object({
     src: z.string().min(1),
     alt: z.string().min(1, "cover images require alt text"),
   }),
+  showcase: showcaseSchema.optional(),
 });
 
 export type ProjectFrontmatter = z.infer<typeof projectFrontmatterSchema>;

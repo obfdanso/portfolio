@@ -42,7 +42,7 @@ describe("projectFrontmatterSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("accepts a recording demo", () => {
+  it("rejects the removed recording demo kind", () => {
     const result = projectFrontmatterSchema.safeParse({
       ...valid,
       demo: {
@@ -52,7 +52,46 @@ describe("projectFrontmatterSchema", () => {
         repoUrl: "https://github.com/obfdanso/bitby",
       },
     });
-    expect(result.success).toBe(true);
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts a project with no showcase", () => {
+    expect(projectFrontmatterSchema.parse(valid).showcase).toBeUndefined();
+  });
+
+  it("accepts an image showcase", () => {
+    const showcase = { kind: "image", src: "/projects/pos-showcase.png", alt: "POS checkout" };
+    expect(projectFrontmatterSchema.parse({ ...valid, showcase }).showcase).toEqual(showcase);
+  });
+
+  it("accepts a video showcase with a poster", () => {
+    const showcase = {
+      kind: "video",
+      src: "/projects/bitby-demo.mp4",
+      poster: "/projects/bitby-poster.png",
+      alt: "bitby walkthrough",
+    };
+    expect(projectFrontmatterSchema.parse({ ...valid, showcase }).showcase).toEqual(showcase);
+  });
+
+  it("rejects a video showcase without a poster", () => {
+    const showcase = { kind: "video", src: "/projects/bitby-demo.mp4", alt: "bitby" };
+    expect(projectFrontmatterSchema.safeParse({ ...valid, showcase }).success).toBe(false);
+  });
+
+  it("rejects a showcase with an empty src or an unknown kind", () => {
+    expect(
+      projectFrontmatterSchema.safeParse({
+        ...valid,
+        showcase: { kind: "image", src: "", alt: "x" },
+      }).success,
+    ).toBe(false);
+    expect(
+      projectFrontmatterSchema.safeParse({
+        ...valid,
+        showcase: { kind: "gif", src: "/x.gif", alt: "x" },
+      }).success,
+    ).toBe(false);
   });
 
   it("accepts a recording that is still on its way", () => {

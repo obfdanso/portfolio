@@ -21,17 +21,20 @@ cover:
 {/* RECORDING SLOT. When the screen recording exists:
       1. Save it as public/projects/bitby-demo.mp4
       2. Save a still frame as public/projects/bitby-poster.png
-      3. Replace the demo block in the frontmatter above with:
+      3. Add this block to the frontmatter above, after cover:
 
-         demo:
-           kind: recording
-           posterSrc: /projects/bitby-poster.png
-           videoSrc: /projects/bitby-demo.mp4
-           repoUrl: https://github.com/obfdanso/bitby
+         showcase:
+           kind: video
+           src: /projects/bitby-demo.mp4
+           poster: /projects/bitby-poster.png
+           alt: A walkthrough of the bitby screens
 
-    That replaces the "coming soon" panel with the real player, and the card
-    gains a "Demo video" button. The tests check that both files exist, so a
-    missing file fails loudly instead of shipping a broken player. */}
+      4. Change demo.kind from recording-pending to repo-only.
+
+    The video then replaces the cover at the top of the case study, the
+    "coming soon" panel goes, and the card gains a "Demo video" pill. The
+    tests check that both files exist, so a missing file fails loudly
+    instead of shipping a broken player. */}
 
 ## Context
 
