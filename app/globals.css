@@ -421,7 +421,9 @@ button,
 @media (min-width: 768px) {
   .project-rail {
     grid-auto-flow: column;
-    grid-auto-columns: minmax(20rem, 24rem);
+    /* Two columns' worth, the same width as a card in the home page's
+       two-column grid; the rest of the rail is reached by scrolling. */
+    grid-auto-columns: calc((100% - 1.5rem) / 2);
     grid-template-columns: none;
     overflow-x: auto;
     scroll-snap-type: x mandatory;

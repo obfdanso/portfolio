@@ -13,6 +13,14 @@ test.describe("project index", () => {
     await expect(page.getByRole("article")).toHaveCount(PROJECT_COUNT);
   });
 
+  test("cards are the same width as on the home page", async ({ page }) => {
+    await page.goto("/");
+    const home = await page.getByRole("article").first().boundingBox();
+    await page.goto("/projects");
+    const projects = await page.getByRole("article").first().boundingBox();
+    expect(Math.abs(projects!.width - home!.width)).toBeLessThanOrEqual(1);
+  });
+
   test("offers no filter for a stack only intercli uses", async ({ page }) => {
     await page.goto("/projects");
     for (const tag of ["C++", "OpenSSL", "CMake"]) {
