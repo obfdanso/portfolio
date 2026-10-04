@@ -102,11 +102,11 @@ test("leaks no drafting notes into any rendered case study", async ({ page }) =>
 test("states the contribution scope on every case study", async ({ page }) => {
   // Scope differs per project, so assert the actual claim rather than a single
   // phrase. POS was a solo build including backend integration; claiming
-  // "frontend only" there would contradict its own case study.
+  // "front end only" there would contradict its own case study.
   const SCOPE: Record<string, RegExp> = {
-    medispace: /frontend only/i,
-    pos: /solo build, frontend, backend and database/i,
-    bitby: /frontend only/i,
+    medispace: /front end only/i,
+    pos: /solo build, front end, backend and database/i,
+    bitby: /front end only/i,
     intercli: /solo build/i,
     smartsocket: /the web, android and windows apps/i,
   };

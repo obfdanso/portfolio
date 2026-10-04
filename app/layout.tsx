@@ -11,7 +11,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: { default: `${SITE.name} — ${SITE.role}`, template: `%s — ${SITE.shortName}` },
-  description: "Software engineer building scalable systems and fast, accessible interfaces.",
+  description: "Front-end developer building fast, accessible interfaces.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

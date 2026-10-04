@@ -14,6 +14,12 @@ test.describe("desktop sidebar", () => {
     }
   });
 
+  test("titles Danso a front-end developer", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.getByRole("complementary", { name: /main/i });
+    await expect(nav.getByText("Front-end Developer", { exact: true })).toBeVisible();
+  });
+
   test("keeps Contact out of the sidebar", async ({ page }) => {
     await page.goto("/");
     const nav = page.getByRole("complementary", { name: /main/i });

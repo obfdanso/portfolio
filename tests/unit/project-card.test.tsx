@@ -7,8 +7,8 @@ const base: Project = {
   title: "POS",
   slug: "pos",
   summary: "A point-of-sale web app.",
-  role: "Frontend Developer",
-  contribution: "Frontend only",
+  role: "Front-end Developer",
+  contribution: "Front end only",
   timeframe: "2025",
   stack: ["JavaScript"],
   featured: false,
@@ -58,7 +58,7 @@ describe("ProjectCard", () => {
 
   it("states the contribution scope", () => {
     render(<ProjectCard project={base} />);
-    expect(screen.getByText(/frontend only/i)).toBeDefined();
+    expect(screen.getByText(/front end only/i)).toBeDefined();
   });
 
   it("always links to the case study", () => {
