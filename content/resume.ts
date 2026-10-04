@@ -21,14 +21,14 @@ type Resume = {
 
 export const resume: Resume = {
   summary:
-    "Front-end developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and proficiency with AI coding tools.",
+    "Front-end developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and proficiency with some AI coding tools.",
 
   education: [
     {
       title: "BSc, Computer Science",
       org: "Kwame Nkrumah University of Science and Technology",
       period: "Final year, graduating 2027",
-      points: ["Coursework in software engineering, data structures, and web development."],
+      points: ["Skill sets in front end dev, databases, and networking."],
     },
   ],
 
@@ -71,7 +71,7 @@ export const resume: Resume = {
       ],
     },
     {
-      title: "App developer",
+      title: "Front-end developer",
       org: "Smart Socket",
       period: "2026",
       points: [
@@ -85,9 +85,9 @@ export const resume: Resume = {
     { group: "Front-end", items: ["TypeScript", "JavaScript", "HTML", "CSS", "React", "Next.js"] },
     {
       group: "Mobile and desktop",
-      items: ["React Native", "Kotlin with Jetpack Compose", "C# with WPF"],
+      items: ["React Native", "Kotlin with Jetpack Compose", "C++ with WPF"],
     },
-    { group: "Other languages", items: ["C++"] },
+    { group: "Other languages", items: ["C++", "Python", "Java"] },
     { group: "Backend", items: ["Node.js", "Express"] },
     { group: "Databases", items: ["PostgreSQL", "MySQL", "SQL"] },
     {
@@ -95,7 +95,6 @@ export const resume: Resume = {
       items: ["TCP/IP and the OSI model", "IP addressing and subnetting", "routing and switching"],
     },
     { group: "AI tools", items: ["Claude Code", "Cursor", "GitHub Copilot", "Gemini"] },
-    { group: "Tooling", items: ["Git", "Vercel", "Vite", "CMake"] },
   ],
 
   pdfPath: "/Danso_Daniel.pdf",
