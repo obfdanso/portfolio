@@ -13,9 +13,7 @@
 export const SKILL_LEVELS = ["Working knowledge", "Good knowledge", "Proficient"] as const;
 type SkillLevel = (typeof SKILL_LEVELS)[number];
 
-type Evidence =
-  | { kind: "project"; slug: string; note: string }
-  | { kind: "link"; href: string; label: string; note: string };
+type Evidence = { slug: string; note: string };
 
 export type SkillSection = {
   /** Also the section's anchor, as in /skills#networking. */
@@ -35,7 +33,7 @@ export const skills: SkillSection[] = [
     statement:
       "I can build a working backend in Node.js and Express and connect it to a database. I built the POS backend and database myself, along with its interfaces.",
     tags: ["Node.js", "Express"],
-    evidence: [{ kind: "project", slug: "pos", note: "Backend built solo in Node.js and Express" }],
+    evidence: [{ slug: "pos", note: "Backend built solo in Node.js and Express" }],
   },
   {
     id: "databases",
@@ -44,7 +42,7 @@ export const skills: SkillSection[] = [
     statement:
       "I can query databases with SQL, and I've worked with PostgreSQL and MySQL. POS keeps its data in a PostgreSQL database I set up.",
     tags: ["SQL", "PostgreSQL", "MySQL"],
-    evidence: [{ kind: "project", slug: "pos", note: "PostgreSQL database, set up by me" }],
+    evidence: [{ slug: "pos", note: "PostgreSQL database, set up by me" }],
   },
   {
     id: "networking",
@@ -55,7 +53,6 @@ export const skills: SkillSection[] = [
     tags: ["TCP/IP", "OSI model", "IP addressing", "Subnetting", "Routing", "Switching"],
     evidence: [
       {
-        kind: "project",
         slug: "intercli",
         note: "Client-server chat over TCP, every connection encrypted",
       },
@@ -69,8 +66,8 @@ export const skills: SkillSection[] = [
       "I use AI coding tools to work faster, and I check what they produce the way I'd check a teammate's code. I built this site with Claude Code. I made the design calls and sent back the changes I didn't like.",
     tags: ["Claude Code", "Cursor", "GitHub Copilot", "Gemini"],
     evidence: [
-      { kind: "project", slug: "intercli", note: "Built with an AI assistant throughout" },
-      { kind: "project", slug: "smartsocket", note: "Polished with an AI assistant" },
+      { slug: "intercli", note: "Built with an AI assistant throughout" },
+      { slug: "smartsocket", note: "Polished with an AI assistant" },
     ],
   },
 ];
