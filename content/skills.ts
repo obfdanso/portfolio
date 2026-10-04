@@ -11,9 +11,9 @@
 // Danso's own words for how well he knows each area. Being plain about a
 // "working knowledge" makes the rest more credible.
 export const SKILL_LEVELS = ["Working knowledge", "Good knowledge", "Proficient"] as const;
-export type SkillLevel = (typeof SKILL_LEVELS)[number];
+type SkillLevel = (typeof SKILL_LEVELS)[number];
 
-export type Evidence =
+type Evidence =
   | { kind: "project"; slug: string; note: string }
   | { kind: "link"; href: string; label: string; note: string };
 
