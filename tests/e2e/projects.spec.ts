@@ -1,17 +1,28 @@
-import fs from "node:fs";
 import { expect, test } from "@playwright/test";
+import { getFrontendProjects } from "@/lib/content";
 
-// Read from the content folder, so adding a project needs no test edits.
-const PROJECT_COUNT = fs
-  .readdirSync("content/projects")
-  .filter((file) => file.endsWith(".mdx")).length;
+// Read from the content folder by category, so adding a project needs no test
+// edits. intercli is "other" and appears only on the skills page.
+const PROJECT_COUNT = getFrontendProjects().length;
 
 test.describe("project index", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test("lists every project", async ({ page }) => {
+  test("lists every front-end project", async ({ page }) => {
     await page.goto("/projects");
     await expect(page.getByRole("article")).toHaveCount(PROJECT_COUNT);
+  });
+
+  test("offers no filter for a stack only intercli uses", async ({ page }) => {
+    await page.goto("/projects");
+    for (const tag of ["C++", "OpenSSL", "CMake"]) {
+      await expect(page.getByRole("button", { name: tag, exact: true })).toHaveCount(0);
+    }
+  });
+
+  test("leaves intercli off the list", async ({ page }) => {
+    await page.goto("/projects");
+    await expect(page.getByRole("link", { name: "intercli", exact: true })).toHaveCount(0);
   });
 
   test("filters by stack tag and can be cleared", async ({ page }) => {

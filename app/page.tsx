@@ -4,15 +4,21 @@ import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionNumber } from "@/components/ui/section-number";
-import { getFeaturedProjects, loadProjects } from "@/lib/content";
+import { getFrontendProjects } from "@/lib/content";
+import { OtherSkillsCta } from "@/components/other-skills-cta";
 import { SITE } from "@/lib/site";
 
 /** Staggered entrance delay, in the order the eye reads down the hero. */
 const stagger = (ms: number) => ({ "--enter-delay": `${ms}ms` }) as CSSProperties;
 
 export default function HomePage() {
-  const featured = getFeaturedProjects();
-  const rest = loadProjects().filter((project) => !project.featured);
+  // Front-end work only; the other skills are one click away, on /skills.
+  // Featured first, then by order.
+  const frontend = getFrontendProjects();
+  const projects = [
+    ...frontend.filter((project) => project.featured),
+    ...frontend.filter((project) => !project.featured),
+  ];
 
   return (
     <>
@@ -56,12 +62,14 @@ export default function HomePage() {
         </h2>
 
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
-          {[...featured, ...rest].map((project, index) => (
+          {projects.map((project, index) => (
             <li key={project.slug}>
               <ProjectCard project={project} index={index} />
             </li>
           ))}
         </ul>
+
+        <OtherSkillsCta className="mt-16" />
       </section>
 
       <Reveal as="section" className="container-page py-8">
