@@ -127,3 +127,17 @@ test("an unknown top-level route returns 404", async ({ page }) => {
   const response = await page.goto("/nope");
   expect(response?.status()).toBe(404);
 });
+
+test("every case study opens with a showcase image", async ({ page }) => {
+  for (const slug of SLUGS) {
+    await page.goto(`/projects/${slug}`);
+    await expect(page.locator(".project-showcase img, .project-showcase video")).toBeVisible();
+  }
+});
+
+test("bitby's coming-soon panel sits below its showcase", async ({ page }) => {
+  await page.goto("/projects/bitby");
+  const showcase = await page.locator(".project-showcase").boundingBox();
+  const panel = await page.getByText(/screen recording coming soon/i).boundingBox();
+  expect(panel!.y).toBeGreaterThan(showcase!.y + showcase!.height);
+});

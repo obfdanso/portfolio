@@ -46,20 +46,24 @@ describe("real project content", () => {
   });
 
   it("never offers a live link for bitby, which is not deployed", () => {
-    // "recording-pending" until the screen recording exists, then "recording".
+    // "recording-pending" until the screen recording exists, then "repo-only"
+    // with a video showcase.
     const kind = projects.find((p) => p.slug === "bitby")?.demo.kind;
-    expect(["recording-pending", "recording"]).toContain(kind);
+    expect(["recording-pending", "repo-only"]).toContain(kind);
   });
 
-  it("points every cover and recording at a file that exists", () => {
-    // A recording demo with a missing file ships a player that cannot play.
-    // This is what makes flipping bitby to "recording" safe.
+  it("points every cover and showcase file at a file that exists", () => {
+    // A showcase with a missing file ships a broken image or a player that
+    // cannot play. This is what makes adding bitby's video safe.
     const pub = (src: string) => path.join(process.cwd(), "public", src);
     for (const project of projects) {
       expect(fs.existsSync(pub(project.cover.src)), `${project.slug} cover`).toBe(true);
-      if (project.demo.kind === "recording") {
-        expect(fs.existsSync(pub(project.demo.videoSrc)), `${project.slug} video`).toBe(true);
-        expect(fs.existsSync(pub(project.demo.posterSrc)), `${project.slug} poster`).toBe(true);
+      const showcase = project.showcase;
+      if (showcase) {
+        expect(fs.existsSync(pub(showcase.src)), `${project.slug} showcase`).toBe(true);
+        if (showcase.kind === "video") {
+          expect(fs.existsSync(pub(showcase.poster)), `${project.slug} poster`).toBe(true);
+        }
       }
     }
   });

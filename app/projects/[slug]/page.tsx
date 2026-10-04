@@ -5,6 +5,7 @@ import { getProject, loadProjects } from "@/lib/content";
 import { Mdx } from "@/components/mdx";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { RecordingSoon } from "@/components/recording-soon";
+import { ProjectShowcase } from "@/components/project-showcase";
 
 export function generateStaticParams() {
   return loadProjects().map((project) => ({ slug: project.slug }));
@@ -77,24 +78,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         </div>
       </header>
 
-      {project.demo.kind === "recording" && (
-        <div className="container-page mt-10">
-          {/* preload="none" with a poster: the recording costs nothing until
-              someone presses play, which protects the performance budget. */}
-          <video
-            controls
-            preload="none"
-            poster={project.demo.posterSrc}
-            className="w-full rounded-xl border border-fg-muted/15"
-          >
-            <source src={project.demo.videoSrc} type="video/mp4" />
-            Your browser does not support embedded video. Use the Source link to view the code.
-          </video>
-        </div>
-      )}
+      <div className="container-page mt-10">
+        <ProjectShowcase project={project} />
+      </div>
 
       {project.demo.kind === "recording-pending" && (
-        <div className="container-page mt-10">
+        <div className="container-page mt-6">
           <RecordingSoon hue={project.accentHue} repoUrl={project.demo.repoUrl} />
         </div>
       )}

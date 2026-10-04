@@ -41,19 +41,33 @@ describe("ProjectCard", () => {
     expect(link.getAttribute("href")).toBe("https://medi-space-xzz7.vercel.app");
   });
 
-  it("labels a recording project as a demo video rather than a live site", () => {
-    const recorded: Project = {
+  it("offers a demo video when the showcase is a video", () => {
+    const withVideo: Project = {
       ...base,
-      demo: {
-        kind: "recording",
-        posterSrc: "/projects/bitby-poster.png",
-        videoSrc: "/projects/bitby-demo.mp4",
-        repoUrl: "https://github.com/obfdanso/bitby",
+      showcase: {
+        kind: "video",
+        src: "/projects/pos-demo.mp4",
+        poster: "/projects/pos-poster.png",
+        alt: "POS walkthrough",
       },
     };
-    render(<ProjectCard project={recorded} />);
-    expect(screen.getByRole("link", { name: /demo video/i })).toBeDefined();
+    render(<ProjectCard project={withVideo} />);
+    expect(screen.getByRole("link", { name: /demo video/i }).getAttribute("href")).toBe(
+      "/projects/pos-demo.mp4",
+    );
     expect(screen.queryByRole("link", { name: /live site/i })).toBeNull();
+  });
+
+  it("offers no demo video for an image showcase", () => {
+    render(
+      <ProjectCard
+        project={{
+          ...base,
+          showcase: { kind: "image", src: "/projects/pos-showcase.png", alt: "POS" },
+        }}
+      />,
+    );
+    expect(screen.queryByRole("link", { name: /demo video/i })).toBeNull();
   });
 
   it("states the contribution scope", () => {
