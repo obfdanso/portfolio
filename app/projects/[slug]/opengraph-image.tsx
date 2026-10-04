@@ -30,7 +30,7 @@ export default async function OpengraphImage({ params }: { params: Promise<{ slu
     >
       {/* One text child: Satori requires an explicit display on any div
             with more than one child, and JSX splits this into three. */}
-      <div style={{ fontSize: 28, opacity: 0.72 }}>{`${SITE.name} — ${SITE.role}`}</div>
+      <div style={{ fontSize: 28, opacity: 0.72 }}>{`${SITE.name} · ${SITE.role}`}</div>
       <div style={{ fontSize: 68, marginTop: 14, letterSpacing: -2 }}>
         {project?.title ?? "Case study"}
       </div>
