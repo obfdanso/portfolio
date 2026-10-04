@@ -33,7 +33,7 @@ export function SkillSection({
           {section.tags.map((tag) => (
             <li
               key={tag}
-              className="rounded-full border border-fg-muted/20 px-3 py-1 text-step-xs text-fg-muted"
+              className="pill pill-muted rounded-full border border-fg-muted/20 px-3 py-1 text-step-xs text-fg-muted"
             >
               {tag}
             </li>

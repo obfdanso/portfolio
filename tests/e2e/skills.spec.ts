@@ -96,6 +96,26 @@ test.describe("skills page", () => {
     await expect(work.getByRole("link", { name: "See my other skills" })).toBeVisible();
   });
 
+  test("topic tags lift on hover like the project pills", async ({ page }) => {
+    await page.goto("/skills");
+    const tag = page
+      .getByRole("list", { name: "Networking topics" })
+      .getByText("Subnetting", { exact: true });
+    await tag.hover();
+    await expect
+      .poll(() => tag.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f))
+      .toBeLessThan(0);
+  });
+
+  test("opens on the gradient, like the home page", async ({ page }) => {
+    await page.goto("/skills");
+    const band = page.locator("main .mesh-host").first();
+    await expect(band.locator(".mesh")).toHaveCount(1);
+    await expect(
+      band.getByRole("heading", { level: 1, name: "Beyond the front end" }),
+    ).toBeVisible();
+  });
+
   test("a section can be linked to directly", async ({ page }) => {
     await page.goto("/skills#networking");
     await expect(page.getByRole("heading", { level: 2, name: "Networking" })).toBeInViewport();
