@@ -1,11 +1,6 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import {
-  getFeaturedProjects,
-  getFrontendProjects,
-  getProject,
-  loadProjects,
-} from "@/lib/content";
+import { getFrontendProjects, getProject, loadProjects } from "@/lib/content";
 
 const FIXTURES = path.join(process.cwd(), "tests/fixtures/projects");
 const VALID = path.join(FIXTURES, "valid");
@@ -43,12 +38,6 @@ describe("getProject", () => {
 
   it("returns undefined for an unknown slug", () => {
     expect(getProject("nope", VALID)).toBeUndefined();
-  });
-});
-
-describe("getFeaturedProjects", () => {
-  it("returns only featured projects", () => {
-    expect(getFeaturedProjects(VALID).map((p) => p.slug)).toEqual(["alpha"]);
   });
 });
 

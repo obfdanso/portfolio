@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { getFrontendProjects } from "@/lib/content";
 
 // Entrance animations are covered in animation.spec.ts, across every route.
 // This file covers the scroll-driven reveal, the scroll-linked hue shift, and
@@ -40,11 +41,14 @@ test("section numerals render their final value without javascript", async ({ br
   await context.close();
 });
 
-test("every project from the content directory is listed", async ({ page }) => {
+test("Selected work lists the front-end projects and not intercli", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: "MediSpace" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "POS" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "bitby" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "intercli" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Smart Socket" })).toBeVisible();
+  const work = page.locator("section", {
+    has: page.getByRole("heading", { level: 2, name: /selected work/i }),
+  });
+  for (const title of ["MediSpace", "POS", "bitby", "Smart Socket"]) {
+    await expect(work.getByRole("link", { name: title, exact: true })).toBeVisible();
+  }
+  await expect(work.getByRole("link", { name: "intercli", exact: true })).toHaveCount(0);
+  await expect(work.getByRole("article")).toHaveCount(getFrontendProjects().length);
 });

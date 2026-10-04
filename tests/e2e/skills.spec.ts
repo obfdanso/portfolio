@@ -78,6 +78,25 @@ test.describe("skills page", () => {
     expect(new Set(names)).toEqual(new Set(["reveal-in-solid"]));
   });
 
+  for (const route of ["/", "/projects"]) {
+    test(`the call to action on ${route} leads to the skills page`, async ({ page }) => {
+      await page.goto(route);
+      await page.getByRole("main").getByRole("link", { name: "See my other skills" }).click();
+      await expect(page).toHaveURL(/\/skills$/);
+      await expect(
+        page.getByRole("heading", { level: 1, name: "Beyond the front end" }),
+      ).toBeVisible();
+    });
+  }
+
+  test("the home call to action follows Selected work", async ({ page }) => {
+    await page.goto("/");
+    const work = page.locator("section", {
+      has: page.getByRole("heading", { level: 2, name: /selected work/i }),
+    });
+    await expect(work.getByRole("link", { name: "See my other skills" })).toBeVisible();
+  });
+
   test("a section can be linked to directly", async ({ page }) => {
     await page.goto("/skills#networking");
     await expect(page.getByRole("heading", { level: 2, name: "Networking" })).toBeInViewport();

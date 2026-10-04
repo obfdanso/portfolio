@@ -34,10 +34,6 @@ export function getProject(slug: string, dir?: string): Project | undefined {
   return loadProjects(dir).find((project) => project.slug === slug);
 }
 
-export function getFeaturedProjects(dir?: string): Project[] {
-  return loadProjects(dir).filter((project) => project.featured);
-}
-
 /** The projects shown on the home and Projects pages, in `order`. */
 export function getFrontendProjects(dir?: string): Project[] {
   return loadProjects(dir).filter((project) => project.category === "frontend");
