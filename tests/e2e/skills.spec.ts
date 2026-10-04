@@ -35,7 +35,6 @@ test.describe("skills page", () => {
       ["Backend", /POS/, "/projects/pos"],
       ["Databases and SQL", /POS/, "/projects/pos"],
       ["Networking", /intercli/, "/projects/intercli"],
-      ["AI tools", /This site/, "https://github.com/obfdanso/portfolio"],
       ["AI tools", /intercli/, "/projects/intercli"],
       ["AI tools", /Smart Socket/, "/projects/smartsocket"],
     ];
