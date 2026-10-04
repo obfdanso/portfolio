@@ -4,7 +4,7 @@ import { SITE } from "@/lib/site";
 const FILLED = {
   name: "Ama",
   email: "ama@example.com",
-  message: "I would like to talk to you about a frontend role.",
+  message: "I would like to talk to you about a front-end role.",
 };
 
 function formAlert(page: import("@playwright/test").Page) {

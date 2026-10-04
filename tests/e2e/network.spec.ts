@@ -1,6 +1,14 @@
 import { expect, test } from "@playwright/test";
 
-const ROUTES = ["/", "/projects", "/projects/medispace", "/about", "/resume", "/skills", "/contact"];
+const ROUTES = [
+  "/",
+  "/projects",
+  "/projects/medispace",
+  "/about",
+  "/resume",
+  "/skills",
+  "/contact",
+];
 
 test("no route makes a failing request", async ({ page }) => {
   // A single 404 — a missing favicon, an analytics script that only exists on

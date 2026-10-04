@@ -30,13 +30,11 @@ export default function HomePage() {
           </p>
 
           <h1 className="enter enter--solid mt-6 max-w-[15ch] text-step-5" style={stagger(80)}>
-            Software engineer building scalable systems and accessible interfaces.
+            Front-end developer building fast, accessible interfaces.
           </h1>
 
           <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(160)}>
-            I work across the frontend and the backend, with a working knowledge of databases,
-            networking and system analysis. Below is the work, with a written case study for each
-            project.
+            I build interfaces in React and TypeScript. Each project below has a written case study.
           </p>
 
           <div className="enter mt-10 flex flex-wrap gap-4" style={stagger(240)}>

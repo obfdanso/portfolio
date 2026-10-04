@@ -6,7 +6,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `${SITE.name}, software engineer.`,
+  description: `${SITE.name}, front-end developer.`,
 };
 
 // Set to a real path once the photo exists. Until then the typographic
@@ -26,19 +26,21 @@ export default function AboutPage() {
       <div className="container-page grid gap-12 py-16 md:grid-cols-[1fr_17rem]">
         <div>
           <p className="text-step-1">
-            I am {SITE.name}, a software engineer based in Accra, Ghana.
+            {`I'm ${SITE.name}, a front-end developer based in Accra, Ghana. I'm in my final year of a computer science degree at KNUST.`}
           </p>
           <p className="mt-5 text-fg-muted">
-            I work on both the frontend and the backend, with a working knowledge of databases,
-            networking and system analysis. The work I am proudest of is the unglamorous part: typed
-            data models that fail at compile time instead of in front of a user, loading states that
-            tell the truth, and interfaces that work from the keyboard.
+            {
+              "Most of my work is in React and TypeScript. I'm proudest of the unglamorous work: data models typed so mistakes fail the build instead of reaching a user, loading states that show what is really happening, and interfaces that work from the keyboard."
+            }
           </p>
           <p className="mt-5 text-fg-muted">
-            I have been a key developer on five projects: a medication tracker with an AI chatbot, a
-            multi-role point-of-sale system, a mobile UI reconstruction study, an encrypted chat
-            server in C++, and the apps for a smart wall socket. Each has a written case study
-            covering what I decided and what I would change.
+            {
+              "Beyond the front end, I have a working knowledge of backend development and databases, and I can query databases with SQL. I know networking fundamentals well, and I'm proficient with AI coding tools, which I use to work faster. The details are on "
+            }
+            <Link href="/skills" className="link-grow text-accent">
+              my skills page
+            </Link>
+            .
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
