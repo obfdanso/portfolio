@@ -30,7 +30,7 @@ describe("real project content", () => {
   });
 
   it("states an explicit contribution on every project", () => {
-    // Scope varies (frontend only, solo build, the apps on a team), but every
+    // Scope varies (front end only, solo build, the apps on a team), but every
     // project must say what Danso did rather than leave it to be assumed.
     for (const project of projects) {
       expect(project.contribution.trim().length, project.slug).toBeGreaterThan(5);

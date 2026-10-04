@@ -1,6 +1,14 @@
 import { expect, test } from "@playwright/test";
 
-const ROUTES = ["/", "/projects", "/projects/medispace", "/about", "/resume", "/skills", "/contact"];
+const ROUTES = [
+  "/",
+  "/projects",
+  "/projects/medispace",
+  "/about",
+  "/resume",
+  "/skills",
+  "/contact",
+];
 
 test("the hero enters with a staggered load animation", async ({ page }) => {
   await page.goto("/");

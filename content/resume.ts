@@ -21,7 +21,7 @@ type Resume = {
 
 export const resume: Resume = {
   summary:
-    "Software engineer working across the frontend and the backend, with a working knowledge of databases, networking and system analysis. Key contributor on five projects, including a deployed medication-tracking app with an AI assistant.",
+    "Front-end developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and proficiency with AI coding tools.",
 
   education: [
     {
@@ -34,13 +34,13 @@ export const resume: Resume = {
 
   experience: [
     {
-      title: "Frontend Developer",
+      title: "Front-end Developer",
       org: "MediSpace",
       period: "2025",
       points: [
-        "Built the full frontend in TypeScript: medication schedule, dosage tracking, and the AI chat interface.",
+        "Built the full front end in TypeScript: medication schedule, dosage tracking, and the AI chat interface.",
         "Streamed chatbot responses so answers render as they arrive rather than after a blocking wait.",
-        "Deployed the frontend on Vercel.",
+        "Deployed the front end on Vercel.",
       ],
     },
     {
@@ -54,11 +54,11 @@ export const resume: Resume = {
       ],
     },
     {
-      title: "Frontend Developer",
+      title: "Front-end Developer",
       org: "bitby",
       period: "2025",
       points: [
-        "Built the React Native frontend for a student UI reconstruction study of a crypto trading interface, as one of three frontend developers on a seven-person team.",
+        "Built the React Native front end for a student UI reconstruction study of a crypto trading interface, as one of three front-end developers on a seven-person team.",
       ],
     },
     {
@@ -82,14 +82,20 @@ export const resume: Resume = {
   ],
 
   skills: [
+    { group: "Front-end", items: ["TypeScript", "JavaScript", "HTML", "CSS", "React", "Next.js"] },
     {
-      group: "Languages",
-      items: ["TypeScript", "JavaScript", "C++", "Kotlin", "C#", "HTML", "CSS"],
+      group: "Mobile and desktop",
+      items: ["React Native", "Kotlin with Jetpack Compose", "C# with WPF"],
     },
-    { group: "Frameworks", items: ["React", "Next.js", "React Native", "Jetpack Compose", "WPF"] },
-    { group: "Backend", items: ["Node.js", "Express", "PostgreSQL"] },
-    { group: "Tooling", items: ["Git", "Vercel", "Vite", "CMake", "OpenSSL"] },
-    { group: "Core & AI", items: ["Database Design", "System Analysis", "Networking", "AI Tools"] },
+    { group: "Other languages", items: ["C++"] },
+    { group: "Backend", items: ["Node.js", "Express"] },
+    { group: "Databases", items: ["PostgreSQL", "MySQL", "SQL"] },
+    {
+      group: "Networking",
+      items: ["TCP/IP and the OSI model", "IP addressing and subnetting", "routing and switching"],
+    },
+    { group: "AI tools", items: ["Claude Code", "Cursor", "GitHub Copilot", "Gemini"] },
+    { group: "Tooling", items: ["Git", "Vercel", "Vite", "CMake"] },
   ],
 
   pdfPath: "/Danso_Daniel.pdf",
