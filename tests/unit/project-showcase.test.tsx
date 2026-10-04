@@ -59,4 +59,27 @@ describe("ProjectShowcase", () => {
     expect(video?.getAttribute("aria-label")).toBe("POS walkthrough");
     expect(container.querySelector("source")?.getAttribute("src")).toBe("/projects/pos-demo.mp4");
   });
+
+  it("gives a video the same fixed frame as the cover, so nothing jumps or towers", () => {
+    // A portrait phone recording at full width would be ~2000px tall, and an
+    // unsized preload="none" video shifts the layout when its poster loads.
+    const { container } = render(
+      <ProjectShowcase
+        project={{
+          ...base,
+          showcase: {
+            kind: "video",
+            src: "/projects/pos-demo.mp4",
+            poster: "/projects/pos-poster.png",
+            alt: "POS walkthrough",
+          },
+        }}
+      />,
+    );
+    const video = container.querySelector("video");
+    expect(video?.getAttribute("width")).toBe("1200");
+    expect(video?.getAttribute("height")).toBe("630");
+    expect(video?.className).toContain("aspect-[1200/630]");
+    expect(video?.className).toContain("object-contain");
+  });
 });

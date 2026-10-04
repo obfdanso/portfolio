@@ -719,9 +719,16 @@ button,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stack-disclosure__chevron,
-  .stack-disclosure::details-content {
+  /* Kept apart from ::details-content: a browser without that pseudo-element
+     drops the whole rule it appears in. */
+  .stack-disclosure__chevron {
     transition: none;
+  }
+
+  @supports selector(::details-content) {
+    .stack-disclosure::details-content {
+      transition: none;
+    }
   }
 
   .stack-disclosure[open] .stack-disclosure__tag {
