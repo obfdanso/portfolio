@@ -231,17 +231,20 @@ button,
 }
 
 /* Tailwind 4 gives buttons the default arrow. Everything clickable shows the
-   hand; anything disabled says so. */
-button:not(:disabled),
-summary,
-[role="button"],
-[role="menuitem"],
-label[for] {
-  cursor: pointer;
-}
+   hand; anything disabled says so. In the base layer, so a cursor-* utility
+   on a specific element still wins. */
+@layer base {
+  button:not(:disabled),
+  summary,
+  [role="button"],
+  [role="menuitem"],
+  label[for] {
+    cursor: pointer;
+  }
 
-button:disabled {
-  cursor: not-allowed;
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -912,8 +915,10 @@ button:disabled {
 }
 
 /* Hero headline: each word rises inside its own mask, 40ms after the last.
-   The words start 40% risen, never hidden, so the headline is painted from
-   the first frame and stays the page's Largest Contentful Paint. */
+   The words start 40% risen, never hidden, so every word is painted from
+   the first frame. Each word is its own Largest Contentful Paint candidate
+   (the largest, "interfaces.", is the one Lighthouse picks), and none waits
+   on the animation. */
 .hero-word {
   display: inline-block;
   overflow: clip;

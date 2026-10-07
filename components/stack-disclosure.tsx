@@ -11,7 +11,7 @@ import { ChevronDownIcon } from "@/components/icons";
 export function StackDisclosure({ stack }: { stack: string[] }) {
   return (
     <details className="stack-disclosure mt-3">
-      <summary className="pill pill-muted relative z-10 inline-flex cursor-pointer list-none items-center gap-1.5 rounded-full border border-fg-muted/25 px-3 py-1 text-step-xs text-fg-muted">
+      <summary className="pill pill-muted relative z-10 inline-flex list-none items-center gap-1.5 rounded-full border border-fg-muted/25 px-3 py-1 text-step-xs text-fg-muted">
         Stack
         <ChevronDownIcon className="stack-disclosure__chevron size-3.5" />
       </summary>
