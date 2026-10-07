@@ -1,32 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
-
-/**
- * Records the pseudo-element animations of every view transition, with their
- * durations, into window.__vt. Client-side navigation keeps `window`, so the
- * record survives the route change.
- */
-async function recordTransitions(page: Page) {
-  await page.evaluate(() => {
-    const record: string[] = [];
-    (window as unknown as { __vt: string[] }).__vt = record;
-    const original = document.startViewTransition.bind(document);
-    document.startViewTransition = ((arg: Parameters<typeof original>[0]) => {
-      const transition = original(arg);
-      transition.ready.then(() => {
-        for (const animation of document.getAnimations()) {
-          const effect = animation.effect as KeyframeEffect | null;
-          if (effect?.pseudoElement) {
-            record.push(`${effect.pseudoElement}|${effect.getTiming().duration}`);
-          }
-        }
-      });
-      return transition;
-    }) as typeof document.startViewTransition;
-  });
-}
-
-const recorded = (page: Page) =>
-  page.evaluate(() => (window as unknown as { __vt: string[] }).__vt.join("\n"));
+import { expect, test } from "@playwright/test";
+import { recordTransitions, recorded } from "./helpers/view-transitions";
 
 test.describe("card-to-page morph", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
