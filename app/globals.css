@@ -836,13 +836,15 @@ button:disabled {
   }
 }
 
-/* Card tilt: project cards lean up to 4 degrees toward the mouse, on top of
-   the 2px lift. Mouse only, and off under reduced motion, like the
-   spotlight that feeds it. Declared after .card-lift:hover so it wins. */
+/* Card tilt: the edge of a project card under the mouse rises toward the
+   viewer, up to 4 degrees, on top of the 2px lift. The hover is read from the
+   card's untransformed list item, and the near edge comes up rather than
+   dipping away, so the card never slips out from under the pointer. Mouse
+   only, and off under reduced motion, like the spotlight that feeds it. */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .tilt:hover {
-    transform: perspective(900px) rotateX(calc(var(--tilt-y, 0) * -4deg))
-      rotateY(calc(var(--tilt-x, 0) * 4deg)) translate3d(0, -2px, 0);
+  li:hover > .tilt {
+    transform: perspective(900px) rotateX(calc(var(--tilt-y, 0) * 4deg))
+      rotateY(calc(var(--tilt-x, 0) * -4deg)) translate3d(0, -2px, 0);
     transition-duration: var(--duration-fast);
   }
 }
