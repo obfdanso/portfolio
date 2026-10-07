@@ -36,8 +36,10 @@ test.describe("project index", () => {
   test("filters by stack tag and can be cleared", async ({ page }) => {
     await page.goto("/projects");
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
-    // Every remaining card uses the tag, and some were filtered out.
+    // Every remaining card uses the tag, and some were filtered out. The
+    // filter updates inside a view transition, so wait for it to settle.
     const shown = page.getByRole("article");
+    await expect.poll(() => shown.count()).toBeLessThan(PROJECT_COUNT);
     const count = await shown.count();
     expect(count).toBeGreaterThan(0);
     expect(count).toBeLessThan(PROJECT_COUNT);
