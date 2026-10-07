@@ -1,21 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 
 const OPTIONS = ["light", "dark", "system"] as const;
 
+// Long enough to cross the small gap between the button and the menu without
+// the menu closing on the way; short enough that leaving feels immediate.
+const LEAVE_GRACE_MS = 150;
+
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const leaveTimer = useRef(0);
+
+  // While open, a press anywhere outside closes the menu, and so does Escape,
+  // which also hands focus back to the button so keyboard users stay put.
+  useEffect(() => {
+    if (!open) return;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      buttonRef.current?.focus();
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+      window.clearTimeout(leaveTimer.current);
+    };
+  }, [open]);
 
   // No `mounted` flag: the menu only renders once `open` is true, which can
   // never happen during SSR, so `theme` is never read on the server and there
   // is nothing to mismatch on hydration. This also keeps us clear of
   // react-hooks/set-state-in-effect, which Next 16 enforces.
   return (
-    <div className="relative">
+    <div
+      ref={rootRef}
+      className="relative"
+      // Mouse only: a touch pointer "leaves" as soon as the finger lifts,
+      // which would close the menu the moment it opened.
+      onPointerLeave={(event) => {
+        if (!open || event.pointerType !== "mouse") return;
+        leaveTimer.current = window.setTimeout(() => setOpen(false), LEAVE_GRACE_MS);
+      }}
+      onPointerEnter={() => window.clearTimeout(leaveTimer.current)}
+    >
       <button
+        ref={buttonRef}
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
