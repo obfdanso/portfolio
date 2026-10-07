@@ -942,6 +942,77 @@ button:disabled {
   }
 }
 
+/* Network diagram (skills page, Networking). Decorative: theme colours,
+   packets that travel the links on the ambient-loop timing, still under
+   reduced motion, hidden where offset-path is unsupported. */
+.network-diagram__link {
+  fill: none;
+  stroke: color-mix(in oklch, var(--color-fg-muted) 45%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+}
+
+.network-diagram__node rect {
+  fill: var(--color-surface);
+  stroke: color-mix(in oklch, var(--color-fg-muted) 40%, transparent);
+}
+
+.network-diagram__node--server rect {
+  stroke: var(--color-accent);
+}
+
+.network-diagram__node text {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.network-diagram__lock {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+}
+
+.network-diagram__packet {
+  display: none;
+  fill: var(--color-accent);
+}
+
+@supports (offset-path: path("M 0 0 L 1 1")) {
+  .network-diagram__packet {
+    display: block;
+    offset-rotate: 0deg;
+    animation: packet-travel var(--duration-pulse) var(--ease-brand) infinite both;
+  }
+
+  .network-diagram__packet--back {
+    animation-direction: reverse;
+  }
+}
+
+@keyframes packet-travel {
+  from {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  to {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-diagram__packet {
+    animation: none;
+    offset-distance: 50%;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Recording placeholder
 
