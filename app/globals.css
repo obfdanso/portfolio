@@ -1115,6 +1115,11 @@ button,
 .marquee {
   overflow: hidden;
   padding-block: 2.5rem;
+  /* It sits just below the full-height hero, so it starts off-screen. Skip
+     rendering it, and its endless animation, until it is near the viewport;
+     the reserved height stops anything shifting when it appears. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 8.5rem;
   mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
 }
 
