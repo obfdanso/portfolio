@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { recordTransitions, recorded } from "./helpers/view-transitions";
 
 test("theme choice persists across reload without a flash", async ({ page }) => {
   await page.goto("/");
@@ -74,5 +75,52 @@ test.describe("theme menu on a phone", () => {
     await expect(page.getByRole("menu")).toBeVisible();
     await page.getByRole("menuitem", { name: /^dark$/i }).tap();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  });
+});
+
+test.describe("theme circle reveal", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("choosing a theme reveals it in a circle from the button", async ({ page }) => {
+    await page.goto("/");
+    await recordTransitions(page);
+    await page.getByRole("button", { name: /theme/i }).click();
+    await page.getByRole("menuitem", { name: /^light$/i }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expect
+      .poll(() => recorded(page))
+      .toContain("::view-transition-new(root)|400|theme-circle");
+  });
+
+  test("the menu is gone before the reveal starts", async ({ page }) => {
+    await page.goto("/");
+    const states: boolean[] = [];
+    await page.exposeFunction("__menuOpen", (open: boolean) => states.push(open));
+    await page.evaluate(() => {
+      const original = document.startViewTransition.bind(document);
+      document.startViewTransition = ((arg: Parameters<typeof original>[0]) => {
+        (window as unknown as { __menuOpen: (o: boolean) => void }).__menuOpen(
+          !!document.querySelector('[role="menu"]'),
+        );
+        return original(arg);
+      }) as typeof document.startViewTransition;
+    });
+    await page.getByRole("button", { name: /theme/i }).click();
+    await page.getByRole("menuitem", { name: /^dark$/i }).click();
+    await expect.poll(() => states.length).toBeGreaterThan(0);
+    expect(states[0]).toBe(false);
+  });
+});
+
+test.describe("theme circle reveal, reduced motion", () => {
+  test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
+
+  test("switches instantly", async ({ page }) => {
+    await page.goto("/");
+    await recordTransitions(page);
+    await page.getByRole("button", { name: /theme/i }).click();
+    await page.getByRole("menuitem", { name: /^light$/i }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    expect(await recorded(page)).not.toContain("theme-circle");
   });
 });
