@@ -116,6 +116,17 @@ test.describe("skills page", () => {
     ).toBeVisible();
   });
 
+  test("the networking section shows a live network diagram", async ({ page }) => {
+    await page.goto("/skills");
+    const networking = page.getByRole("region", { name: "Networking" });
+    await expect(networking.locator("svg.network-diagram")).toHaveAttribute("aria-hidden", "true");
+    await expect(networking.locator(".network-diagram__packet").first()).toHaveCSS(
+      "animation-name",
+      "packet-travel",
+    );
+    await expect(page.locator("svg.network-diagram")).toHaveCount(1);
+  });
+
   test("a section can be linked to directly", async ({ page }) => {
     await page.goto("/skills#networking");
     await expect(page.getByRole("heading", { level: 2, name: "Networking" })).toBeInViewport();
@@ -165,6 +176,15 @@ test.describe("skills page, reduced motion", () => {
       .evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity));
     expect(opacities).toHaveLength(SECTIONS.length);
     expect(new Set(opacities)).toEqual(new Set(["1"]));
+  });
+
+  test("the diagram's packets hold still", async ({ page }) => {
+    await page.goto("/skills");
+    await expect(page.locator(".network-diagram__packet").first()).toHaveCSS(
+      "animation-name",
+      "none",
+    );
+    await expect(page.locator("svg.network-diagram")).toBeVisible();
   });
 
   test("sections hold still under reduced motion", async ({ page }) => {
