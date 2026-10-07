@@ -26,6 +26,24 @@ async function visitThemed(page: import("@playwright/test").Page, route: string,
   await page.addInitScript((t) => window.localStorage.setItem("theme", t), theme);
   await page.goto(route);
   await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+  await entrancesSettled(page);
+}
+
+/**
+ * Contrast is measured on what a visitor reads, after the page has entered.
+ * Under heavy parallel load axe could otherwise catch the sidebar mid-fade
+ * and report a contrast failure that no visitor ever sees.
+ */
+async function entrancesSettled(page: import("@playwright/test").Page) {
+  await page.waitForFunction(() =>
+    document
+      .getAnimations()
+      .filter((a) => {
+        const target = (a.effect as KeyframeEffect | null)?.target as Element | null;
+        return !!target?.closest(".enter");
+      })
+      .every((a) => a.playState === "finished"),
+  );
 }
 
 for (const route of ROUTES) {
