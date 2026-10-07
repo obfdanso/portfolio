@@ -20,21 +20,12 @@ export function ThemeToggle() {
 
   // Close the menu first, synchronously, so the reveal's "before" snapshot
   // doesn't freeze an open menu outside the growing circle. Then apply the
-  // theme inside the transition. data-theme is set directly as well, so the
-  // "after" snapshot already has the new colours; next-themes then records
-  // the choice.
+  // theme synchronously inside the transition: flushSync makes next-themes
+  // set data-theme and color-scheme (and pause colour transitions) before the
+  // "after" snapshot is taken.
   const choose = (option: (typeof OPTIONS)[number]) => {
     flushSync(() => setOpen(false));
-    switchTheme(() => {
-      const resolved =
-        option === "system"
-          ? window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-          : option;
-      document.documentElement.setAttribute("data-theme", resolved);
-      setTheme(option);
-    }, buttonRef.current);
+    switchTheme(() => flushSync(() => setTheme(option)), buttonRef.current);
   };
 
   // While open, a press anywhere outside closes the menu, and so does Escape,

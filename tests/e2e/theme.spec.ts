@@ -112,15 +112,61 @@ test.describe("theme circle reveal", () => {
   });
 });
 
+test.describe("theme circle reveal, timing", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  /** Wraps startViewTransition so each call records `label` from inside it. */
+  async function spy(page: import("@playwright/test").Page) {
+    await page.evaluate(() => {
+      const log: string[] = [];
+      (window as unknown as { __log: string[] }).__log = log;
+      const root = () => document.documentElement;
+      const original = document.startViewTransition.bind(document);
+      document.startViewTransition = ((arg: () => void | Promise<void>) => {
+        const transition = original(async () => {
+          await arg();
+          log.push(`after:${root().dataset.theme}|${root().style.colorScheme}`);
+        });
+        transition.ready
+          .then(() => log.push(`ready:${root().classList.contains("theme-reveal")}`))
+          .catch(() => log.push("ready:skipped"));
+        return transition;
+      }) as typeof document.startViewTransition;
+    });
+  }
+  const log = (page: import("@playwright/test").Page) =>
+    page.evaluate(() => (window as unknown as { __log: string[] }).__log);
+
+  test("the new theme is fully applied before the circle is drawn", async ({ page }) => {
+    await page.addInitScript(() => window.localStorage.setItem("theme", "dark"));
+    await page.goto("/");
+    await spy(page);
+    await page.getByRole("button", { name: /theme/i }).click();
+    await page.getByRole("menuitem", { name: /^light$/i }).click();
+    await expect.poll(() => log(page)).toContain("after:light|light");
+  });
+});
+
 test.describe("theme circle reveal, reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
   test("switches instantly", async ({ page }) => {
     await page.goto("/");
-    await recordTransitions(page);
+    await page.evaluate(() => {
+      const w = window as unknown as { __vtCalls: number };
+      w.__vtCalls = 0;
+      const original = document.startViewTransition.bind(document);
+      document.startViewTransition = ((arg: Parameters<typeof original>[0]) => {
+        w.__vtCalls += 1;
+        return original(arg);
+      }) as typeof document.startViewTransition;
+    });
     await page.getByRole("button", { name: /theme/i }).click();
     await page.getByRole("menuitem", { name: /^light$/i }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-    expect(await recorded(page)).not.toContain("theme-circle");
+    await page.waitForTimeout(300);
+    expect(await page.evaluate(() => (window as unknown as { __vtCalls: number }).__vtCalls)).toBe(
+      0,
+    );
   });
 });
