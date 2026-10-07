@@ -52,3 +52,17 @@ test("Selected work lists the front-end projects and not intercli", async ({ pag
   await expect(work.getByRole("link", { name: "intercli", exact: true })).toHaveCount(0);
   await expect(work.getByRole("article")).toHaveCount(getFrontendProjects().length);
 });
+
+test("a project card lifts on hover", async ({ page }) => {
+  // Regression: the scroll reveal animated `transform` with fill both, which
+  // overrode the hover lift on every revealed card.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const card = page.getByRole("article").first();
+  await card.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await card.hover();
+  await expect
+    .poll(() => card.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f))
+    .toBeLessThan(0);
+});

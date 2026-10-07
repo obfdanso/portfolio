@@ -230,6 +230,20 @@ button,
   z-index: 1;
 }
 
+/* Tailwind 4 gives buttons the default arrow. Everything clickable shows the
+   hand; anything disabled says so. */
+button:not(:disabled),
+summary,
+[role="button"],
+[role="menuitem"],
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 /* ---------------------------------------------------------------------------
    Chrome
 --------------------------------------------------------------------------- */
@@ -295,23 +309,26 @@ button,
   }
 }
 
+/* The reveal moves with the `translate` property, not `transform`. A fill-both
+   animation on `transform` overrides every hover transform on the same
+   element, which silently disabled the card lift. */
 @keyframes reveal-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 16px, 0);
+    translate: 0 16px;
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    translate: none;
   }
 }
 
 @keyframes reveal-in-solid {
   from {
-    transform: translate3d(0, 16px, 0);
+    translate: 0 16px;
   }
   to {
-    transform: translate3d(0, 0, 0);
+    translate: none;
   }
 }
 
@@ -386,6 +403,7 @@ button,
     animation: none;
     opacity: 1;
     transform: none;
+    translate: none;
   }
 
   .card-lift {
