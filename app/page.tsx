@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { HeroHeadline } from "@/components/hero-headline";
+import { TechMarquee } from "@/components/tech-marquee";
 import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionNumber } from "@/components/ui/section-number";
@@ -56,6 +57,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <TechMarquee />
 
       <section className="container-page py-24">
         <h2 className="flex items-baseline gap-4 text-step-3">
