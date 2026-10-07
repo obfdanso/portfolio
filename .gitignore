@@ -9,3 +9,6 @@ next-env.d.ts
 test-results/
 playwright-report/
 .kilo/
+# Instructions for AI coding tools; local only. `next dev` rewrites AGENTS.md.
+AGENTS.md
+CLAUDE.md
