@@ -839,6 +839,23 @@ button,
   }
 }
 
+/* Magnetic buttons: the main calls to action lean up to 6px toward the
+   mouse while it is over them. They move with `translate`, so the hover lift
+   and press (on `transform`) still apply. Mouse only, off under reduced
+   motion; the transition list repeats .btn's so none of it is lost. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .magnetic {
+    translate: var(--mag-x, 0px) var(--mag-y, 0px);
+    transition:
+      translate var(--duration-base) var(--ease-brand),
+      transform var(--duration-fast) var(--ease-brand),
+      background-color var(--duration-base) var(--ease-brand),
+      border-color var(--duration-base) var(--ease-brand),
+      color var(--duration-base) var(--ease-brand),
+      box-shadow var(--duration-base) var(--ease-brand);
+  }
+}
+
 /* Card tilt: the edge of a project card under the mouse rises toward the
    viewer, up to 4 degrees, on top of the 2px lift. The hover is read from the
    card's untransformed list item, and the near edge comes up rather than
