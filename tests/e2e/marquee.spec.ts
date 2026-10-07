@@ -26,6 +26,13 @@ test.describe("tech marquee", () => {
   });
 });
 
+test("is not rendered until it nears the screen", async ({ page }) => {
+  // Regression: the endless band below the hero cost the home page about
+  // five Lighthouse points while it was still off-screen.
+  await page.goto("/");
+  await expect(page.locator(".marquee")).toHaveCSS("content-visibility", "auto");
+});
+
 test.describe("tech marquee, phone", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
