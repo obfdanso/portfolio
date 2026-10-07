@@ -39,8 +39,15 @@ async function entrancesSettled(page: import("@playwright/test").Page) {
     document
       .getAnimations()
       .filter((a) => {
-        const target = (a.effect as KeyframeEffect | null)?.target as Element | null;
-        return !!target?.closest(".enter");
+        const effect = a.effect as KeyframeEffect | null;
+        const target = effect?.target as Element | null;
+        // Only finite, time-based entrances: an endless or scroll-driven
+        // animation never "finishes" and would hang the sweep.
+        return (
+          !!target?.closest(".enter") &&
+          a.timeline instanceof DocumentTimeline &&
+          effect?.getTiming().iterations !== Infinity
+        );
       })
       .every((a) => a.playState === "finished"),
   );
