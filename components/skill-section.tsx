@@ -1,5 +1,5 @@
 import { EvidenceCard } from "@/components/evidence-card";
-import { NetworkDiagram } from "@/components/network-diagram";
+import { SkillDiagram } from "@/components/skill-diagram";
 import { Reveal } from "@/components/ui/reveal";
 import type { SkillSection as SkillSectionData } from "@/content/skills";
 import type { ResolvedEvidence } from "@/lib/skills";
@@ -30,7 +30,7 @@ export function SkillSection({
 
         <p className="mt-5 max-w-2xl text-step-1 text-fg-muted">{section.statement}</p>
 
-        {section.id === "networking" && <NetworkDiagram />}
+        <SkillDiagram id={section.id} />
 
         <ul aria-label={`${section.title} topics`} className="mt-6 flex flex-wrap gap-2">
           {section.tags.map((tag) => (
