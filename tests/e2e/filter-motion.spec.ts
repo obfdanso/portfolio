@@ -49,6 +49,9 @@ test.describe("animated project filter, reduced motion", () => {
     await recordTransitions(page);
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
     await expect(page.getByRole("article")).toHaveCount(TS_COUNT);
-    expect(await recorded(page)).not.toMatch(/\|400\|card-out/);
+    // Wait for the transition to be recorded, then check nothing in it ran
+    // at full length.
+    await expect.poll(() => recorded(page)).toContain("filter-highlight");
+    expect(await recorded(page)).not.toMatch(/\|400\|/);
   });
 });
