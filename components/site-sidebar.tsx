@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, ViewTransition } from "react";
 import {
   AboutIcon,
   CloseIcon,
@@ -29,7 +29,15 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+function NavList({
+  pathname,
+  onNavigate,
+  glide = false,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+  glide?: boolean;
+}) {
   return (
     <ul className="space-y-1">
       {LINKS.map(({ href, label, Icon }) => {
@@ -41,12 +49,21 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-step-0",
-                active
-                  ? "bg-fg/8 font-medium text-accent"
-                  : "text-fg-muted hover:bg-fg/5 hover:text-fg",
+                "nav-item relative isolate flex items-center gap-3 rounded-lg px-3 py-2.5 text-step-0",
+                active ? "font-medium text-accent" : "text-fg-muted hover:bg-fg/5 hover:text-fg",
+                // The mobile menu keeps a plain background; only the desktop
+                // sidebar's highlight glides between links.
+                active && !glide && "bg-fg/8",
               )}
             >
+              {active && glide && (
+                <ViewTransition name="nav-highlight" share="morph" default="none">
+                  <span
+                    aria-hidden="true"
+                    className="nav-highlight absolute inset-0 -z-10 rounded-lg bg-fg/8"
+                  />
+                </ViewTransition>
+              )}
               <Icon className="size-[1.15rem] shrink-0" />
               {label}
             </Link>
@@ -76,7 +93,7 @@ export function SiteSidebar() {
         </Link>
 
         <nav className="mt-6 flex-1">
-          <NavList pathname={pathname} />
+          <NavList pathname={pathname} glide />
         </nav>
 
         <ThemeToggle />
