@@ -1,11 +1,28 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import {
+  addTransitionType,
+  startTransition,
+  useMemo,
+  useRef,
+  useState,
+  ViewTransition,
+} from "react";
 import type { Project } from "@/lib/content";
 import { ProjectCard } from "@/components/project-card";
 import { cn } from "@/lib/cn";
 
 const ALL = "All";
+
+// Only filter changes carry this type, so the cards' enter and exit
+// animations never run on route navigations (where the card morph plays).
+const FILTER = "project-filter";
+
+const select = (setFilter: (tag: string) => void, tag: string) =>
+  startTransition(() => {
+    addTransitionType(FILTER);
+    setFilter(tag);
+  });
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   const [filter, setFilter] = useState<string>(ALL);
@@ -54,14 +71,22 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             key={tag}
             type="button"
             aria-pressed={filter === tag}
-            onClick={() => setFilter(tag)}
+            onClick={() => select(setFilter, tag)}
             className={cn(
-              "pill rounded-full border px-3.5 py-1.5 text-step-xs",
+              "pill relative isolate rounded-full border px-3.5 py-1.5 text-step-xs",
               filter === tag
                 ? "pill-primary border-accent text-accent"
                 : "pill-muted border-fg-muted/20 text-fg-muted",
             )}
           >
+            {filter === tag && (
+              <ViewTransition name="filter-highlight" share="morph" default="none">
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 -z-10 rounded-full bg-accent/10"
+                />
+              </ViewTransition>
+            )}
             {tag}
           </button>
         ))}
@@ -83,9 +108,17 @@ export function ProjectList({ projects }: { projects: Project[] }) {
         }}
       >
         {visible.map((project, index) => (
-          <li key={project.slug} className="project-rail__item">
-            <ProjectCard project={project} index={index} headingLevel={2} />
-          </li>
+          <ViewTransition
+            key={project.slug}
+            enter={{ [FILTER]: "card-in", default: "none" }}
+            exit={{ [FILTER]: "card-out", default: "none" }}
+            update={{ [FILTER]: "card-move", default: "none" }}
+            default="none"
+          >
+            <li className="project-rail__item">
+              <ProjectCard project={project} index={index} headingLevel={2} />
+            </li>
+          </ViewTransition>
         ))}
       </ul>
 

@@ -408,6 +408,35 @@ button:disabled {
   animation: theme-circle var(--duration-slow) var(--ease-brand) both;
 }
 
+/* Projects filter: staying cards slide to their new place, leaving cards
+   shrink away, returning cards rise into their slot. */
+::view-transition-group(.card-move) {
+  animation-duration: var(--duration-slow);
+  animation-timing-function: var(--ease-brand);
+}
+
+::view-transition-old(.card-out) {
+  animation: card-out var(--duration-slow) var(--ease-brand) both;
+}
+
+::view-transition-new(.card-in) {
+  animation: card-in var(--duration-slow) var(--ease-brand) both;
+}
+
+@keyframes card-out {
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.97);
+  }
+}
+
 @keyframes theme-circle {
   from {
     clip-path: circle(0 at var(--reveal-x) var(--reveal-y));
