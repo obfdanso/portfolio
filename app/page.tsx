@@ -62,7 +62,7 @@ export default function HomePage() {
 
       <section className="container-page py-24">
         <h2 className="flex items-baseline gap-4 text-step-3">
-          <SectionNumber value={1} /> Selected work
+          <SectionNumber value={1} /> <span className="fill-on-scroll">Selected work</span>
         </h2>
 
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
@@ -78,7 +78,7 @@ export default function HomePage() {
 
       <Reveal as="section" className="container-page py-8">
         <h2 className="flex items-baseline gap-4 text-step-3">
-          <SectionNumber value={2} /> About
+          <SectionNumber value={2} /> <span className="fill-on-scroll">About</span>
         </h2>
         <p className="mt-8 max-w-2xl text-step-1 text-fg-muted">
           I am a computer science student at KNUST. I care about interfaces that stay fast and
