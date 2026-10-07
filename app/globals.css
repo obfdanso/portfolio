@@ -1072,6 +1072,37 @@ button,
   }
 }
 
+/* Section headings fill with colour, left to right, as they scroll into
+   view: muted to full. Scroll-driven CSS only; a plain solid heading where
+   the browser can't drive it, and under reduced motion. The muted colour is
+   the site's own body-copy colour, so the heading reads at every point. */
+@supports (animation-timeline: view()) {
+  .fill-on-scroll {
+    color: transparent;
+    background: linear-gradient(to right, var(--color-fg) 50%, var(--color-fg-muted) 50%) right /
+      200% 100% no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: text-fill var(--duration-slow) linear both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 45%;
+  }
+}
+
+@keyframes text-fill {
+  to {
+    background-position: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill-on-scroll {
+    animation: none;
+    color: inherit;
+    background: none;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Tech marquee
 
