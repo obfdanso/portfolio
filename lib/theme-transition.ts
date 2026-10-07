@@ -1,3 +1,7 @@
+// Counts reveals, so a quick second switch keeps its class when the first
+// (skipped) transition finishes.
+let latest = 0;
+
 type Rect = { left: number; top: number; width: number; height: number };
 type Viewport = { width: number; height: number };
 
@@ -31,6 +35,9 @@ export function switchTheme(apply: () => void, origin: HTMLElement | null): void
   root.style.setProperty("--reveal-r", `${r}px`);
   root.classList.add("theme-reveal");
 
+  const id = ++latest;
   const transition = document.startViewTransition(apply);
-  transition.finished.finally(() => root.classList.remove("theme-reveal"));
+  transition.finished.finally(() => {
+    if (id === latest) root.classList.remove("theme-reveal");
+  });
 }
