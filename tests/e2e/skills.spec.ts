@@ -174,10 +174,13 @@ test.describe("skills page, reduced motion", () => {
     const states = await page.locator("main .reveal").evaluateAll((els) =>
       els.map((el) => {
         const style = getComputedStyle(el);
-        return `${style.animationName}|${style.transform}`;
+        // The reveal moves with `translate`; no animation and no offset means
+        // the section is still. (`transform` may read as an identity matrix.)
+        const offset = new DOMMatrix(style.transform);
+        return `${style.animationName}|${style.translate}|${offset.e},${offset.f}`;
       }),
     );
     expect(states).toHaveLength(SECTIONS.length);
-    expect(new Set(states)).toEqual(new Set(["none|none"]));
+    expect(new Set(states)).toEqual(new Set(["none|none|0,0"]));
   });
 });
