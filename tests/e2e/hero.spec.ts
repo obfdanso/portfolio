@@ -13,7 +13,8 @@ test("the headline reads as one sentence", async ({ page }) => {
     selection.addRange(range);
     return selection.toString();
   });
-  expect(selected.replace(/\s+/g, " ").trim()).toBe(TEXT);
+  // No whitespace collapsing: copying must give exactly the sentence.
+  expect(selected.trim()).toBe(TEXT);
 });
 
 test("the words rise on transform only, never fading", async ({ page }) => {
