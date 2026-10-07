@@ -24,7 +24,7 @@ export function OtherSkillsCta({ className }: { className?: string }) {
       </p>
       <Link
         href="/skills"
-        className="btn btn-outline shrink-0 rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
+        className="btn btn-outline magnetic shrink-0 rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
       >
         See my other skills
       </Link>

@@ -43,13 +43,13 @@ export default function HomePage() {
           <div className="enter mt-10 flex flex-wrap gap-4" style={stagger(240)}>
             <Link
               href="/projects"
-              className="btn btn-solid rounded-full bg-fg px-6 py-3 text-step-xs font-medium text-ground"
+              className="btn btn-solid magnetic rounded-full bg-fg px-6 py-3 text-step-xs font-medium text-ground"
             >
               See the work
             </Link>
             <Link
               href="/contact"
-              className="btn btn-outline rounded-full border border-fg-muted/30 px-6 py-3 text-step-xs"
+              className="btn btn-outline magnetic rounded-full border border-fg-muted/30 px-6 py-3 text-step-xs"
             >
               Get in touch
             </Link>

@@ -6,7 +6,8 @@ const QUERY = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: n
 
 /**
  * One listener for the whole site. It moves the glow on whichever .spotlight
- * card the mouse is over, and the lean on .tilt cards, at most once per frame. No listener at all on touch
+ * card the mouse is over, the lean on .tilt cards, and the pull on .magnetic
+ * buttons, at most once per frame. No listener at all on touch
  * screens or under reduced motion.
  */
 export function SpotlightTracker() {
@@ -15,11 +16,38 @@ export function SpotlightTracker() {
 
     let frame = 0;
     let last: PointerEvent | null = null;
+    let magnet: HTMLElement | null = null;
+
+    // Magnetic buttons lean a few pixels toward the mouse while it is over
+    // them, and settle back (through their CSS transition) when it leaves.
+    const release = () => {
+      magnet?.style.removeProperty("--mag-x");
+      magnet?.style.removeProperty("--mag-y");
+      magnet = null;
+    };
 
     const paint = () => {
       frame = 0;
       if (!last) return;
-      const card = (last.target as Element | null)?.closest<HTMLElement>(".spotlight");
+      const target = last.target as Element | null;
+
+      const nextMagnet = target?.closest<HTMLElement>(".magnetic") ?? null;
+      if (nextMagnet !== magnet) release();
+      if (nextMagnet) {
+        magnet = nextMagnet;
+        const box = nextMagnet.getBoundingClientRect();
+        const pull = (offset: number) => Math.max(-6, Math.min(6, offset * 0.25));
+        nextMagnet.style.setProperty(
+          "--mag-x",
+          `${pull(last.clientX - (box.left + box.width / 2)).toFixed(2)}px`,
+        );
+        nextMagnet.style.setProperty(
+          "--mag-y",
+          `${pull(last.clientY - (box.top + box.height / 2)).toFixed(2)}px`,
+        );
+      }
+
+      const card = target?.closest<HTMLElement>(".spotlight");
       if (!card) return;
       const rect = card.getBoundingClientRect();
       card.style.setProperty("--spot-x", `${last.clientX - rect.left}px`);
@@ -41,9 +69,16 @@ export function SpotlightTracker() {
       if (!frame) frame = requestAnimationFrame(paint);
     };
 
+    // The mouse left the window: let any magnetic button settle.
+    const onOut = (event: PointerEvent) => {
+      if (!event.relatedTarget) release();
+    };
+
     document.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("pointerout", onOut, { passive: true });
     return () => {
       document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerout", onOut);
       if (frame) cancelAnimationFrame(frame);
     };
   }, []);
