@@ -898,6 +898,39 @@ button:disabled {
   }
 }
 
+/* Hero headline: each word rises inside its own mask, 40ms after the last.
+   The words start 40% risen, never hidden, so the headline is painted from
+   the first frame and stays the page's Largest Contentful Paint. */
+.hero-word {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.1em;
+  padding-block-end: 0.08em;
+  margin-block-end: -0.08em;
+  vertical-align: top;
+}
+
+.hero-word__inner {
+  display: inline-block;
+  animation: word-rise var(--duration-slow) var(--ease-brand) both;
+  animation-delay: calc(var(--enter-delay, 0ms) + var(--word-index, 0) * 40ms);
+}
+
+@keyframes word-rise {
+  from {
+    transform: translate3d(0, 40%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-word__inner {
+    animation: none;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Recording placeholder
 

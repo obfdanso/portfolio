@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
+import { HeroHeadline } from "@/components/hero-headline";
 import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionNumber } from "@/components/ui/section-number";
@@ -29,9 +30,11 @@ export default function HomePage() {
             {SITE.name}
           </p>
 
-          <h1 className="enter enter--solid mt-6 max-w-[15ch] text-step-5" style={stagger(80)}>
-            Front-end developer building fast, accessible interfaces.
-          </h1>
+          <HeroHeadline
+            text="Front-end developer building fast, accessible interfaces."
+            className="enter enter--solid mt-6 max-w-[15ch] text-step-5"
+            style={stagger(80)}
+          />
 
           <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(160)}>
             I build interfaces in React and TypeScript.
