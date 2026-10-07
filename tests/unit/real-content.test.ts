@@ -25,6 +25,15 @@ describe("real project content", () => {
     ]);
   });
 
+  it("opens intercli with its demo recording, the screenshot as its poster", () => {
+    const intercli = projects.find((p) => p.slug === "intercli");
+    expect(intercli?.showcase).toMatchObject({
+      kind: "video",
+      src: "/projects/intercli-demo.mp4",
+      poster: "/projects/intercli-cover.png",
+    });
+  });
+
   it("features MediSpace", () => {
     expect(projects.find((p) => p.slug === "medispace")?.featured).toBe(true);
   });
