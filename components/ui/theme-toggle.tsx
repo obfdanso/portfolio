@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
+import { switchTheme } from "@/lib/theme-transition";
 
 const OPTIONS = ["light", "dark", "system"] as const;
 
@@ -15,6 +17,25 @@ export function ThemeToggle() {
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const leaveTimer = useRef(0);
+
+  // Close the menu first, synchronously, so the reveal's "before" snapshot
+  // doesn't freeze an open menu outside the growing circle. Then apply the
+  // theme inside the transition. data-theme is set directly as well, so the
+  // "after" snapshot already has the new colours; next-themes then records
+  // the choice.
+  const choose = (option: (typeof OPTIONS)[number]) => {
+    flushSync(() => setOpen(false));
+    switchTheme(() => {
+      const resolved =
+        option === "system"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light"
+          : option;
+      document.documentElement.setAttribute("data-theme", resolved);
+      setTheme(option);
+    }, buttonRef.current);
+  };
 
   // While open, a press anywhere outside closes the menu, and so does Escape,
   // which also hands focus back to the button so keyboard users stay put.
@@ -79,10 +100,7 @@ export function ThemeToggle() {
                 type="button"
                 role="menuitem"
                 aria-current={theme === option ? "true" : undefined}
-                onClick={() => {
-                  setTheme(option);
-                  setOpen(false);
-                }}
+                onClick={() => choose(option)}
                 className="nav-item w-full rounded px-2 py-1.5 text-left text-sm capitalize hover:bg-ground aria-[current]:text-accent"
               >
                 {option}

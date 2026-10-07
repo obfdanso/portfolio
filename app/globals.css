@@ -398,6 +398,25 @@ button:disabled {
   animation-timing-function: var(--ease-brand);
 }
 
+/* Theme switch: the new colours grow in a circle from the Theme button. The
+   old snapshot stays still underneath; only the circle moves. */
+:root.theme-reveal::view-transition-old(root) {
+  animation: none;
+}
+
+:root.theme-reveal::view-transition-new(root) {
+  animation: theme-circle var(--duration-slow) var(--ease-brand) both;
+}
+
+@keyframes theme-circle {
+  from {
+    clip-path: circle(0 at var(--reveal-x) var(--reveal-y));
+  }
+  to {
+    clip-path: circle(var(--reveal-r) at var(--reveal-x) var(--reveal-y));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     animation: none;
