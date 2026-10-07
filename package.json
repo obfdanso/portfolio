@@ -12,8 +12,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:e2e": "playwright test",
+    "test": "vitest run --config tests/vitest.config.ts",
+    "test:e2e": "playwright test -c tests/playwright.config.ts",
     "format": "prettier --write .",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
@@ -48,5 +48,11 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.70.0",
     "vitest": "5.0.0"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": false,
+    "trailingComma": "all",
+    "printWidth": 100
   }
 }
