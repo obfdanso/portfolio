@@ -33,6 +33,28 @@ test.describe("card tilt", () => {
   });
 });
 
+test.describe("card tilt at the very edge", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("stays tilted and clickable with the mouse 2px inside the edge", async ({ page }) => {
+    // Regression: the edge under the mouse tilted away from it, so the card
+    // slipped out from under the pointer, lost hover, flattened, and repeated;
+    // a click in that band could miss the card.
+    await page.goto("/projects");
+    const card = page.getByRole("article").first();
+    const box = await card.boundingBox();
+    const x = box!.x + box!.width - 2;
+    const y = box!.y + box!.height / 2;
+    await page.mouse.move(x - 40, y);
+    await page.mouse.move(x, y, { steps: 8 });
+    await page.waitForTimeout(400);
+    const hovered = await card.evaluate((el) => el.matches(":hover"));
+    expect(hovered).toBe(true);
+    await page.mouse.click(x, y);
+    await expect(page).toHaveURL(/\/projects\/[a-z-]+$/);
+  });
+});
+
 test.describe("card tilt, reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
