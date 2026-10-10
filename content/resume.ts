@@ -15,7 +15,7 @@ type Resume = {
 
 /**
  * The /resume page renders entirely from this object, so updating the resume
- * is an edit to one data file with no layout work. Keep public/resume.pdf in
+ * is an edit to one data file with no layout work. Keep public/Danso_Daniel.pdf in
  * sync when this changes.
  */
 
