@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
@@ -12,6 +13,10 @@ import { SITE } from "@/lib/site";
 
 /** Staggered entrance delay, in the order the eye reads down the hero. */
 const stagger = (ms: number) => ({ "--enter-delay": `${ms}ms` }) as CSSProperties;
+
+// Only the canonical: title and description come from the root layout.
+// A canonical in the layout would be inherited by every route.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   // Front-end work only; the other skills are one click away, on /skills.

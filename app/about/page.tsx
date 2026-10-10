@@ -7,6 +7,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description: `${SITE.name}, front-end developer.`,
+  alternates: { canonical: "/about" },
 };
 
 // Set to a real path once the photo exists. Until then the typographic
