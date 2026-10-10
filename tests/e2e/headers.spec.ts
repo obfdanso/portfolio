@@ -42,6 +42,22 @@ test("no case study is broken by the policy, including the one with video", asyn
   expect(errors).toEqual([]);
 });
 
+test("the policy lets the intercli demo video load", async ({ page }) => {
+  // The player is preload="none", so a page visit alone never fetches the
+  // mp4 and a blocked media-src would go unnoticed until someone pressed
+  // play. Ask for it directly. Only the request is asserted: Playwright's
+  // Chromium may not decode H.264, but a CSP block stops the request itself.
+  await page.goto("/projects/intercli");
+  const requested = page.waitForRequest((request) => request.url().endsWith("intercli-demo.mp4"), {
+    timeout: 5_000,
+  });
+  await page.locator("video").evaluate((video: HTMLVideoElement) => {
+    video.preload = "metadata";
+    video.load();
+  });
+  await requested;
+});
+
 test("the no-JavaScript contact form still posts", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
