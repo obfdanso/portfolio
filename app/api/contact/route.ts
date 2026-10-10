@@ -23,7 +23,14 @@ export async function POST(request: Request) {
   const isJson = contentType.includes("application/json");
 
   // Accepting both encodings is what makes the no-JavaScript form work.
-  const raw = isJson ? await request.json() : Object.fromEntries(await request.formData());
+  // A body that cannot be read at all is the sender's mistake, so it gets a
+  // 400 rather than an unhandled 500.
+  let raw: unknown;
+  try {
+    raw = isJson ? await request.json() : Object.fromEntries(await request.formData());
+  } catch {
+    return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
+  }
   const parsed = contactSchema.safeParse(raw);
 
   if (!parsed.success) {
