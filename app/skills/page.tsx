@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Skills",
   description:
     "Backend, databases and SQL, networking and AI tools, each shown next to work that uses it.",
+  alternates: { canonical: "/skills" },
 };
 
 // Reached only from the "See my other skills" button and the About page, never

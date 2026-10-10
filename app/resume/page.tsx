@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { resume, type Entry } from "@/content/resume";
 
-export const metadata: Metadata = { title: "Resume", description: resume.summary };
+export const metadata: Metadata = {
+  title: "Resume",
+  description: resume.summary,
+  alternates: { canonical: "/resume" },
+};
 
 function Section({ title, entries }: { title: string; entries: Entry[] }) {
   return (

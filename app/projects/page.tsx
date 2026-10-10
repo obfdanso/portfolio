@@ -6,6 +6,7 @@ import { OtherSkillsCta } from "@/components/other-skills-cta";
 export const metadata: Metadata = {
   title: "Projects",
   description: "Front-end projects, each with a written case study.",
+  alternates: { canonical: "/projects" },
 };
 
 export default function ProjectsPage() {

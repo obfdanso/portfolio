@@ -54,3 +54,37 @@ test("declares an open graph image on the home page", async ({ page }) => {
   const og = await page.locator('meta[property="og:image"]').first().getAttribute("content");
   expect(og).toContain("opengraph-image");
 });
+
+const CANONICAL_ROUTES = [
+  "/",
+  "/projects",
+  "/about",
+  "/resume",
+  "/skills",
+  "/contact",
+  "/projects/medispace",
+  "/projects/pos",
+  "/projects/bitby",
+  "/projects/intercli",
+  "/projects/smartsocket",
+];
+
+test("gives every route a canonical URL on the real domain", async ({ page }) => {
+  for (const path of CANONICAL_ROUTES) {
+    await page.goto(path);
+    const href = await page.locator('link[rel="canonical"]').getAttribute("href");
+    // new URL normalises the root's trailing slash either way.
+    expect(new URL(href ?? "").href, path).toBe(new URL(path, SITE.url).href);
+  }
+});
+
+test("keeps the query string out of the canonical", async ({ page }) => {
+  await page.goto("/contact?sent=1");
+  const href = await page.locator('link[rel="canonical"]').getAttribute("href");
+  expect(href).toBe(`${SITE.url}/contact`);
+});
+
+test("claims no canonical for a project that does not exist", async ({ page }) => {
+  await page.goto("/projects/does-not-exist");
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+});
