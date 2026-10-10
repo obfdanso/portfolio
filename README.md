@@ -20,13 +20,18 @@ skills page, an about page, a resume and a contact form.
 - **CSS-only motion.** The gradient, page entrances, hover and press feedback,
   and scroll reveals are all CSS, so they cost no JavaScript and run before
   React hydrates. Everything stops under `prefers-reduced-motion`.
+- **Security headers, kept static.** Every route sends a Content Security
+  Policy, HSTS, `nosniff`, a referrer policy and a permissions policy, set in
+  `next.config.ts`. A nonce-based policy would make every page render per
+  request; with no accounts or private data on the site, staying static and
+  CDN-cached is the better trade.
 - **Tested.** Unit tests (Vitest) cover the schemas, content loader, contact
   validation and components. End-to-end tests (Playwright) cover every route,
   keyboard navigation, both themes, reduced motion, the contact form's failure
   states, and an axe accessibility sweep in light and dark mode.
 
-Lighthouse scores 100 for performance, accessibility, best practices and SEO on
-every route.
+CI runs Lighthouse on every route and fails the build if accessibility, best
+practices or SEO score below 100. Performance is reported, and warns below 90.
 
 ## Stack
 
@@ -59,17 +64,18 @@ npm run dev
 
 Then open http://localhost:3000.
 
-| Script              | What it does                                        |
-| ------------------- | --------------------------------------------------- |
-| `npm run dev`       | Development server                                  |
-| `npm run build`     | Production build                                    |
-| `npm run start`     | Serve the production build                          |
-| `npm run lint`      | ESLint                                              |
-| `npm run typecheck` | TypeScript, no emit                                 |
-| `npm run test`      | Unit tests                                          |
-| `npm run test:e2e`  | End-to-end tests (builds and serves the site first) |
-| `npm run verify`    | Lint, typecheck, unit tests and build               |
-| `npm run format`    | Prettier                                            |
+| Script               | What it does                                          |
+| -------------------- | ----------------------------------------------------- |
+| `npm run dev`        | Development server                                    |
+| `npm run build`      | Production build                                      |
+| `npm run start`      | Serve the production build                            |
+| `npm run lint`       | ESLint                                                |
+| `npm run typecheck`  | TypeScript, no emit                                   |
+| `npm run test`       | Unit tests                                            |
+| `npm run test:e2e`   | End-to-end tests (builds and serves the site first)   |
+| `npm run lighthouse` | Lighthouse on every route (run `npm run build` first) |
+| `npm run verify`     | Lint, typecheck, unit tests and build                 |
+| `npm run format`     | Prettier                                              |
 
 The end-to-end tests need a browser the first time: `npx playwright install chromium`.
 
@@ -88,6 +94,19 @@ a sending domain in Resend before the form will deliver. Until then the form
 shows an error and points people to the email address shown beside it.
 
 `.env` and `.env*.local` are gitignored. Never commit a key.
+
+## Deploying
+
+The site is built for Vercel. For the first deploy:
+
+1. Import the GitHub repository into Vercel.
+2. Set `RESEND_API_KEY` and `CONTACT_TO_EMAIL` for the Production environment.
+3. Add `danso.dev` and `www.danso.dev` as domains, with `www` redirecting to
+   `danso.dev`. Point the name.com DNS records at Vercel as it instructs.
+4. Verify `danso.dev` as a sending domain in Resend, by adding the DNS records
+   Resend lists at name.com.
+5. After the deploy: send a test message through the contact form, and check
+   that the live site returns the security headers (`curl -I https://danso.dev`).
 
 ## Updating the content
 
