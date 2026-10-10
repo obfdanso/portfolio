@@ -65,3 +65,34 @@ test("the no-JavaScript contact form still posts", async ({ browser }) => {
 
   await context.close();
 });
+
+const ROUTES = [
+  "/",
+  "/projects",
+  "/about",
+  "/resume",
+  "/skills",
+  "/contact",
+  ...CASE_STUDIES.map((slug) => `/projects/${slug}`),
+];
+
+test("no route trips the security policy, even silently", async ({ page }) => {
+  // A violation that a library catches never reaches the console, but Chrome
+  // still files it in the Issues panel, and Lighthouse counts it against Best
+  // Practices. Zod's eval probe on /contact was exactly that.
+  const cdp = await page.context().newCDPSession(page);
+  const violations: string[] = [];
+  cdp.on("Audits.issueAdded", ({ issue }) => {
+    if (issue.code === "ContentSecurityPolicyIssue") {
+      const details = issue.details.contentSecurityPolicyIssueDetails;
+      violations.push(`${page.url()}: ${details?.contentSecurityPolicyViolationType}`);
+    }
+  });
+  await cdp.send("Audits.enable");
+
+  for (const route of ROUTES) {
+    await page.goto(route, { waitUntil: "networkidle" });
+  }
+
+  expect(violations).toEqual([]);
+});
