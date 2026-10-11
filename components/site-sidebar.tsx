@@ -39,7 +39,7 @@ function NavList({
   glide?: boolean;
 }) {
   return (
-    <ul className="space-y-1">
+    <ul className="space-y-1.5">
       {LINKS.map(({ href, label, Icon }) => {
         const active = isActive(pathname, href);
         return (
@@ -49,7 +49,7 @@ function NavList({
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "nav-item relative isolate flex items-center gap-3 rounded-lg px-3 py-2.5 text-step-0",
+                "nav-item relative isolate flex items-center gap-3.5 rounded-xl px-4 py-3 text-step-1",
                 active ? "font-medium text-accent" : "text-fg-muted hover:bg-fg/5 hover:text-fg",
                 // The mobile menu keeps a plain background; only the desktop
                 // sidebar's highlight glides between links.
@@ -60,11 +60,11 @@ function NavList({
                 <ViewTransition name="nav-highlight" share="morph" default="none">
                   <span
                     aria-hidden="true"
-                    className="nav-highlight absolute inset-0 -z-10 rounded-lg bg-fg/8"
+                    className="nav-highlight absolute inset-0 -z-10 rounded-xl bg-fg/8"
                   />
                 </ViewTransition>
               )}
-              <Icon className="size-[1.15rem] shrink-0" />
+              <Icon className="size-[1.35rem] shrink-0" />
               {label}
             </Link>
           </li>
@@ -85,14 +85,14 @@ export function SiteSidebar() {
         aria-label="Main"
         className="enter enter--left fixed inset-y-3 left-3 z-50 hidden w-(--sidebar-width) flex-col rounded-2xl border border-fg-muted/12 bg-surface/70 p-4 backdrop-blur-xl md:flex"
       >
-        <Link href="/" className="block rounded-lg px-3 py-2">
-          <span className="block font-display text-step-1 font-semibold tracking-tight">
-            {SITE.shortName}
-          </span>
-          <span className="mt-0.5 block font-mono text-step-xs text-fg-muted">{SITE.role}</span>
+        <Link
+          href="/"
+          className="block rounded-lg px-4 py-2 font-display text-step-2 font-semibold tracking-tight"
+        >
+          {SITE.shortName}
         </Link>
 
-        <nav className="mt-6 flex-1">
+        <nav className="mt-8 flex-1">
           <NavList pathname={pathname} glide />
         </nav>
 
