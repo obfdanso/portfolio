@@ -1369,3 +1369,55 @@ button,
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Back button
+
+   iPhone style: a back arrow in a round, frosted-glass bubble that lets the
+   gradient show through. Like iOS it shrinks slightly while pressed, and the
+   arrow nudges left on hover to say which way it goes. The blur covers only
+   the 44px bubble and nothing behind it moves, so it costs next to nothing.
+--------------------------------------------------------------------------- */
+
+.back-button {
+  background: color-mix(in oklch, var(--color-fg) 9%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-fg) 16%, transparent);
+  box-shadow:
+    0 6px 18px -8px color-mix(in oklch, var(--color-ground) 70%, transparent),
+    inset 0 1px 0 color-mix(in oklch, var(--color-fg) 14%, transparent);
+  backdrop-filter: blur(14px) saturate(1.5);
+  transition:
+    transform var(--duration-fast) var(--ease-brand),
+    background-color var(--duration-base) var(--ease-brand),
+    border-color var(--duration-base) var(--ease-brand);
+}
+
+.back-button:hover {
+  background-color: color-mix(in oklch, var(--color-fg) 14%, transparent);
+  border-color: color-mix(in oklch, var(--color-fg) 24%, transparent);
+}
+
+.back-button:active {
+  transform: scale(0.92);
+}
+
+.back-button__chevron {
+  stroke-width: 2.25;
+  transition: transform var(--duration-base) var(--ease-brand);
+}
+
+.back-button:hover .back-button__chevron {
+  transform: translate3d(-2px, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-button,
+  .back-button__chevron {
+    transition: none;
+  }
+
+  .back-button:active,
+  .back-button:hover .back-button__chevron {
+    transform: none;
+  }
+}

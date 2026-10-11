@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooter } from "@/components/site-footer";
 import { SpotlightTracker } from "@/components/spotlight-tracker";
+import { BackButton } from "@/components/back-button";
 import { JsonLd } from "@/components/json-ld";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
@@ -34,7 +35,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <SiteSidebar />
           <SpotlightTracker />
-          <div className="md:pl-[calc(var(--sidebar-width)+1.5rem)]">
+          <div className="relative md:pl-[calc(var(--sidebar-width)+1.5rem)]">
+            {/* Over the top-left corner of each page, a little clear of the
+                sidebar. */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-30 px-5 pt-4 md:pl-[calc(var(--sidebar-width)+2.5rem)]">
+              <BackButton />
+            </div>
             <main id="main" tabIndex={-1}>
               {children}
             </main>
