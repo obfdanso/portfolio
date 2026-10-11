@@ -1,69 +1,20 @@
 import { expect, test } from "@playwright/test";
 
-test("gradient blobs hold still under reduced motion", async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: "reduce" });
-  const page = await context.newPage();
+test("the gradient blobs hold still", async ({ page }) => {
+  // Danso's call, 2026-10-11: the blobs used to drift on a loop, but moving a
+  // blurred layer makes the GPU redo the blur every frame. On an Intel UHD
+  // 620 the drift kept the GPU about 33% busy; held still, 2.4%. This pins it
+  // so a drift is not added back without measuring.
   await page.goto("/");
-
-  const animationName = await page
+  const animations = await page
     .locator(".mesh__blob")
-    .first()
-    .evaluate((el) => getComputedStyle(el).animationName);
-
-  expect(animationName).toBe("none");
-  await context.close();
-});
-
-test("gradient blobs drift when motion is allowed", async ({ page }) => {
-  await page.goto("/");
-
-  const animationName = await page
-    .locator(".mesh__blob")
-    .first()
-    .evaluate((el) => getComputedStyle(el).animationName);
-
-  expect(animationName).toBe("mesh-drift-a");
+    .evaluateAll((els) => els.map((el) => getComputedStyle(el).animationName));
+  expect(animations).toEqual(["none", "none", "none"]);
 });
 
 test("the gradient is hidden from the accessibility tree", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".mesh")).toHaveAttribute("aria-hidden", "true");
-});
-
-test("the gradient animates only transform, never layout properties", async ({ page }) => {
-  await page.goto("/");
-
-  // Guards the performance budget: a keyframe touching width/top/left would
-  // force layout on every frame.
-  const forbidden = await page.evaluate(() => {
-    const sheets = Array.from(document.styleSheets);
-    const banned = ["width", "height", "top", "left", "right", "bottom", "background-position"];
-    const offenders: string[] = [];
-
-    for (const sheet of sheets) {
-      let rules: CSSRuleList;
-      try {
-        rules = sheet.cssRules;
-      } catch {
-        continue;
-      }
-      for (const rule of Array.from(rules)) {
-        if (!(rule instanceof CSSKeyframesRule)) continue;
-        if (!rule.name.startsWith("mesh-drift")) continue;
-        for (const frame of Array.from(rule.cssRules)) {
-          const text = frame.cssText;
-          for (const property of banned) {
-            if (new RegExp(`[{;\\s]${property}\\s*:`).test(text)) {
-              offenders.push(`${rule.name}: ${property}`);
-            }
-          }
-        }
-      }
-    }
-    return offenders;
-  });
-
-  expect(forbidden).toEqual([]);
 });
 
 test("the blobs keep their blur", async ({ page }) => {
