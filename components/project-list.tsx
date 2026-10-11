@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import {
   addTransitionType,
   startTransition,
@@ -10,6 +11,7 @@ import {
 } from "react";
 import type { Project } from "@/lib/content";
 import { ProjectCard } from "@/components/project-card";
+import { ChevronDownIcon } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 const ALL = "All";
@@ -65,32 +67,52 @@ export function ProjectList({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter by stack">
-        {tags.map((tag) => (
-          <button
-            key={tag}
-            type="button"
-            aria-pressed={filter === tag}
-            onClick={() => select(setFilter, tag)}
-            className={cn(
-              "pill relative isolate rounded-full border px-3.5 py-1.5 text-step-xs",
-              filter === tag
-                ? "pill-primary border-accent text-accent"
-                : "pill-muted border-fg-muted/20 text-fg-muted",
-            )}
-          >
-            {filter === tag && (
-              <ViewTransition name="filter-highlight" share="morph" default="none">
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-10 rounded-full bg-accent/10"
-                />
-              </ViewTransition>
-            )}
-            {tag}
-          </button>
-        ))}
-      </div>
+      {/* Folded behind a "Stack" pill, like each card's tags. The pill names
+          the active filter, so a filtered list says so even while closed. */}
+      <details className="stack-disclosure filter-disclosure">
+        <summary className="pill pill-muted inline-flex list-none items-center gap-1.5 rounded-full border border-fg-muted/25 px-3.5 py-1.5 text-step-xs text-fg-muted">
+          Stack
+          {filter !== ALL && <span className="text-accent">· {filter}</span>}
+          <ChevronDownIcon className="stack-disclosure__chevron size-3.5" />
+        </summary>
+        <div
+          className="mt-3 flex flex-wrap items-center gap-2"
+          role="group"
+          aria-label="Filter by stack"
+        >
+          {tags.map((tag, index) => (
+            // The pop-in runs on this wrapper, not the button: an animation's
+            // fill would otherwise override the button's hover lift.
+            <span
+              key={tag}
+              className="stack-disclosure__tag inline-flex"
+              style={{ "--tag-index": index } as CSSProperties}
+            >
+              <button
+                type="button"
+                aria-pressed={filter === tag}
+                onClick={() => select(setFilter, tag)}
+                className={cn(
+                  "pill relative isolate rounded-full border px-3.5 py-1.5 text-step-xs",
+                  filter === tag
+                    ? "pill-primary border-accent text-accent"
+                    : "pill-muted border-fg-muted/20 text-fg-muted",
+                )}
+              >
+                {filter === tag && (
+                  <ViewTransition name="filter-highlight" share="morph" default="none">
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 -z-10 rounded-full bg-accent/10"
+                    />
+                  </ViewTransition>
+                )}
+                {tag}
+              </button>
+            </span>
+          ))}
+        </div>
+      </details>
 
       <ul
         ref={listRef}

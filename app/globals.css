@@ -724,7 +724,9 @@ button,
 
 .stack-disclosure[open] .stack-disclosure__tag {
   animation: tag-pop var(--duration-base) var(--ease-brand) both;
-  animation-delay: calc(var(--tag-index, 0) * 40ms);
+  /* Capped at the sixth tag: the Projects filter has about fifteen, and a
+     full 40ms stagger left the last one waiting most of a second. */
+  animation-delay: calc(min(var(--tag-index, 0), 6) * 40ms);
 }
 
 @keyframes tag-pop {

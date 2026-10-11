@@ -4,11 +4,16 @@ import { recordTransitions, recorded } from "./helpers/view-transitions";
 
 const TS_COUNT = getFrontendProjects().filter((p) => p.stack.includes("TypeScript")).length;
 
+/** The filter is folded behind a "Stack" pill; open it before using it. */
+const openFilter = (page: import("@playwright/test").Page) =>
+  page.locator(".filter-disclosure summary").click();
+
 test.describe("animated project filter", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("the highlight glides between pills and cards animate", async ({ page }) => {
     await page.goto("/projects");
+    await openFilter(page);
     await recordTransitions(page);
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
 
@@ -21,6 +26,7 @@ test.describe("animated project filter", () => {
 
   test("two quick clicks land on the second filter", async ({ page }) => {
     await page.goto("/projects");
+    await openFilter(page);
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
     await page.getByRole("button", { name: "JavaScript", exact: true }).click();
     await expect(page.getByRole("button", { name: "JavaScript", exact: true })).toHaveAttribute(
@@ -46,6 +52,7 @@ test.describe("animated project filter, reduced motion", () => {
 
   test("filters instantly", async ({ page }) => {
     await page.goto("/projects");
+    await openFilter(page);
     await recordTransitions(page);
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
     await expect(page.getByRole("article")).toHaveCount(TS_COUNT);

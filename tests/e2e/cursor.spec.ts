@@ -6,6 +6,8 @@ test.describe("hand cursor", () => {
   test("every clickable button shows the hand", async ({ page }) => {
     await page.goto("/projects");
     await expect(page.getByRole("button", { name: /theme/i })).toHaveCSS("cursor", "pointer");
+    await expect(page.locator(".filter-disclosure summary")).toHaveCSS("cursor", "pointer");
+    await page.locator(".filter-disclosure summary").click();
     await expect(page.getByRole("button", { name: "All", exact: true })).toHaveCSS(
       "cursor",
       "pointer",
