@@ -19,9 +19,11 @@ export default function ProjectsPage() {
           Each project has a written case study covering the decisions I made.
         </p>
       </PageHeader>
-      <div className="container-page py-16">
+      <div className="py-16">
         <ProjectList projects={getFrontendProjects()} />
-        <OtherSkillsCta className="mt-20" />
+        <div className="container-page">
+          <OtherSkillsCta className="mt-20" />
+        </div>
       </div>
     </>
   );
