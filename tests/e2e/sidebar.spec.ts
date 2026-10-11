@@ -14,10 +14,12 @@ test.describe("desktop sidebar", () => {
     }
   });
 
-  test("titles Danso a front-end developer", async ({ page }) => {
+  test("shows Danso's name with no role line under it", async ({ page }) => {
+    // Danso's call, 2026-10-11: the hero already says front-end developer.
     await page.goto("/");
     const nav = page.getByRole("complementary", { name: /main/i });
-    await expect(nav.getByText("Front-end Developer", { exact: true })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Danso", exact: true })).toBeVisible();
+    await expect(nav.getByText("Front-end Developer", { exact: true })).toHaveCount(0);
   });
 
   test("keeps Contact out of the sidebar", async ({ page }) => {
