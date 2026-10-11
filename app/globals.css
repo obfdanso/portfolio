@@ -111,8 +111,8 @@ button,
    bleeding into a smooth saturated wash across the bottom, edge to edge.
    The base vertical wash lives on the container and does the structural
    work; three blurred blobs sit low and wide to break up the banding and
-   give it organic variation. Blobs animate on the compositor only, so this
-   costs no layout and no JavaScript — it renders before React hydrates.
+   give it organic variation. It is pure CSS, so it costs no layout and no
+   JavaScript, and it renders before React hydrates.
 --------------------------------------------------------------------------- */
 
 .mesh {
@@ -149,7 +149,13 @@ button,
      Kept by Danso's preference (2026-10-02). A blur-free version built from
      smoothstep gradient stops measured faster, about 60 fps instead of 12 on
      phones that render without a GPU and a quicker mobile menu, but read as
-     less soft. Do not swap it out without asking. */
+     less soft. Do not swap it out without asking.
+
+     The blobs hold still (Danso's call, 2026-10-11). They used to drift on
+     a slow loop, but moving a blurred layer makes the GPU redo the blur
+     every frame: measured on an Intel UHD 620, the drift kept the GPU about
+     33% busy while a gradient was on screen, against 2.4% held still. Still
+     blur is drawn once and costs nothing after. */
   filter: blur(110px);
   will-change: transform;
   transform: translate3d(0, 0, 0);
@@ -162,7 +168,6 @@ button,
   width: 95vmax;
   height: 70vmax;
   background: radial-gradient(ellipse at 50% 50%, var(--color-teal) 0%, transparent 70%);
-  animation: mesh-drift-a 26s var(--ease-brand) infinite alternate;
 }
 
 /* Emerald is the mid tone, low and right, overlapping the teal. */
@@ -172,7 +177,7 @@ button,
   width: 90vmax;
   height: 62vmax;
   background: radial-gradient(ellipse at 50% 50%, var(--color-emerald) 0%, transparent 68%);
-  animation: mesh-drift-b 22s var(--ease-brand) infinite alternate;
+  transform: scale(1.06);
 }
 
 /* Lime is a highlight only — roughly a tenth of the area, never behind text. */
@@ -182,41 +187,7 @@ button,
   width: 40vmax;
   height: 30vmax;
   background: radial-gradient(ellipse at 50% 50%, var(--color-lime) 0%, transparent 66%);
-  animation: mesh-drift-c 29s var(--ease-brand) infinite alternate;
-}
-
-/* transform and opacity only — never layout or paint properties. */
-@keyframes mesh-drift-a {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  to {
-    transform: translate3d(5%, -3%, 0) scale(1.1);
-  }
-}
-
-@keyframes mesh-drift-b {
-  from {
-    transform: translate3d(0, 0, 0) scale(1.06);
-  }
-  to {
-    transform: translate3d(-6%, -5%, 0) scale(0.96);
-  }
-}
-
-@keyframes mesh-drift-c {
-  from {
-    transform: translate3d(0, 0, 0) scale(0.92);
-  }
-  to {
-    transform: translate3d(-4%, -8%, 0) scale(1.15);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mesh__blob {
-    animation: none;
-  }
+  transform: scale(0.92);
 }
 
 /* Content over a gradient must establish its own stacking context. */
@@ -281,7 +252,7 @@ button,
    button and pill press, underline grow, sidebar nudge, the theme menu and
    the section numerals. Anything not expressible in those tokens does not
    ship. Ambient loops, which respond to nothing, run on their own slow
-   timings: the mesh drift, the scroll-linked hue shift, and the recording
+   timings: the scroll-linked hue shift and the recording
    placeholder's ripple (--duration-pulse).
 --------------------------------------------------------------------------- */
 
@@ -1187,7 +1158,7 @@ button,
    Recording placeholder
 
    Two rings ripple out from a play disc that breathes slightly, over the
-   drifting mesh. The second ring starts half a cycle late so the motion never
+   mesh gradient. The second ring starts half a cycle late so the motion never
    pauses. Transform and opacity only.
 --------------------------------------------------------------------------- */
 
@@ -1329,8 +1300,10 @@ button,
    The home hero's three blobs lean toward the cursor by different amounts,
    the lime highlight most, the emerald the other way, so the wash reads as
    having depth. SpotlightTracker writes --follow-x and --follow-y (-1 to 1);
-   the blobs move on `translate`, which leaves their drift on `transform`
-   untouched. Mouse only, and off under reduced motion.
+   the blobs move on `translate`, which leaves their resting scale on
+   `transform` untouched. It redoes the blur only while the mouse moves, and
+   the blobs settle and stop when it rests. Mouse only, and off under
+   reduced motion.
 --------------------------------------------------------------------------- */
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
