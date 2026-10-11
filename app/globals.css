@@ -1254,3 +1254,147 @@ button,
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Hero greeting
+
+   The line above the home headline says Welcome, Bonne arrivée and Akwaaba,
+   each in the accent colour, rising through a mask, holding long enough to
+   read, and leaving out the top. Then it settles on the name. All four share
+   one grid cell, so the line is as wide as the widest from the first frame
+   and nothing shifts. Transform only. Under reduced motion the greetings are
+   gone and the name simply sits there.
+--------------------------------------------------------------------------- */
+
+.greeting {
+  /* 1.6s a word: a fifth to rise, three fifths held, a fifth to leave. */
+  --greet-step: calc(var(--duration-slow) * 4);
+  display: inline-grid;
+  overflow: clip;
+  overflow-clip-margin: 0.1em;
+  vertical-align: top;
+}
+
+.greeting > * {
+  grid-area: 1 / 1;
+}
+
+.greeting__word {
+  color: var(--color-accent);
+  user-select: none;
+  animation: greet-pass var(--greet-step) var(--ease-brand) both;
+  animation-delay: calc(var(--greet-step) * var(--greet-index, 0));
+}
+
+.greeting__name {
+  animation: greet-settle var(--duration-slow) var(--ease-brand) both;
+  animation-delay: calc(var(--greet-step) * var(--greet-index, 0));
+}
+
+/* `both` fill holds each greeting below the mask before its turn and above
+   it after, so only one is ever in view. */
+@keyframes greet-pass {
+  0% {
+    transform: translate3d(0, 110%, 0);
+  }
+  20%,
+  80% {
+    transform: none;
+  }
+  100% {
+    transform: translate3d(0, -110%, 0);
+  }
+}
+
+@keyframes greet-settle {
+  from {
+    transform: translate3d(0, 110%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .greeting__word {
+    display: none;
+  }
+
+  .greeting__name {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero follows the mouse
+
+   The home hero's three blobs lean toward the cursor by different amounts,
+   the lime highlight most, the emerald the other way, so the wash reads as
+   having depth. SpotlightTracker writes --follow-x and --follow-y (-1 to 1);
+   the blobs move on `translate`, which leaves their drift on `transform`
+   untouched. Mouse only, and off under reduced motion.
+--------------------------------------------------------------------------- */
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .mesh--follow .mesh__blob {
+    translate: calc(var(--follow-x, 0) * var(--follow-depth))
+      calc(var(--follow-y, 0) * var(--follow-depth));
+    transition: translate var(--duration-slow) var(--ease-brand);
+  }
+
+  .mesh--follow .mesh__blob--teal {
+    --follow-depth: 3%;
+  }
+
+  .mesh--follow .mesh__blob--emerald {
+    --follow-depth: -4%;
+  }
+
+  .mesh--follow .mesh__blob--lime {
+    --follow-depth: 9%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Scroll-lit text
+
+   The home page's About paragraph lights up word by word, from the muted
+   body colour to full, over the first 240px of scrolling once it is fully
+   on screen. The paragraph names its
+   own view timeline and each word takes a slice of it, by where it sits in
+   the paragraph. The muted colour already passes contrast, so the text
+   reads at every point. A plain muted paragraph where the browser can't
+   drive it, and under reduced motion.
+--------------------------------------------------------------------------- */
+
+@supports (animation-timeline: view()) {
+  .scroll-lit {
+    view-timeline-name: --scroll-lit;
+  }
+
+  .scroll-lit__word {
+    animation: word-light linear both;
+    animation-timeline: --scroll-lit;
+    /* Counted in pixels from the moment the whole paragraph is on screen,
+       not as a share of the viewport: the paragraph sits near the end of
+       the page, so a tall window can't scroll it far. The page always has
+       more than 240px below it, so every word is lit by the bottom. */
+    animation-range: contain calc(var(--word-progress, 0) * 180px) contain
+      calc(var(--word-progress, 0) * 180px + 60px);
+  }
+}
+
+@keyframes word-light {
+  from {
+    color: var(--color-fg-muted);
+  }
+  to {
+    color: var(--color-fg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-lit__word {
+    animation: none;
+  }
+}

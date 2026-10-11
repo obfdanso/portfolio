@@ -3,13 +3,14 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { HeroHeadline } from "@/components/hero-headline";
+import { HeroGreeting } from "@/components/hero-greeting";
+import { ScrollLitText } from "@/components/scroll-lit-text";
 import { TechMarquee } from "@/components/tech-marquee";
 import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionNumber } from "@/components/ui/section-number";
 import { getFrontendProjects } from "@/lib/content";
 import { OtherSkillsCta } from "@/components/other-skills-cta";
-import { SITE } from "@/lib/site";
 
 /** Staggered entrance delay, in the order the eye reads down the hero. */
 const stagger = (ms: number) => ({ "--enter-delay": `${ms}ms` }) as CSSProperties;
@@ -30,10 +31,10 @@ export default function HomePage() {
   return (
     <>
       <section className="mesh-host relative flex min-h-[calc(100dvh-1.5rem)] items-center overflow-hidden md:rounded-2xl">
-        <MeshGradient className="mesh--scroll-linked" />
+        <MeshGradient className="mesh--scroll-linked mesh--follow" />
         <div className="container-page w-full py-24">
-          <p className="enter font-mono text-step-xs text-fg-muted" style={stagger(0)}>
-            {SITE.name}
+          <p className="enter text-step-2 font-semibold text-fg-muted" style={stagger(0)}>
+            <HeroGreeting />
           </p>
 
           <HeroHeadline
@@ -85,10 +86,10 @@ export default function HomePage() {
         <h2 className="flex items-baseline gap-4 text-step-3">
           <SectionNumber value={2} /> <span className="fill-on-scroll">About</span>
         </h2>
-        <p className="mt-8 max-w-2xl text-step-1 text-fg-muted">
-          I am a computer science student at KNUST. I care about interfaces that stay fast and
-          usable, which mostly means typed data, honest loading states, and keyboard support.
-        </p>
+        <ScrollLitText
+          className="mt-8 max-w-2xl text-step-1 text-fg-muted"
+          text="I am a computer science student at KNUST. I care about interfaces that stay fast and usable, which mostly means typed data, honest loading states, and keyboard support."
+        />
         <Link href="/about" className="link-grow mt-6 inline-block text-accent">
           More about me
         </Link>
