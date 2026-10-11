@@ -22,6 +22,19 @@ test.describe("card tilt", () => {
       .toMatch(/^matrix3d/);
   });
 
+  test("the carousel's middle card still leans toward the mouse", async ({ page }) => {
+    // Danso's call, 2026-10-11: the Projects cards became a carousel like the
+    // home page's, but keep leaning toward the pointer.
+    await page.goto("/projects");
+    const card = page.locator(".carousel__slide[data-current] article");
+    const box = await card.boundingBox();
+    await card.hover({ position: { x: 10, y: box!.height - 10 } });
+    await expect.poll(async () => (await card.evaluate(tilt))[0]).toBeLessThan(-0.8);
+    await expect
+      .poll(() => card.evaluate((el) => getComputedStyle(el).transform))
+      .toMatch(/^matrix3d/);
+  });
+
   test("a click near the corner still opens the case study", async ({ page }) => {
     await page.goto("/projects");
     const card = page.getByRole("article").first();

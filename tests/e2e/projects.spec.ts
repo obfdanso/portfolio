@@ -123,35 +123,56 @@ test.describe("project index", () => {
     await expect(firstCardLink).toBeFocused();
   });
 
-  test("scrolls horizontally on a wide viewport", async ({ page }) => {
+  test("is a carousel across the page, like the home page", async ({ page }) => {
     await page.goto("/projects");
-    const overflow = await page
-      .getByRole("list", { name: /projects/i })
-      .evaluate((el) => getComputedStyle(el).overflowX);
-    expect(overflow).toBe("auto");
+    const carousel = page.getByRole("region", { name: "Projects" });
+    const track = carousel.locator(".carousel__track");
+    expect(await track.evaluate((el) => getComputedStyle(el).overflowX)).toBe("auto");
+    await expect(carousel.locator(".carousel__dot")).toHaveCount(PROJECT_COUNT);
+    await carousel.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await page.mouse.move(5, 5);
+    const dot = carousel.locator(".carousel__dot[aria-current]");
+    const first = await dot.getAttribute("aria-label");
+    await expect.poll(() => dot.getAttribute("aria-label"), { timeout: 9_000 }).not.toBe(first);
+  });
+
+  test("a new filter starts the carousel over from its first card", async ({ page }) => {
+    await page.goto("/projects");
+    const carousel = page.getByRole("region", { name: "Projects" });
+    await carousel.getByRole("button", { name: "Show bitby" }).click();
+    await expect(carousel.locator(".carousel__dot[aria-current]")).toHaveAccessibleName(
+      "Show bitby",
+    );
+    await openFilter(page);
+    await page.getByRole("button", { name: "TypeScript", exact: true }).click();
+    await expect(carousel.locator(".carousel__slide").first()).toHaveAttribute(
+      "data-current",
+      "true",
+    );
   });
 });
 
 test.describe("project index, narrow", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test("collapses to a vertical grid on a narrow screen", async ({ page }) => {
+  test("stays a swipeable carousel on a phone", async ({ page }) => {
     await page.goto("/projects");
-    const overflow = await page
-      .getByRole("list", { name: /projects/i })
-      .evaluate((el) => getComputedStyle(el).overflowX);
-    expect(overflow).toBe("visible");
+    const track = page.getByRole("region", { name: "Projects" }).locator(".carousel__track");
+    expect(await track.evaluate((el) => getComputedStyle(el).overflowX)).toBe("auto");
   });
 });
 
 test.describe("project index, reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
-  test("collapses to a vertical grid under reduced motion", async ({ page }) => {
+  test("never moves on its own under reduced motion", async ({ page }) => {
     await page.goto("/projects");
-    const snap = await page
-      .getByRole("list", { name: /projects/i })
-      .evaluate((el) => getComputedStyle(el).scrollSnapType);
-    expect(snap).toBe("none");
+    const carousel = page.getByRole("region", { name: "Projects" });
+    await carousel.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await page.mouse.move(5, 5);
+    const dot = carousel.locator(".carousel__dot[aria-current]");
+    const first = await dot.getAttribute("aria-label");
+    await page.waitForTimeout(6_500);
+    await expect(dot).toHaveAttribute("aria-label", first!);
   });
 });

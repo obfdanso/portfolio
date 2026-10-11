@@ -1,17 +1,12 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import {
-  addTransitionType,
-  startTransition,
-  useMemo,
-  useRef,
-  useState,
-  ViewTransition,
-} from "react";
+import { addTransitionType, startTransition, useMemo, useState, ViewTransition } from "react";
 import type { Project } from "@/lib/content";
 import { ProjectCard } from "@/components/project-card";
 import { ChevronDownIcon } from "@/components/icons";
+import { CarouselControls } from "@/components/carousel-controls";
+import { useCarousel } from "@/lib/use-carousel";
 import { cn } from "@/lib/cn";
 
 const ALL = "All";
@@ -28,7 +23,6 @@ const select = (setFilter: (tag: string) => void, tag: string) =>
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   const [filter, setFilter] = useState<string>(ALL);
-  const listRef = useRef<HTMLUListElement>(null);
 
   const tags = useMemo(
     () => [ALL, ...Array.from(new Set(projects.flatMap((p) => p.stack))).sort()],
@@ -37,6 +31,13 @@ export function ProjectList({ projects }: { projects: Project[] }) {
 
   const visible = filter === ALL ? projects : projects.filter((p) => p.stack.includes(filter));
 
+  // The home page carousel's behaviour: it advances on its own, holds under
+  // the pointer or focus, and starts over from the first card on a new filter.
+  const { trackRef, current, goTo, running, playing, setPlaying, rootProps } = useCarousel(
+    visible.length,
+    filter,
+  );
+
   /**
    * Steps between projects, not between individual links. Walking every anchor
    * would make ArrowRight land on the current card's "Source" link rather than
@@ -44,9 +45,10 @@ export function ProjectList({ projects }: { projects: Project[] }) {
    *
    * Driven by focus rather than scroll offsets, so keyboard focus and scroll
    * position can never disagree — the usual failure mode of horizontal rails.
+   * Scrolling the card to the middle makes it the carousel's current one.
    */
   function move(direction: -1 | 1) {
-    const list = listRef.current;
+    const list = trackRef.current;
     if (!list) return;
 
     const cards = Array.from(list.querySelectorAll<HTMLElement>("article"));
@@ -67,84 +69,114 @@ export function ProjectList({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      {/* Folded behind a "Stack" pill, like each card's tags. The pill names
+      <div className="container-page">
+        {/* Folded behind a "Stack" pill, like each card's tags. The pill names
           the active filter, so a filtered list says so even while closed. */}
-      <details className="stack-disclosure filter-disclosure">
-        <summary className="pill pill-muted inline-flex list-none items-center gap-1.5 rounded-full border border-fg-muted/25 px-3.5 py-1.5 text-step-xs text-fg-muted">
-          Stack
-          {filter !== ALL && <span className="text-accent">· {filter}</span>}
-          <ChevronDownIcon className="stack-disclosure__chevron size-3.5" />
-        </summary>
-        <div
-          className="mt-3 flex flex-wrap items-center gap-2"
-          role="group"
-          aria-label="Filter by stack"
-        >
-          {tags.map((tag, index) => (
-            // The pop-in runs on this wrapper, not the button: an animation's
-            // fill would otherwise override the button's hover lift.
-            <span
-              key={tag}
-              className="stack-disclosure__tag inline-flex"
-              style={{ "--tag-index": index } as CSSProperties}
-            >
-              <button
-                type="button"
-                aria-pressed={filter === tag}
-                onClick={() => select(setFilter, tag)}
-                className={cn(
-                  "pill relative isolate rounded-full border px-3.5 py-1.5 text-step-xs",
-                  filter === tag
-                    ? "pill-primary border-accent text-accent"
-                    : "pill-muted border-fg-muted/20 text-fg-muted",
-                )}
+        <details className="stack-disclosure filter-disclosure">
+          <summary className="pill pill-muted inline-flex list-none items-center gap-1.5 rounded-full border border-fg-muted/25 px-3.5 py-1.5 text-step-xs text-fg-muted">
+            Stack
+            {filter !== ALL && <span className="text-accent">· {filter}</span>}
+            <ChevronDownIcon className="stack-disclosure__chevron size-3.5" />
+          </summary>
+          <div
+            className="mt-3 flex flex-wrap items-center gap-2"
+            role="group"
+            aria-label="Filter by stack"
+          >
+            {tags.map((tag, index) => (
+              // The pop-in runs on this wrapper, not the button: an animation's
+              // fill would otherwise override the button's hover lift.
+              <span
+                key={tag}
+                className="stack-disclosure__tag inline-flex"
+                style={{ "--tag-index": index } as CSSProperties}
               >
-                {filter === tag && (
-                  <ViewTransition name="filter-highlight" share="morph" default="none">
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-0 -z-10 rounded-full bg-accent/10"
-                    />
-                  </ViewTransition>
-                )}
-                {tag}
-              </button>
-            </span>
+                <button
+                  type="button"
+                  aria-pressed={filter === tag}
+                  onClick={() => select(setFilter, tag)}
+                  className={cn(
+                    "pill relative isolate rounded-full border px-3.5 py-1.5 text-step-xs",
+                    filter === tag
+                      ? "pill-primary border-accent text-accent"
+                      : "pill-muted border-fg-muted/20 text-fg-muted",
+                  )}
+                >
+                  {filter === tag && (
+                    <ViewTransition name="filter-highlight" share="morph" default="none">
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 -z-10 rounded-full bg-accent/10"
+                      />
+                    </ViewTransition>
+                  )}
+                  {tag}
+                </button>
+              </span>
+            ))}
+          </div>
+        </details>
+      </div>
+
+      {/* Across the whole page like the home carousel, with the cards a
+          little narrower, since they carry more. */}
+      <section
+        aria-roledescription="carousel"
+        aria-label="Projects"
+        className="carousel carousel--cards mt-6"
+        {...rootProps}
+      >
+        <div
+          ref={trackRef}
+          className="carousel__track"
+          aria-live={running ? "off" : "polite"}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              move(1);
+            }
+            if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              move(-1);
+            }
+          }}
+        >
+          {visible.map((project, index) => (
+            <ViewTransition
+              key={project.slug}
+              enter={{ [FILTER]: "card-in", default: "none" }}
+              exit={{ [FILTER]: "card-out", default: "none" }}
+              update={{ [FILTER]: "card-move", default: "none" }}
+              default="none"
+            >
+              {/* Plain divs: a list item may not take the group role. */}
+              <div
+                className="carousel__slide"
+                data-current={index === current || undefined}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${visible.length}`}
+              >
+                <ProjectCard project={project} index={index} headingLevel={2} />
+              </div>
+            </ViewTransition>
           ))}
         </div>
-      </details>
 
-      <ul
-        ref={listRef}
-        aria-label="Projects"
-        className="project-rail mt-6"
-        onKeyDown={(event) => {
-          if (event.key === "ArrowRight") {
-            event.preventDefault();
-            move(1);
-          }
-          if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            move(-1);
-          }
-        }}
-      >
-        {visible.map((project, index) => (
-          <ViewTransition
-            key={project.slug}
-            enter={{ [FILTER]: "card-in", default: "none" }}
-            exit={{ [FILTER]: "card-out", default: "none" }}
-            update={{ [FILTER]: "card-move", default: "none" }}
-            default="none"
-          >
-            <li className="project-rail__item">
-              <ProjectCard project={project} index={index} headingLevel={2} />
-            </li>
-          </ViewTransition>
-        ))}
-      </ul>
+        {visible.length > 1 && (
+          <CarouselControls
+            labels={visible.map((project) => project.title)}
+            current={current}
+            playing={playing}
+            onSelect={goTo}
+            onTogglePlay={() => setPlaying((value) => !value)}
+          />
+        )}
+      </section>
 
-      {visible.length === 0 && <p className="mt-8 text-fg-muted">No projects use {filter}.</p>}
+      {visible.length === 0 && (
+        <p className="container-page mt-8 text-fg-muted">No projects use {filter}.</p>
+      )}
     </div>
   );
 }

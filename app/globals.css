@@ -448,50 +448,6 @@ button,
 }
 
 /* ---------------------------------------------------------------------------
-   Project rail
-
-   The vertical grid is the base case; horizontal scrolling is the progressive
-   enhancement. Horizontal rails are a known accessibility hazard, so it
-   collapses back to a grid on narrow viewports and under reduced motion.
---------------------------------------------------------------------------- */
-
-.project-rail {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr;
-}
-
-.project-rail__item {
-  scroll-snap-align: start;
-  /* Lets the card stretch to the tallest in the row, so demo links line up. */
-  display: grid;
-}
-
-@media (min-width: 768px) {
-  .project-rail {
-    grid-auto-flow: column;
-    /* Two cards' worth across; the rest of the rail is reached by
-       scrolling. */
-    grid-auto-columns: calc((100% - 1.5rem) / 2);
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 1.5rem;
-    padding-bottom: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .project-rail {
-    grid-auto-flow: row;
-    grid-template-columns: 1fr;
-    grid-auto-columns: auto;
-    overflow-x: visible;
-    scroll-snap-type: none;
-  }
-}
-
-/* ---------------------------------------------------------------------------
    Entrance
 
    Runs on a fresh page load only. Pure CSS with staggered delays, so it costs
@@ -833,11 +789,11 @@ button,
 
 /* Card tilt: the edge of a project card under the mouse rises toward the
    viewer, up to 4 degrees, on top of the 2px lift. The hover is read from the
-   card's untransformed list item, and the near edge comes up rather than
+   card's untransformed list item or slide, and the near edge comes up rather than
    dipping away, so the card never slips out from under the pointer. Mouse
    only, and off under reduced motion, like the spotlight that feeds it. */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  li:hover > .tilt {
+  :is(li, .carousel__slide):hover > .tilt {
     transform: perspective(900px) rotateX(calc(var(--tilt-y, 0) * 4deg))
       rotateY(calc(var(--tilt-x, 0) * -4deg)) translate3d(0, -2px, 0);
     transition-duration: var(--duration-fast);
@@ -1617,6 +1573,27 @@ button,
   opacity: 1;
 }
 
+/* Projects page: the cards carry more than a screenshot, so they are
+   narrower, and only their screenshot dims off the middle; their text stays
+   readable and reachable, so Tab and the arrow keys walk through them. */
+@media (min-width: 768px) {
+  .carousel--cards .carousel__track {
+    padding-inline: 20%;
+  }
+
+  .carousel--cards .carousel__slide {
+    flex-basis: 60%;
+  }
+}
+
+.carousel--cards .carousel__slide:not([data-current]) .card-media {
+  opacity: 0.45;
+}
+
+.carousel--cards .card-media {
+  transition: opacity var(--duration-slow) var(--ease-brand);
+}
+
 /* The name and buttons belong to the slide in the middle. Hidden, not just
    faded, on the others: out of the tab order too, so Tab stays on the
    current slide and the dots reach the rest. */
@@ -1713,6 +1690,7 @@ button,
 
 @media (prefers-reduced-motion: reduce) {
   .carousel__slide .carousel__media,
+  .carousel--cards .card-media,
   .carousel__media img,
   .carousel__meta,
   .carousel__slide:not([data-current]) .carousel__meta,
