@@ -54,21 +54,13 @@ test.describe("project index", () => {
     await page.goto("/projects");
     await openFilter(page);
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
-    // Every remaining card uses the tag, and some were filtered out. The
-    // filter updates inside a view transition, so wait for it to settle.
+    // Only the projects that use the tag remain. The filter updates inside a
+    // view transition, so wait for it to settle.
+    const typescript = getFrontendProjects().filter((p) => p.stack.includes("TypeScript"));
     const shown = page.getByRole("article");
-    await expect.poll(() => shown.count()).toBeLessThan(PROJECT_COUNT);
-    const count = await shown.count();
-    expect(count).toBeGreaterThan(0);
-    expect(count).toBeLessThan(PROJECT_COUNT);
-    for (let i = 0; i < count; i += 1) {
-      await expect(
-        shown
-          .nth(i)
-          .getByRole("listitem", { includeHidden: true })
-          .filter({ hasText: /^TypeScript$/ }),
-      ).toHaveCount(1);
-    }
+    await expect(shown).toHaveCount(typescript.length);
+    const titles = await shown.locator("h2").allTextContents();
+    expect(titles.sort()).toEqual(typescript.map((p) => p.title).sort());
 
     await page.getByRole("button", { name: "All", exact: true }).click();
     await expect(page.getByRole("article")).toHaveCount(PROJECT_COUNT);
@@ -84,7 +76,7 @@ test.describe("project index", () => {
     await expect(all).toHaveAttribute("aria-pressed", "false");
   });
 
-  test("moves focus through the rail with the arrow keys", async ({ page }) => {
+  test("the arrow keys step through the cards", async ({ page }) => {
     await page.goto("/projects");
 
     const firstCardLink = page.getByRole("article").nth(0).getByRole("link").first();
@@ -97,24 +89,19 @@ test.describe("project index", () => {
     await expect(firstCardLink).toBeFocused();
   });
 
-  test("reaches every card by tabbing", async ({ page }) => {
+  test("Tab stays on the middle card; the dots reach the rest", async ({ page }) => {
+    // As on the home page: the cards either side keep their name and buttons
+    // hidden until they slide to the middle.
     await page.goto("/projects");
-    const first = page.getByRole("article").nth(0).getByRole("link").first();
-    await first.focus();
-
-    // Tab must walk into the later cards: the rail has no previous/next
-    // buttons, so this is the primary keyboard route through it. Stop as soon
-    // as focus lands in the last card rather than tabbing a fixed count past it.
-    const last = page.getByRole("article").last();
-    let reached = false;
-    for (let i = 0; i < 25 && !reached; i += 1) {
-      await page.keyboard.press("Tab");
-      reached = await last.evaluate((el) => el.contains(document.activeElement));
-    }
-    expect(reached).toBe(true);
+    const middle = page.locator(".carousel__slide[data-current]");
+    await middle.getByRole("link").first().focus();
+    const links = await middle.getByRole("link").count();
+    for (let i = 1; i < links; i += 1) await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: /^Show / }).first()).toBeFocused();
   });
 
-  test("does not run off the ends of the rail", async ({ page }) => {
+  test("the arrow keys hold at the ends", async ({ page }) => {
     await page.goto("/projects");
 
     const firstCardLink = page.getByRole("article").nth(0).getByRole("link").first();

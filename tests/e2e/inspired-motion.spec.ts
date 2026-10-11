@@ -27,7 +27,19 @@ test.describe("hero greeting", () => {
     await page.goto("/");
     const words = page.locator(".greeting__word");
     await expect(words).toHaveText(["Welcome"]);
-    await expect(words.first()).toHaveCSS("animation-name", "greet-pass");
+    const letters = page.locator(".greeting__letter");
+    await expect(letters).toHaveCount(7);
+    await expect(letters.first()).toHaveCSS("animation-name", "letter-in, letter-out");
+    // Transform and opacity only: an animated blur dropped frames on a
+    // modest GPU for as long as it played.
+    const blurs = await letters.evaluateAll((els) =>
+      els.some((el) =>
+        el
+          .getAnimations()
+          .some((a) => (a.effect as KeyframeEffect).getKeyframes().some((k) => "filter" in k)),
+      ),
+    );
+    expect(blurs).toBe(false);
     const layer = page.locator(".greeting-layer");
     const h1 = page.getByRole("heading", { level: 1 });
     const size = (el: Element) => parseFloat(getComputedStyle(el).fontSize);
@@ -41,7 +53,7 @@ test.describe("hero greeting", () => {
       await firstWord.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f),
     ).toBeGreaterThan(40);
 
-    // Welcome for 1.6s, then the hero: all settled by about 2.5s.
+    // Welcome for about 2.5s, then the hero: all settled by about 3.5s.
     await expect
       .poll(() => firstWord.evaluate(progressOf, "word-rise"), { timeout: 10_000 })
       .toBe(1);

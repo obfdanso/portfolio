@@ -40,6 +40,10 @@ test.describe("animated project filter", () => {
   test("navigating away runs no card exit", async ({ page }) => {
     await page.goto("/projects");
     await recordTransitions(page);
+    await page
+      .getByRole("region", { name: "Projects" })
+      .getByRole("button", { name: "Show POS" })
+      .click();
     await page.getByRole("link", { name: "POS", exact: true }).click();
     await expect(page).toHaveURL(/\/projects\/pos$/);
     await expect.poll(() => recorded(page)).toContain("project-cover-pos");

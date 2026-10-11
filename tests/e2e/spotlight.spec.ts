@@ -7,17 +7,18 @@ test.describe("cursor spotlight", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("follows the mouse across a card", async ({ page }) => {
-    await page.goto("/projects");
-    const card = page.getByRole("article").first();
+    // The Skills page evidence cards: the glow without the tilt, so it sits
+    // right under the pointer.
+    await page.goto("/skills");
+    const card = page.locator("main a.spotlight").first();
+    await card.scrollIntoViewIfNeeded();
     const spotX = () =>
       card.evaluate((el) => parseFloat((el as HTMLElement).style.getPropertyValue("--spot-x")));
-    // The card leans up to 4 degrees toward the mouse while the glow is
-    // measured from its upright list item, so within a few pixels.
-    await card.hover({ position: { x: 40, y: 120 } });
-    await expect.poll(async () => Math.abs((await spotX()) - 40)).toBeLessThan(8);
+    await card.hover({ position: { x: 40, y: 20 } });
+    await expect.poll(async () => Math.abs((await spotX()) - 40)).toBeLessThan(2);
 
-    await card.hover({ position: { x: 200, y: 120 } });
-    await expect.poll(async () => Math.abs((await spotX()) - 200)).toBeLessThan(8);
+    await card.hover({ position: { x: 200, y: 20 } });
+    await expect.poll(async () => Math.abs((await spotX()) - 200)).toBeLessThan(2);
   });
 
   test("covers evidence cards and the skills call to action", async ({ page }) => {
