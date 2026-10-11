@@ -117,8 +117,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
       </div>
 
       {/* The home page's carousel, slide for slide: across the whole page,
-          the name and actions under each screenshot. These lean toward the
-          mouse as well. */}
+          the name and actions under each screenshot. */}
       <section
         aria-roledescription="carousel"
         aria-label="Projects"
@@ -156,7 +155,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                 aria-roledescription="slide"
                 aria-label={`${index + 1} of ${visible.length}`}
               >
-                <ProjectSlide project={project} headingLevel={2} tilt />
+                <ProjectSlide project={project} headingLevel={2} />
               </div>
             </ViewTransition>
           ))}

@@ -7,8 +7,8 @@ test.describe("cursor spotlight", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("follows the mouse across a card", async ({ page }) => {
-    // The Skills page evidence cards: the glow without the tilt, so it sits
-    // right under the pointer.
+    // The Skills page evidence cards carry the glow; it sits right under the
+    // pointer.
     await page.goto("/skills");
     const card = page.locator("main a.spotlight").first();
     await card.scrollIntoViewIfNeeded();

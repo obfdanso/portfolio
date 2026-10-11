@@ -768,19 +768,6 @@ button,
   }
 }
 
-/* Card tilt: the edge of a project card under the mouse rises toward the
-   viewer, up to 4 degrees, on top of the 2px lift. The hover is read from the
-   card's untransformed list item or slide, and the near edge comes up rather than
-   dipping away, so the card never slips out from under the pointer. Mouse
-   only, and off under reduced motion, like the spotlight that feeds it. */
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  :is(li, .carousel__slide):hover > .tilt {
-    transform: perspective(900px) rotateX(calc(var(--tilt-y, 0) * 4deg))
-      rotateY(calc(var(--tilt-x, 0) * -4deg)) translate3d(0, -2px, 0);
-    transition-duration: var(--duration-fast);
-  }
-}
-
 /* ---------------------------------------------------------------------------
    Scroll-driven effects
 
@@ -1531,12 +1518,6 @@ button,
   opacity: 1;
 }
 
-/* Projects page slides lean toward the mouse (see "Card tilt"), easing
-   into it rather than snapping. */
-.carousel__card.tilt {
-  transition: transform var(--duration-base) var(--ease-brand);
-}
-
 /* The name and buttons belong to the slide in the middle. Hidden, not just
    faded, on the others: out of the tab order too, so Tab stays on the
    current slide and the dots reach the rest. */
@@ -1633,7 +1614,6 @@ button,
 
 @media (prefers-reduced-motion: reduce) {
   .carousel__slide .carousel__media,
-  .carousel__card.tilt,
   .carousel__media img,
   .carousel__meta,
   .carousel__slide:not([data-current]) .carousel__meta,
