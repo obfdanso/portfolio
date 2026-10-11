@@ -1,34 +1,52 @@
-import type { CSSProperties } from "react";
-import { SITE } from "@/lib/site";
+"use client";
 
-const GREETINGS = ["Welcome", "Bonne arrivée", "Akwaaba"];
+import { useEffect, useState, type CSSProperties } from "react";
+import { cn } from "@/lib/cn";
+
+const GREETINGS = ["Welcome"];
+
+// Module scope: it resets when the page is loaded or refreshed and survives
+// moving around the site, so the greeting plays once per visit.
+let played = false;
 
 /**
- * The line above the home headline says welcome in English, French and Twi,
- * then settles on Danso's name. The greetings are decoration, hidden from
- * assistive technology; the name is in the markup from the first byte, so
- * screen readers, search engines and visitors without CSS animation get it
- * straight away.
+ * The home hero's stage. On a visit's first look at the home page it says
+ * Welcome, big and glowing, and only then do the headline, the line under it and the buttons move in. Coming
+ * back to the home page later in the visit goes straight to the hero.
+ *
+ * The first load is pure CSS, painted before any JavaScript runs; the server
+ * always renders the greeting, and so does the first client render, so
+ * hydration matches. The greetings are decoration, hidden from assistive
+ * technology, which reads the hero as usual.
  */
-export function HeroGreeting() {
+export function HeroGreeting({ children }: { children: React.ReactNode }) {
+  const [staged] = useState(() => !played);
+
+  useEffect(() => {
+    played = true;
+  }, []);
+
   return (
-    <span className="greeting">
-      {GREETINGS.map((word, index) => (
-        <span
-          key={word}
-          aria-hidden="true"
-          className="greeting__word"
-          style={{ "--greet-index": String(index) } as CSSProperties}
-        >
-          {word}
-        </span>
-      ))}
-      <span
-        className="greeting__name"
-        style={{ "--greet-index": String(GREETINGS.length) } as CSSProperties}
-      >
-        {SITE.name}
-      </span>
-    </span>
+    <div
+      className={cn("container-page relative w-full py-24", staged && "greeting-stage")}
+      style={staged ? ({ "--greet-count": GREETINGS.length } as CSSProperties) : undefined}
+    >
+      {staged && (
+        <div aria-hidden="true" className="greeting-layer">
+          <span className="greeting">
+            {GREETINGS.map((word, index) => (
+              <span
+                key={word}
+                className="greeting__word"
+                style={{ "--greet-index": String(index) } as CSSProperties}
+              >
+                {word}
+              </span>
+            ))}
+          </span>
+        </div>
+      )}
+      {children}
+    </div>
   );
 }

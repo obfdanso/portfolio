@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, ViewTransition } from "react";
+import { useState, ViewTransition, type CSSProperties } from "react";
 import {
   AboutIcon,
   CloseIcon,
@@ -32,34 +32,43 @@ function isActive(pathname: string, href: string): boolean {
 function NavList({
   pathname,
   onNavigate,
-  glide = false,
+  deck = false,
 }: {
   pathname: string;
   onNavigate?: () => void;
-  glide?: boolean;
+  /** Desktop sidebar: rest as a deck of cards, fan out on hover or focus. */
+  deck?: boolean;
 }) {
+  const current = LINKS.findIndex(({ href }) => isActive(pathname, href));
+  // A deck needs a card to put in front: on a page with no link of its
+  // own, the links stay a plain list.
+  const stacked = deck && current >= 0;
   return (
-    <ul className="space-y-2.5">
-      {LINKS.map(({ href, label, Icon }) => {
-        const active = isActive(pathname, href);
+    <ul className={cn("flex flex-col gap-1", stacked && "nav-deck")}>
+      {LINKS.map(({ href, label, Icon }, index) => {
+        const active = index === current;
+        // In the deck every card slides up to the first slot (--i), and only
+        // the current page's card shows there.
         return (
-          <li key={href}>
+          <li
+            key={href}
+            className={cn(stacked && "nav-deck__card")}
+            data-front={(stacked && active) || undefined}
+            style={stacked ? ({ "--i": index } as CSSProperties) : undefined}
+          >
             <Link
               href={href}
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                // A bubble each. Resting links are fainter, so the current one
-                // stands out. Its fill stays at 9%: the accent text measured
-                // above 4.5:1 there in the light theme, and fell short of it
-                // on anything more solid.
-                "nav-item bubble relative isolate flex items-center gap-3.5 rounded-full px-4 py-3 text-step-1",
-                active
-                  ? "font-medium text-accent"
-                  : "text-fg-muted [--bubble-fill:4%] hover:text-fg",
+                // The bubble only shows for the current page and under the
+                // pointer or keyboard focus. Its fill stays at 9%: the accent
+                // text measured above 4.5:1 there in the light theme.
+                "nav-item bubble bubble--quiet relative isolate flex h-11 items-center gap-3 rounded-full px-3.5 text-step-0",
+                active ? "font-medium text-accent" : "text-fg-muted hover:text-fg",
               )}
             >
-              {active && glide && (
+              {active && deck && (
                 <ViewTransition name="nav-highlight" share="morph" default="none">
                   <span
                     aria-hidden="true"
@@ -67,8 +76,8 @@ function NavList({
                   />
                 </ViewTransition>
               )}
-              <Icon className="size-[1.35rem] shrink-0" />
-              {label}
+              <Icon className="nav-item__icon size-[1.15rem] shrink-0" />
+              <span className="nav-item__label">{label}</span>
             </Link>
           </li>
         );
@@ -96,7 +105,7 @@ export function SiteSidebar() {
         </Link>
 
         <nav className="mt-8 flex-1">
-          <NavList pathname={pathname} glide />
+          <NavList pathname={pathname} deck />
         </nav>
 
         <ThemeToggle />

@@ -57,17 +57,23 @@ export function ProjectCard({
     <Reveal
       as="article"
       delay={index * 40}
-      className="spotlight tilt card-lift relative flex h-full flex-col rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
+      className="project-card spotlight tilt card-lift relative flex h-full flex-col overflow-hidden rounded-3xl border border-fg-muted/12 bg-surface/60"
     >
-      {/* Named so the cover morphs into the case study's showcase, and the
-          title into its heading. default="none" keeps them still on every
-          other navigation; share="morph" keeps the pair morphing. */}
+      {/* The home page slides' look: the screenshot leads, with the title on a
+          dark caption over its foot. Named so the cover morphs into the case
+          study's showcase, and the title into its heading. default="none"
+          keeps them still on every other navigation; share="morph" keeps the
+          pair morphing. */}
+      {/* The home page slides' look: the screenshot leads and nothing sits
+          over it. Named so the cover morphs into the case study's showcase,
+          and the title into its heading. default="none" keeps them still on
+          every other navigation; share="morph" keeps the pair morphing. */}
       <ViewTransition
         name={projectTransitionName(project.slug, "cover")}
         share="morph"
         default="none"
       >
-        <div className="card-media mb-6 rounded-lg">
+        <div className="card-media">
           <Image
             src={project.cover.src}
             alt={project.cover.alt}
@@ -79,30 +85,34 @@ export function ProjectCard({
         </div>
       </ViewTransition>
 
-      <ViewTransition
-        name={projectTransitionName(project.slug, "title")}
-        share="morph"
-        default="none"
-      >
-        <Heading className="text-step-1">
-          {/* The stretched link makes the whole card clickable; the demo links
-              above sit on z-10 so they stay individually reachable. */}
-          <Link href={`/projects/${project.slug}`} className="after:absolute after:inset-0">
-            {project.title}
-          </Link>
-        </Heading>
-      </ViewTransition>
+      <div className="flex flex-1 flex-col p-6 pt-5">
+        <ViewTransition
+          name={projectTransitionName(project.slug, "title")}
+          share="morph"
+          default="none"
+        >
+          <Heading className="text-step-2">
+            {/* The stretched link makes the whole card clickable; the pills
+                and the Stack toggle sit on z-10 so they stay individually
+                reachable. */}
+            <Link
+              href={`/projects/${project.slug}`}
+              className="after:absolute after:inset-0 after:z-[1]"
+            >
+              {project.title}
+            </Link>
+          </Heading>
+        </ViewTransition>
+        <p className="mt-1 font-mono text-step-xs text-fg-muted">
+          {project.timeframe} · {project.contribution}
+        </p>
+        <p className="mt-3 text-step-xs text-fg-muted">{project.summary}</p>
 
-      <p className="mt-2 text-step-xs text-fg-muted">{project.summary}</p>
+        <StackDisclosure stack={project.stack} />
 
-      <p className="mt-3 text-step-xs text-fg-muted">
-        {project.timeframe} · {project.contribution}
-      </p>
-
-      <StackDisclosure stack={project.stack} />
-
-      <div className="mt-auto">
-        <DemoLinks project={project} />
+        <div className="mt-auto">
+          <DemoLinks project={project} />
+        </div>
       </div>
     </Reveal>
   );

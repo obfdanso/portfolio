@@ -9,19 +9,15 @@ test.describe("cursor spotlight", () => {
   test("follows the mouse across a card", async ({ page }) => {
     await page.goto("/projects");
     const card = page.getByRole("article").first();
+    const spotX = () =>
+      card.evaluate((el) => parseFloat((el as HTMLElement).style.getPropertyValue("--spot-x")));
+    // The card leans up to 4 degrees toward the mouse while the glow is
+    // measured from its upright list item, so within a few pixels.
     await card.hover({ position: { x: 40, y: 120 } });
-    await expect
-      .poll(() =>
-        card.evaluate((el) => parseFloat((el as HTMLElement).style.getPropertyValue("--spot-x"))),
-      )
-      .toBeCloseTo(40, -0.5);
+    await expect.poll(async () => Math.abs((await spotX()) - 40)).toBeLessThan(8);
 
     await card.hover({ position: { x: 200, y: 120 } });
-    await expect
-      .poll(() =>
-        card.evaluate((el) => parseFloat((el as HTMLElement).style.getPropertyValue("--spot-x"))),
-      )
-      .toBeCloseTo(200, -0.5);
+    await expect.poll(async () => Math.abs((await spotX()) - 200)).toBeLessThan(8);
   });
 
   test("covers evidence cards and the skills call to action", async ({ page }) => {

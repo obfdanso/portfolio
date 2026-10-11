@@ -6,7 +6,7 @@ import { HeroHeadline } from "@/components/hero-headline";
 import { HeroGreeting } from "@/components/hero-greeting";
 import { ScrollLitText } from "@/components/scroll-lit-text";
 import { TechMarquee } from "@/components/tech-marquee";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCarousel } from "@/components/project-carousel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionNumber } from "@/components/ui/section-number";
 import { getFrontendProjects } from "@/lib/content";
@@ -32,22 +32,18 @@ export default function HomePage() {
     <>
       <section className="mesh-host relative flex min-h-[calc(100dvh-1.5rem)] items-center overflow-hidden md:rounded-2xl">
         <MeshGradient className="mesh--scroll-linked mesh--follow" />
-        <div className="container-page w-full py-24">
-          <p className="enter text-step-2 font-semibold text-fg-muted" style={stagger(0)}>
-            <HeroGreeting />
-          </p>
-
+        <HeroGreeting>
           <HeroHeadline
             text="Front-end developer building fast, accessible interfaces."
-            className="enter enter--solid mt-6 max-w-[15ch] text-step-5"
-            style={stagger(80)}
+            className="enter enter--solid max-w-[15ch] text-step-5"
+            style={stagger(0)}
           />
 
-          <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(160)}>
+          <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(80)}>
             I build interfaces in React and TypeScript.
           </p>
 
-          <div className="enter mt-10 flex flex-wrap gap-4" style={stagger(240)}>
+          <div className="enter mt-10 flex flex-wrap gap-4" style={stagger(160)}>
             <Link
               href="/projects"
               className="btn btn-solid magnetic rounded-full bg-fg px-6 py-3 text-step-xs font-medium text-ground"
@@ -61,25 +57,25 @@ export default function HomePage() {
               Get in touch
             </Link>
           </div>
-        </div>
+        </HeroGreeting>
       </section>
 
       <TechMarquee />
 
-      <section className="container-page py-24">
-        <h2 className="flex items-baseline gap-4 text-step-3">
+      <section className="py-24">
+        <h2 className="container-page flex items-baseline gap-4 text-step-3">
           <SectionNumber value={1} /> <span className="fill-on-scroll">Selected work</span>
         </h2>
 
-        <ul className="mt-12 grid gap-6 md:grid-cols-2">
-          {projects.map((project, index) => (
-            <li key={project.slug}>
-              <ProjectCard project={project} index={index} />
-            </li>
-          ))}
-        </ul>
+        {/* Across the whole page, like the hero above it, not held to the
+            text column. */}
+        <div className="mt-12">
+          <ProjectCarousel projects={projects} />
+        </div>
 
-        <OtherSkillsCta className="mt-16" />
+        <div className="container-page">
+          <OtherSkillsCta className="mt-16" />
+        </div>
       </section>
 
       <Reveal as="section" className="container-page py-8">

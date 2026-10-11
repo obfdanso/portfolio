@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { SITE } from "@/lib/site";
+import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "About",
@@ -17,13 +17,9 @@ const PHOTO: { src: string; alt: string } | null = null;
 export default function AboutPage() {
   return (
     <>
-      {/* The same full-height gradient as the home hero. */}
-      <section className="mesh-host relative flex min-h-[calc(100dvh-1.5rem)] items-center overflow-hidden md:rounded-2xl">
-        <MeshGradient hue={90} />
-        <div className="container-page w-full py-24">
-          <h1 className="enter enter--solid text-step-5">About</h1>
-        </div>
-      </section>
+      <PageHeader>
+        <h1 className="enter enter--solid text-step-5">About</h1>
+      </PageHeader>
 
       <div className="container-page grid gap-12 py-16 md:grid-cols-[1fr_17rem]">
         <div>

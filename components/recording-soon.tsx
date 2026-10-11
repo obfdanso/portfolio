@@ -4,10 +4,10 @@ import { MeshGradient } from "@/components/ui/mesh-gradient";
  * Stands in for a screen recording that does not exist yet. Deliberately not a
  * video element: a player with nothing to play shows an error when pressed.
  *
- * All motion is CSS (the mesh drift plus two expanding rings), so it costs no
+ * All motion is CSS (two expanding rings over the gradient), so it costs no
  * JavaScript and stops under prefers-reduced-motion.
  */
-export function RecordingSoon({ hue, repoUrl }: { hue: number; repoUrl: string }) {
+export function RecordingSoon({ hue = 0, repoUrl }: { hue?: number; repoUrl: string }) {
   return (
     <div className="mesh-host relative grid aspect-video w-full place-items-center overflow-hidden rounded-xl border border-fg-muted/15 bg-surface/40">
       <MeshGradient hue={hue} />

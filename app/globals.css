@@ -470,8 +470,8 @@ button,
 @media (min-width: 768px) {
   .project-rail {
     grid-auto-flow: column;
-    /* Two columns' worth, the same width as a card in the home page's
-       two-column grid; the rest of the rail is reached by scrolling. */
+    /* Two cards' worth across; the rest of the rail is reached by
+       scrolling. */
     grid-auto-columns: calc((100% - 1.5rem) / 2);
     grid-template-columns: none;
     overflow-x: auto;
@@ -606,6 +606,7 @@ button,
   transition:
     background-color var(--duration-base) var(--ease-brand),
     border-color var(--duration-base) var(--ease-brand),
+    box-shadow var(--duration-base) var(--ease-brand),
     color var(--duration-base) var(--ease-brand),
     transform var(--duration-base) var(--ease-brand);
 }
@@ -638,7 +639,9 @@ button,
   background-size: 100% 1px;
 }
 
-/* Cover images drift in slightly when the card is hovered. */
+/* Projects page cards share the home slides' look but move their own way:
+   the screenshot slowly pushes in, on top of the card's tilt and its
+   scroll-in wipe. The home slides only dim and slide. */
 .card-media {
   overflow: hidden;
 }
@@ -649,7 +652,7 @@ button,
 
 .card-lift:hover .card-media img,
 .card-lift:focus-within .card-media img {
-  transform: scale(1.04);
+  transform: scale(1.08);
 }
 
 /* The theme menu grows out of the control it belongs to. */
@@ -925,7 +928,7 @@ button,
 
 @keyframes word-rise {
   from {
-    transform: translate3d(0, 40%, 0);
+    transform: translate3d(0, var(--word-start, 40%), 0);
   }
   to {
     transform: none;
@@ -1230,21 +1233,55 @@ button,
 /* ---------------------------------------------------------------------------
    Hero greeting
 
-   The line above the home headline says Welcome, Bonne arrivée and Akwaaba,
-   each in the accent colour, rising through a mask, holding long enough to
-   read, and leaving out the top. Then it settles on the name. All four share
-   one grid cell, so the line is as wide as the widest from the first frame
-   and nothing shifts. Transform only. Under reduced motion the greetings are
-   gone and the name simply sits there.
+   On a visit's first look at the home page, Welcome plays big, white and
+   glowing: it sharpens in from a blur, holds long enough to read, and
+   blurs away. Then the
+   hero moves in, its entrances pushed back by the greeting's length. The
+   headline's words rise from fully below their masks here, not 40% as
+   usual, so nothing of the hero shows under the greeting.
+
+   The cost, accepted: the headline is the page's Largest Contentful Paint,
+   and it now paints after the greeting, about two seconds in, on the first
+   visit only. Lighthouse's performance score for the home page drops with
+   it; CI only warns on performance.
+
+   Under reduced motion the greeting is skipped and the hero is simply there.
 --------------------------------------------------------------------------- */
 
-.greeting {
+.greeting-stage {
   /* 1.6s a word: a fifth to rise, three fifths held, a fifth to leave. */
   --greet-step: calc(var(--duration-slow) * 4);
-  display: inline-grid;
-  overflow: clip;
-  overflow-clip-margin: 0.1em;
-  vertical-align: top;
+  --greet-total: calc(var(--greet-step) * var(--greet-count, 1));
+}
+
+.greeting-layer {
+  position: absolute;
+  inset: 6rem 1.5rem;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-family: var(--font-display);
+  /* Bigger than the type scale's top step, deliberately: Danso asked for
+     the greeting to be the loudest thing on the site (2026-10-11). It is
+     decoration, hidden from assistive technology, and gone in five
+     seconds. */
+  font-size: clamp(2.6rem, 0.5rem + 8vw, 7.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  /* White with an accent glow and a soft drop shadow, so it reads on the
+     dark gradient and still stands off the light one. */
+  color: #fff;
+  text-shadow:
+    0 0 18px color-mix(in oklch, var(--color-lime) 55%, transparent),
+    0 0 48px color-mix(in oklch, var(--color-emerald) 70%, transparent),
+    0 8px 32px oklch(0 0 0 / 0.45);
+}
+
+.greeting {
+  display: grid;
+  place-items: center;
 }
 
 .greeting > * {
@@ -1252,48 +1289,46 @@ button,
 }
 
 .greeting__word {
-  color: var(--color-accent);
   user-select: none;
+  opacity: 0;
   animation: greet-pass var(--greet-step) var(--ease-brand) both;
   animation-delay: calc(var(--greet-step) * var(--greet-index, 0));
 }
 
-.greeting__name {
-  animation: greet-settle var(--duration-slow) var(--ease-brand) both;
-  animation-delay: calc(var(--greet-step) * var(--greet-index, 0));
-}
-
-/* `both` fill holds each greeting below the mask before its turn and above
-   it after, so only one is ever in view. */
+/* Each word sharpens in from a blur as it rises and settles, holds, then
+   blurs away upward, like a keynote title. `both` fill keeps each one out of
+   sight before its turn and after it. */
 @keyframes greet-pass {
   0% {
-    transform: translate3d(0, 110%, 0);
+    opacity: 0;
+    filter: blur(16px);
+    transform: translate3d(0, 0.35em, 0) scale(0.9);
   }
   20%,
   80% {
+    opacity: 1;
+    filter: blur(0);
     transform: none;
   }
   100% {
-    transform: translate3d(0, -110%, 0);
+    opacity: 0;
+    filter: blur(16px);
+    transform: translate3d(0, -0.3em, 0) scale(1.06);
   }
 }
 
-@keyframes greet-settle {
-  from {
-    transform: translate3d(0, 110%, 0);
-  }
-  to {
-    transform: none;
-  }
+.greeting-stage .enter {
+  animation-delay: calc(var(--greet-total) + var(--enter-delay, 0ms));
+}
+
+.greeting-stage .hero-word__inner {
+  --word-start: 110%;
+  animation-delay: calc(var(--greet-total) + var(--enter-delay, 0ms) + var(--word-index, 0) * 40ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .greeting__word {
+  .greeting-layer {
     display: none;
-  }
-
-  .greeting__name {
-    animation: none;
   }
 }
 
@@ -1402,6 +1437,14 @@ button,
   border-color: color-mix(in oklch, var(--color-fg) 24%, transparent);
 }
 
+/* A quiet bubble is invisible at rest and appears for the current page and
+   under the pointer or keyboard focus: the sidebar links. */
+.bubble--quiet:not([aria-current="page"], :hover, :focus-visible) {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
 /* The current page's link. On the desktop sidebar the gliding ring sits
    exactly over this edge, so the two read as one. */
 .nav-item.bubble[aria-current="page"] {
@@ -1443,6 +1486,242 @@ button,
 
   .back-button:active,
   .back-button:hover .back-button__chevron {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar deck
+
+   At rest the desktop sidebar shows a deck of cards in the first slot: the
+   current page's link in front, two card edges peeking out below it.
+   Pointing at the list or tabbing into it fans the links out into the plain
+   list, in their usual order, which never changes.
+
+   The peeking edges are the front card's own ::before and ::after, not the
+   other links. Folded, the other links sit invisible under the front card
+   and take no pointer events, so no link ever covers another (WCAG 2.5.8,
+   target size). They stay in the accessibility tree and the tab order:
+   screen readers list them as usual, and tabbing to one fans the deck out.
+
+   Keyboard focus only (:focus-visible): a clicked link keeps focus after the
+   page changes, which would otherwise hold the deck open. Pages with no link
+   of their own (Skills, Contact) get the plain list. Mouse-driven, so touch
+   screens get the plain list, and so does reduced motion.
+--------------------------------------------------------------------------- */
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .nav-deck {
+    --deck-step: 3rem; /* a 2.75rem link plus the 0.25rem gap */
+  }
+
+  .nav-deck__card {
+    position: relative;
+    transition:
+      transform var(--duration-slow) var(--ease-brand),
+      opacity var(--duration-base) var(--ease-brand);
+  }
+
+  .nav-deck:not(:hover, :has(:focus-visible)) .nav-deck__card {
+    transform: translate3d(0, calc(var(--i) * var(--deck-step) * -1), 0);
+  }
+
+  .nav-deck:not(:hover, :has(:focus-visible)) .nav-deck__card:not([data-front]) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nav-deck__card[data-front] {
+    z-index: 1;
+  }
+
+  /* The two card edges behind the front card. */
+  .nav-deck__card[data-front]::before,
+  .nav-deck__card[data-front]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklch, var(--color-fg) 14%, transparent);
+    background: color-mix(in oklab, var(--color-fg) 6%, var(--color-surface));
+    box-shadow: 0 6px 14px -8px oklch(0 0 0 / 0.35);
+    pointer-events: none;
+    transition:
+      transform var(--duration-slow) var(--ease-brand),
+      opacity var(--duration-base) var(--ease-brand);
+  }
+
+  .nav-deck__card[data-front]::before {
+    transform: translate3d(0, 0.5rem, 0) scale(0.94);
+  }
+
+  .nav-deck__card[data-front]::after {
+    z-index: -2;
+    transform: translate3d(0, 1rem, 0) scale(0.88);
+  }
+
+  /* Fanned out, the edges tuck away under the front card. */
+  .nav-deck:is(:hover, :has(:focus-visible)) .nav-deck__card[data-front]::before,
+  .nav-deck:is(:hover, :has(:focus-visible)) .nav-deck__card[data-front]::after {
+    opacity: 0;
+    transform: none;
+  }
+
+  /* Folded, the front card is solid, so the edges behind it don't show
+     through its translucent bubble. */
+  .nav-deck:not(:hover, :has(:focus-visible)) .nav-item[aria-current="page"] {
+    background-color: color-mix(in oklab, var(--color-fg) 9%, var(--color-surface));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Project carousel (home page)
+
+   After the entertainment row on apple.com: wide slides centred in a native
+   horizontal scroller, the neighbours peeking in at the sides and dimmed
+   until they slide to the middle. The current dot stretches into a pill
+   that fills over the five seconds the slide is shown, and stops filling
+   whenever the slideshow is held. The scrollbar is hidden; the dots, the
+   pause button, swiping and keyboard focus all move it.
+--------------------------------------------------------------------------- */
+
+.carousel__track {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Room either side so the first and last slides can sit in the middle. */
+  padding-inline: 4%;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__slide {
+  flex: 0 0 92%;
+  scroll-snap-align: center;
+}
+
+/* Only the screenshot dims: the name and buttons under it stay at full
+   strength, so their text keeps its contrast. */
+.carousel__slide .carousel__media {
+  opacity: 0.45;
+  transition: opacity var(--duration-slow) var(--ease-brand);
+}
+
+.carousel__slide[data-current] .carousel__media {
+  opacity: 1;
+}
+
+/* The name and buttons belong to the slide in the middle. Hidden, not just
+   faded, on the others: out of the tab order too, so Tab stays on the
+   current slide and the dots reach the rest. */
+.carousel__meta {
+  transition:
+    opacity var(--duration-base) var(--ease-brand),
+    visibility 0s linear;
+}
+
+.carousel__slide:not([data-current]) .carousel__meta {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-base) var(--ease-brand),
+    visibility 0s linear var(--duration-base);
+}
+
+@media (min-width: 768px) {
+  .carousel__track {
+    padding-inline: 9%;
+  }
+
+  .carousel__slide {
+    flex-basis: 82%;
+  }
+}
+
+.carousel__media {
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 768px) {
+  .carousel__media {
+    aspect-ratio: 1200 / 630;
+  }
+}
+
+.carousel__media img {
+  transition: transform var(--duration-slow) var(--ease-brand);
+}
+
+.carousel__card:hover .carousel__media img,
+.carousel__card:focus-within .carousel__media img {
+  transform: scale(1.03);
+}
+
+.carousel__dot {
+  display: grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding-inline: 0.25rem;
+}
+
+.carousel__pip {
+  position: relative;
+  overflow: hidden;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--color-fg) 35%, transparent);
+  transition:
+    width var(--duration-base) var(--ease-brand),
+    background-color var(--duration-base) var(--ease-brand);
+}
+
+.carousel__dot:hover .carousel__pip {
+  background: color-mix(in oklch, var(--color-fg) 60%, transparent);
+}
+
+.carousel__dot[aria-current] .carousel__pip {
+  width: 2.25rem;
+}
+
+/* The fill only runs while the slideshow does. */
+.carousel__progress {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-fg);
+  transform-origin: 0 50%;
+  transform: scaleX(1);
+}
+
+.carousel[data-running] .carousel__progress {
+  animation: carousel-progress 5000ms linear both;
+}
+
+@keyframes carousel-progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__slide .carousel__media,
+  .carousel__media img,
+  .carousel__meta,
+  .carousel__slide:not([data-current]) .carousel__meta,
+  .carousel__pip {
+    transition: none;
+  }
+
+  .carousel__card:hover .carousel__media img,
+  .carousel__card:focus-within .carousel__media img {
     transform: none;
   }
 }

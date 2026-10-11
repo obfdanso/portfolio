@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { SITE } from "@/lib/site";
+import { clickSidebarLink } from "./helpers/sidebar";
 
 // Motion drawn from the portfolio sites Danso picked out (2026-10-11): the
 // greeting, the mouse-led hero and scroll-lit text.
@@ -20,33 +21,51 @@ const translateX = (el: Element) => {
 };
 
 test.describe("hero greeting", () => {
-  test("says welcome, then settles on the name", async ({ page }) => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("says welcome big, white and glowing, then the hero moves in", async ({ page }) => {
     await page.goto("/");
     const words = page.locator(".greeting__word");
-    await expect(words).toHaveText(["Welcome", "Bonne arrivée", "Akwaaba"]);
+    await expect(words).toHaveText(["Welcome"]);
     await expect(words.first()).toHaveCSS("animation-name", "greet-pass");
-    const name = page.locator(".greeting__name");
-    await expect(name).toHaveText(SITE.name);
-    // Three greetings of 1.6s each, then the name: about 5.2s in all. It ends
-    // finished and held in place by its fill.
-    await expect.poll(() => name.evaluate(progressOf, "greet-settle"), { timeout: 10_000 }).toBe(1);
+    const layer = page.locator(".greeting-layer");
+    const h1 = page.getByRole("heading", { level: 1 });
+    const size = (el: Element) => parseFloat(getComputedStyle(el).fontSize);
+    expect(await layer.evaluate(size)).toBeGreaterThan(await h1.evaluate(size));
+    await expect(layer).toHaveCSS("color", "rgb(255, 255, 255)");
+    expect(await layer.evaluate((el) => getComputedStyle(el).textShadow)).not.toBe("none");
+
+    // While it plays, the headline's words wait fully below their masks.
+    const firstWord = page.locator(".hero-word__inner").first();
     expect(
-      await name.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).isIdentity),
-    ).toBe(true);
+      await firstWord.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).f),
+    ).toBeGreaterThan(40);
+
+    // Welcome for 1.6s, then the hero: all settled by about 2.5s.
+    await expect
+      .poll(() => firstWord.evaluate(progressOf, "word-rise"), { timeout: 10_000 })
+      .toBe(1);
+    await expect(page.getByRole("link", { name: "See the work" })).toBeVisible();
   });
 
-  test("never fades, so nothing waits on it to be read", async ({ page }) => {
+  test("Danso's name is no longer in the hero", async ({ page }) => {
     await page.goto("/");
-    const fades = await page
-      .locator(".greeting > *")
-      .evaluateAll((els) =>
-        els.some((el) =>
-          el
-            .getAnimations()
-            .some((a) => (a.effect as KeyframeEffect).getKeyframes().some((k) => "opacity" in k)),
-        ),
-      );
-    expect(fades).toBe(false);
+    await expect(page.locator("main section").first().getByText(SITE.name)).toHaveCount(0);
+  });
+
+  test("plays once per visit, and again after a refresh", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".greeting-layer")).toHaveCount(1);
+    await clickSidebarLink(page, "About");
+    await expect(page).toHaveURL(/\/about$/);
+    await clickSidebarLink(page, "Home");
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator(".greeting-layer")).toHaveCount(0);
+    await expect(page.locator(".greeting-stage")).toHaveCount(0);
+
+    await page.reload();
+    await expect(page.locator(".greeting-layer")).toHaveCount(1);
   });
 });
 
@@ -131,11 +150,11 @@ test.describe("scroll-lit About text", () => {
 test.describe("inspired motion, reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
-  test("the greeting is skipped and the name simply sits there", async ({ page }) => {
+  test("the greeting is skipped and the hero is simply there", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".greeting__word").first()).toBeHidden();
-    await expect(page.locator(".greeting__name")).toHaveCSS("animation-name", "none");
-    await expect(page.locator(".greeting__name")).toBeVisible();
+    await expect(page.locator(".greeting-layer")).toBeHidden();
+    await expect(page.locator(".hero-word__inner").first()).toHaveCSS("animation-name", "none");
+    await expect(page.getByRole("link", { name: "See the work" })).toBeVisible();
   });
 
   test("the hero ignores the mouse", async ({ page }) => {
