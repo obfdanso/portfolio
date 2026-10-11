@@ -60,22 +60,19 @@ const PILL = "pill relative z-10 rounded-full px-4 py-1.5 text-step-xs";
 
 /**
  * One project slide: the screenshot, then the name and its actions under it.
- * The home page and the Projects page use the same one. `tilt` makes it lean
- * toward the mouse, as the Projects page cards always have.
+ * The home page and the Projects page use the same one.
  */
 export function ProjectSlide({
   project,
   headingLevel = 3,
-  tilt = false,
 }: {
   project: Project;
   headingLevel?: 2 | 3;
-  tilt?: boolean;
 }) {
   const { demo, showcase } = project;
   const Heading = headingLevel === 2 ? "h2" : "h3";
   return (
-    <article className={cn("carousel__card relative", tilt && "tilt")}>
+    <article className="carousel__card relative">
       <ViewTransition
         name={projectTransitionName(project.slug, "cover")}
         share="morph"
