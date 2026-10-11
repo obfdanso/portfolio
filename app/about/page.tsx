@@ -17,9 +17,10 @@ const PHOTO: { src: string; alt: string } | null = null;
 export default function AboutPage() {
   return (
     <>
-      <section className="mesh-host relative overflow-hidden py-24 md:rounded-2xl">
+      {/* The same full-height gradient as the home hero. */}
+      <section className="mesh-host relative flex min-h-[calc(100dvh-1.5rem)] items-center overflow-hidden md:rounded-2xl">
         <MeshGradient hue={90} />
-        <div className="container-page">
+        <div className="container-page w-full py-24">
           <h1 className="enter enter--solid text-step-5">About</h1>
         </div>
       </section>
