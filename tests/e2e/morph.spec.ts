@@ -7,6 +7,10 @@ test.describe("card-to-page morph", () => {
   test("a card's cover and title morph into the case study", async ({ page }) => {
     await page.goto("/projects");
     await recordTransitions(page);
+    await page
+      .getByRole("region", { name: "Projects" })
+      .getByRole("button", { name: "Show POS" })
+      .click();
     await page.getByRole("link", { name: "POS", exact: true }).click();
     await expect(page).toHaveURL(/\/projects\/pos$/);
 
@@ -20,6 +24,10 @@ test.describe("card-to-page morph", () => {
 
   test("the list works after going back", async ({ page }) => {
     await page.goto("/projects");
+    await page
+      .getByRole("region", { name: "Projects" })
+      .getByRole("button", { name: "Show POS" })
+      .click();
     await page.getByRole("link", { name: "POS", exact: true }).click();
     await expect(page).toHaveURL(/\/projects\/pos$/);
     await page.goBack();
@@ -37,6 +45,10 @@ test.describe("card-to-page morph, reduced motion", () => {
   test("the morph is instant", async ({ page }) => {
     await page.goto("/projects");
     await recordTransitions(page);
+    await page
+      .getByRole("region", { name: "Projects" })
+      .getByRole("button", { name: "Show POS" })
+      .click();
     await page.getByRole("link", { name: "POS", exact: true }).click();
     await expect(page).toHaveURL(/\/projects\/pos$/);
     await expect(page.getByRole("heading", { level: 1, name: "POS" })).toBeVisible();

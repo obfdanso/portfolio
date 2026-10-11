@@ -12,7 +12,6 @@ test.describe("hand cursor", () => {
       "cursor",
       "pointer",
     );
-    await expect(page.locator("article summary").first()).toHaveCSS("cursor", "pointer");
 
     await page.getByRole("button", { name: /theme/i }).click();
     await expect(page.getByRole("menuitem").first()).toHaveCSS("cursor", "pointer");

@@ -33,6 +33,10 @@ test.describe("back button", () => {
 
   test("names a case study by its title", async ({ page }) => {
     await page.goto("/projects");
+    await page
+      .getByRole("region", { name: "Projects" })
+      .getByRole("button", { name: "Show POS" })
+      .click();
     await page.getByRole("link", { name: "POS", exact: true }).click();
     await expect(page).toHaveURL(/\/projects\/pos$/);
     await sidebar(page, "Resume");

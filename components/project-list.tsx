@@ -1,9 +1,17 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { addTransitionType, startTransition, useMemo, useState, ViewTransition } from "react";
+import {
+  addTransitionType,
+  startTransition,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  ViewTransition,
+} from "react";
 import type { Project } from "@/lib/content";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectSlide } from "@/components/project-carousel";
 import { ChevronDownIcon } from "@/components/icons";
 import { CarouselControls } from "@/components/carousel-controls";
 import { useCarousel } from "@/lib/use-carousel";
@@ -38,33 +46,23 @@ export function ProjectList({ projects }: { projects: Project[] }) {
     filter,
   );
 
-  /**
-   * Steps between projects, not between individual links. Walking every anchor
-   * would make ArrowRight land on the current card's "Source" link rather than
-   * the next project.
-   *
-   * Driven by focus rather than scroll offsets, so keyboard focus and scroll
-   * position can never disagree — the usual failure mode of horizontal rails.
-   * Scrolling the card to the middle makes it the carousel's current one.
-   */
+  // The arrow keys step the carousel; focus follows to the new middle card's
+  // name once it is there (the others' names are hidden, as on the home page).
+  const focusAfterMove = useRef(false);
+  useEffect(() => {
+    if (!focusAfterMove.current) return;
+    focusAfterMove.current = false;
+    trackRef.current?.children[current]?.querySelector<HTMLElement>("h2 a")?.focus({
+      preventScroll: true,
+    });
+  }, [current, trackRef]);
+
+  /** Steps between projects, holding at the ends rather than wrapping. */
   function move(direction: -1 | 1) {
-    const list = trackRef.current;
-    if (!list) return;
-
-    const cards = Array.from(list.querySelectorAll<HTMLElement>("article"));
-    if (cards.length === 0) return;
-
-    const focused = document.activeElement;
-    const current = cards.findIndex((card) => card.contains(focused));
-
-    // Clamped, so the ends of the rail hold rather than wrap.
-    const next = Math.min(Math.max(current + direction, 0), cards.length - 1);
-
-    const target = cards[next];
-    if (!target) return;
-
-    target.querySelector("a")?.focus();
-    target.scrollIntoView({ block: "nearest", inline: "center" });
+    const next = Math.min(Math.max(current + direction, 0), visible.length - 1);
+    if (next === current) return;
+    focusAfterMove.current = true;
+    goTo(next);
   }
 
   return (
@@ -118,12 +116,13 @@ export function ProjectList({ projects }: { projects: Project[] }) {
         </details>
       </div>
 
-      {/* Across the whole page like the home carousel, with the cards a
-          little narrower, since they carry more. */}
+      {/* The home page's carousel, slide for slide: across the whole page,
+          the name and actions under each screenshot. These lean toward the
+          mouse as well. */}
       <section
         aria-roledescription="carousel"
         aria-label="Projects"
-        className="carousel carousel--cards mt-6"
+        className="carousel mt-6"
         {...rootProps}
       >
         <div
@@ -157,7 +156,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                 aria-roledescription="slide"
                 aria-label={`${index + 1} of ${visible.length}`}
               >
-                <ProjectCard project={project} index={index} headingLevel={2} />
+                <ProjectSlide project={project} headingLevel={2} tilt />
               </div>
             </ViewTransition>
           ))}

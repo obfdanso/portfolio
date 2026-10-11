@@ -22,21 +22,10 @@ test.describe("reading progress", () => {
   });
 });
 
-test.describe("cover wipe", () => {
-  test("card covers wipe in; the showcase does not", async ({ page }) => {
-    await page.goto("/projects");
-    await expect(page.locator(".card-media").first()).toHaveCSS("animation-name", "media-wipe");
-    await page.goto("/projects/medispace");
-    await expect(page.locator(".project-showcase")).toHaveCSS("animation-name", "none");
-  });
-});
-
 test.describe("scroll effects, reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
-  test("both hold still", async ({ page }) => {
-    await page.goto("/projects");
-    await expect(page.locator(".card-media").first()).toHaveCSS("animation-name", "none");
+  test("it holds still", async ({ page }) => {
     await page.goto("/projects/medispace");
     await expect(page.locator(".reading-progress")).toBeHidden();
   });
