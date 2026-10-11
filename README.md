@@ -37,7 +37,7 @@ practices or SEO score below 100. Performance is reported, and warns below 90.
 
 |           |                                               |
 | --------- | --------------------------------------------- |
-| Framework | Next.js 16.3.5, React 19.3.0                  |
+| Framework | Next.js 16.3.8, React 19.3.0                  |
 | Language  | TypeScript 5.9.3, strict                      |
 | Styling   | Tailwind CSS 4.3.3, OKLCH colour tokens       |
 | Content   | MDX via next-mdx-remote, validated with Zod 4 |
@@ -49,7 +49,7 @@ Two versions are pinned deliberately and should not be upgraded on their own:
 
 - **TypeScript stays on 5.9.3.** `typescript-eslint` 8.70 supports TypeScript
   below 6.1, so TypeScript 7 breaks linting.
-- **ESLint stays on 9.** `eslint-config-next` 16.3.5 bundles an
+- **ESLint stays on 9.** `eslint-config-next` 16.3.8 bundles an
   `eslint-plugin-react` that calls an API ESLint 10 removed, and linting
   crashes on any file containing JSX.
 
