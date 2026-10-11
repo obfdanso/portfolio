@@ -22,6 +22,31 @@ test.describe("desktop sidebar", () => {
     await expect(nav.getByText("Front-end Developer", { exact: true })).toHaveCount(0);
   });
 
+  test("puts each link and the Theme button in the back button's bubble", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.getByRole("complementary", { name: /main/i });
+    const controls = [
+      ...(await nav.getByRole("link").all()).slice(1), // after the name
+      nav.getByRole("button", { name: "Theme" }),
+    ];
+    expect(controls).toHaveLength(5);
+    for (const control of controls) {
+      await expect(control).toContainClass("bubble");
+      const { radius, height } = await control.evaluate((el) => ({
+        radius: parseFloat(getComputedStyle(el).borderTopLeftRadius),
+        height: el.getBoundingClientRect().height,
+      }));
+      expect(radius).toBeGreaterThanOrEqual(height / 2);
+    }
+    // The current page's link is edged in the accent colour.
+    await expect(nav.getByRole("link", { name: "Home", exact: true })).not.toHaveCSS(
+      "border-top-color",
+      await nav
+        .getByRole("link", { name: "About", exact: true })
+        .evaluate((el) => getComputedStyle(el).borderTopColor),
+    );
+  });
+
   test("keeps Contact out of the sidebar", async ({ page }) => {
     await page.goto("/");
     const nav = page.getByRole("complementary", { name: /main/i });

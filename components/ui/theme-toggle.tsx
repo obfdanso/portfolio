@@ -73,7 +73,7 @@ export function ThemeToggle() {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="btn btn-outline rounded-full border border-fg-muted/30 px-3 py-1.5 text-sm"
+        className="btn bubble rounded-full px-4 py-2 text-sm"
       >
         Theme
       </button>
