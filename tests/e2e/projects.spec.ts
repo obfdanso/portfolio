@@ -5,6 +5,10 @@ import { getFrontendProjects } from "@/lib/content";
 // edits. intercli is "other" and appears only on the skills page.
 const PROJECT_COUNT = getFrontendProjects().length;
 
+/** The filter is folded behind a "Stack" pill; open it before using it. */
+const openFilter = (page: import("@playwright/test").Page) =>
+  page.locator(".filter-disclosure summary").click();
+
 test.describe("project index", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -23,9 +27,30 @@ test.describe("project index", () => {
 
   test("offers no filter for a stack only intercli uses", async ({ page }) => {
     await page.goto("/projects");
+    await openFilter(page);
     for (const tag of ["C++", "OpenSSL", "CMake"]) {
       await expect(page.getByRole("button", { name: tag, exact: true })).toHaveCount(0);
     }
+  });
+
+  test("folds the stack filter behind a Stack pill until it is clicked", async ({ page }) => {
+    await page.goto("/projects");
+    const filters = page.getByRole("group", { name: "Filter by stack" });
+    await expect(filters).toBeHidden();
+    await openFilter(page);
+    await expect(filters).toBeVisible();
+    await expect(filters.getByRole("button", { name: "All", exact: true })).toBeVisible();
+  });
+
+  test("the Stack pill names the active filter while closed", async ({ page }) => {
+    await page.goto("/projects");
+    await openFilter(page);
+    await page.getByRole("button", { name: "TypeScript", exact: true }).click();
+    const summary = page.locator(".filter-disclosure summary");
+    await expect(summary).toHaveText(/Stack\s*· TypeScript/);
+    await summary.click();
+    await expect(page.getByRole("group", { name: "Filter by stack" })).toBeHidden();
+    await expect(summary).toHaveText(/· TypeScript/);
   });
 
   test("leaves intercli off the list", async ({ page }) => {
@@ -35,6 +60,7 @@ test.describe("project index", () => {
 
   test("filters by stack tag and can be cleared", async ({ page }) => {
     await page.goto("/projects");
+    await openFilter(page);
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
     // Every remaining card uses the tag, and some were filtered out. The
     // filter updates inside a view transition, so wait for it to settle.
@@ -58,6 +84,7 @@ test.describe("project index", () => {
 
   test("marks the active filter for assistive technology", async ({ page }) => {
     await page.goto("/projects");
+    await openFilter(page);
     const all = page.getByRole("button", { name: "All", exact: true });
     await expect(all).toHaveAttribute("aria-pressed", "true");
 
