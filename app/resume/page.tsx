@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { resume, type Entry } from "@/content/resume";
-import { MeshGradient } from "@/components/ui/mesh-gradient";
+import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -34,21 +34,18 @@ function Section({ title, entries }: { title: string; entries: Entry[] }) {
 export default function ResumePage() {
   return (
     <>
-      <section className="mesh-host relative overflow-hidden py-24 md:rounded-2xl">
-        <MeshGradient />
-        <div className="container-page">
-          <h1 className="enter enter--solid text-step-4">Resume</h1>
-          <p className="mt-5 max-w-2xl text-fg-muted">{resume.summary}</p>
+      <PageHeader>
+        <h1 className="enter enter--solid text-step-4">Resume</h1>
+        <p className="mt-5 max-w-2xl text-fg-muted">{resume.summary}</p>
 
-          <a
-            href={resume.pdfPath}
-            download
-            className="btn btn-outline mt-8 inline-block rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
-          >
-            Download PDF
-          </a>
-        </div>
-      </section>
+        <a
+          href={resume.pdfPath}
+          download
+          className="btn btn-outline mt-8 inline-block rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
+        >
+          Download PDF
+        </a>
+      </PageHeader>
 
       <div className="container-page pb-16">
         <Section title="Experience" entries={resume.experience} />

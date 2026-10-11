@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { clickSidebarLink } from "./helpers/sidebar";
 
 const ROUTES = [
   "/",
@@ -73,11 +74,11 @@ test("the transition uses the brand easing and a permitted duration", async ({ p
 
 test("nav items respond to hover", async ({ page }) => {
   await page.goto("/");
-  const item = page.getByRole("complementary", { name: /main/i }).getByRole("link", {
-    name: "Projects",
-    exact: true,
-  });
+  const nav = page.getByRole("complementary", { name: /main/i });
+  const item = nav.getByRole("link", { name: "Projects", exact: true });
 
+  // The links rest folded in a deck; pointing at the list fans them out.
+  await nav.locator("nav ul").first().hover();
   await item.hover();
   await page.waitForTimeout(260);
   const transform = await item.evaluate((el) => getComputedStyle(el).transform);
@@ -200,10 +201,7 @@ test.describe("entrance on navigation", () => {
   // only a fresh visit. A quick swap on navigation was faster but read as
   // dull. These pin that preference so it is not optimised away again.
   async function clickSidebar(page: import("@playwright/test").Page, label: string, path: RegExp) {
-    await page
-      .getByRole("complementary", { name: /main/i })
-      .getByRole("link", { name: label, exact: true })
-      .click();
+    await clickSidebarLink(page, label);
     await expect(page).toHaveURL(path);
   }
 
@@ -238,10 +236,7 @@ test.describe("entrance on navigation, reduced motion", () => {
 
   test("stays off after a navigation", async ({ page }) => {
     await page.goto("/");
-    await page
-      .getByRole("complementary", { name: /main/i })
-      .getByRole("link", { name: "About", exact: true })
-      .click();
+    await clickSidebarLink(page, "About");
     await expect(page).toHaveURL(/\/about$/);
     await expect(page.locator("main .enter").first()).toHaveCSS("animation-name", "none");
   });

@@ -13,13 +13,12 @@ test("renders the MediSpace case study with all five sections", async ({ page })
   }
 });
 
-test("tints the case study gradient with the project hue", async ({ page }) => {
-  await page.goto("/projects/pos");
-  const hue = await page
-    .locator(".mesh")
-    .first()
-    .evaluate((el) => getComputedStyle(el).getPropertyValue("--mesh-hue"));
-  expect(hue.trim()).toBe("24deg");
+test("every case study header uses the site's own colours", async ({ page }) => {
+  // Danso's call, 2026-10-11: one size and one palette on every page.
+  for (const slug of SLUGS) {
+    await page.goto(`/projects/${slug}`);
+    await expect(page.locator("main .mesh").first(), slug).toHaveCSS("filter", "hue-rotate(0deg)");
+  }
 });
 
 test("links MediSpace to its live site", async ({ page }) => {

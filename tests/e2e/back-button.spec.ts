@@ -1,12 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
+import { clickSidebarLink } from "./helpers/sidebar";
 
 const back = (page: Page) => page.getByRole("link", { name: /^Back to / });
 
-const sidebar = (page: Page, label: string) =>
-  page
-    .getByRole("complementary", { name: /main/i })
-    .getByRole("link", { name: label, exact: true })
-    .click();
+const sidebar = (page: Page, label: string) => clickSidebarLink(page, label);
 
 test.describe("back button", () => {
   test.use({ viewport: { width: 1440, height: 900 } });

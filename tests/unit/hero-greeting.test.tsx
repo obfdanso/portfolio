@@ -1,21 +1,54 @@
-import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { HeroGreeting } from "@/components/hero-greeting";
-import { SITE } from "@/lib/site";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+// The "already played" flag lives in module scope, so each test loads a
+// fresh copy of the module: a fresh page load.
+async function load() {
+  vi.resetModules();
+  return (await import("@/components/hero-greeting")).HeroGreeting;
+}
 
 describe("HeroGreeting", () => {
-  it("says welcome in English, French and Twi, hidden from assistive technology", () => {
-    const { container } = render(<HeroGreeting />);
+  it("says Welcome, hidden from assistive technology", async () => {
+    const HeroGreeting = await load();
+    const { container } = render(
+      <HeroGreeting>
+        <h1>Hero</h1>
+      </HeroGreeting>,
+    );
     const words = Array.from(container.querySelectorAll(".greeting__word"));
-    expect(words.map((w) => w.textContent)).toEqual(["Welcome", "Bonne arrivée", "Akwaaba"]);
-    for (const word of words) expect(word.getAttribute("aria-hidden")).toBe("true");
+    expect(words.map((w) => w.textContent)).toEqual(["Welcome"]);
+    expect(container.querySelector(".greeting-layer")?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector(".greeting-stage")).not.toBeNull();
+    expect(screen.getByRole("heading", { name: "Hero" })).toBeTruthy();
   });
 
-  it("settles on the name, which assistive technology reads", () => {
-    const { container } = render(<HeroGreeting />);
-    const name = container.querySelector<HTMLElement>(".greeting__name");
-    expect(name?.textContent).toBe(SITE.name);
-    expect(name?.hasAttribute("aria-hidden")).toBe(false);
-    expect(name?.style.getPropertyValue("--greet-index")).toBe("3");
+  it("plays once per page load: coming back goes straight to the hero", async () => {
+    const HeroGreeting = await load();
+    const first = render(
+      <HeroGreeting>
+        <h1>Hero</h1>
+      </HeroGreeting>,
+    );
+    first.unmount();
+
+    const { container } = render(
+      <HeroGreeting>
+        <h1>Hero</h1>
+      </HeroGreeting>,
+    );
+    expect(container.querySelector(".greeting-layer")).toBeNull();
+    expect(container.querySelector(".greeting-stage")).toBeNull();
+    expect(screen.getByRole("heading", { name: "Hero" })).toBeTruthy();
+  });
+
+  it("plays again after a refresh", async () => {
+    const HeroGreeting = await load();
+    const { container } = render(
+      <HeroGreeting>
+        <h1>Hero</h1>
+      </HeroGreeting>,
+    );
+    expect(container.querySelector(".greeting-layer")).not.toBeNull();
   });
 });

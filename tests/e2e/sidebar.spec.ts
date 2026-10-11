@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { clickSidebarLink } from "./helpers/sidebar";
 
 const DESKTOP = { width: 1440, height: 900 };
 const PHONE = { width: 390, height: 844 };
@@ -119,10 +120,7 @@ test.describe("desktop sidebar", () => {
 
   test("navigates between sections", async ({ page }) => {
     await page.goto("/");
-    await page
-      .getByRole("complementary", { name: /main/i })
-      .getByRole("link", { name: "Resume", exact: true })
-      .click();
+    await clickSidebarLink(page, "Resume");
     await expect(page).toHaveURL(/\/resume$/);
     await expect(page.getByRole("heading", { level: 1, name: "Resume" })).toBeVisible();
   });

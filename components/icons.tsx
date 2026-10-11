@@ -84,3 +84,19 @@ export function ChevronLeftIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function PlayIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M8 5.5v13l10-6.5z" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function PauseIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M8.5 5.5v13M15.5 5.5v13" strokeWidth={2.5} />
+    </svg>
+  );
+}

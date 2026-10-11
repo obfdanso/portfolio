@@ -68,8 +68,11 @@ test("Selected work lists the front-end projects and not intercli", async ({ pag
   const work = page.locator("section", {
     has: page.getByRole("heading", { level: 2, name: /selected work/i }),
   });
+  // One slide shows at a time; the others' names wait, hidden, for their turn.
   for (const title of ["MediSpace", "POS", "bitby", "Smart Socket"]) {
-    await expect(work.getByRole("link", { name: title, exact: true })).toBeVisible();
+    await expect(
+      work.getByRole("link", { name: title, exact: true, includeHidden: true }),
+    ).toHaveCount(1);
   }
   await expect(work.getByRole("link", { name: "intercli", exact: true })).toHaveCount(0);
   await expect(work.getByRole("article")).toHaveCount(getFrontendProjects().length);
@@ -78,8 +81,10 @@ test("Selected work lists the front-end projects and not intercli", async ({ pag
 test("a project card lifts on hover", async ({ page }) => {
   // Regression: the scroll reveal animated `transform` with fill both, which
   // overrode the hover lift on every revealed card.
+  // The Projects page cards; the home page's big tiles raise their
+  // screenshot instead.
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/projects");
   const card = page.getByRole("article").first();
   await card.scrollIntoViewIfNeeded();
   await page.waitForTimeout(600);

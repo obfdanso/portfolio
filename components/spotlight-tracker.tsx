@@ -76,7 +76,10 @@ export function SpotlightTracker() {
 
       const card = target?.closest<HTMLElement>(".spotlight");
       if (!card) return;
-      const rect = card.getBoundingClientRect();
+      // A tilted card's own box shifts as it leans, which would pull the
+      // glow off the pointer. Its list item never tilts: measure that.
+      const box = card.classList.contains("tilt") ? card.parentElement : null;
+      const rect = (box ?? card).getBoundingClientRect();
       card.style.setProperty("--spot-x", `${last.clientX - rect.left}px`);
       card.style.setProperty("--spot-y", `${last.clientY - rect.top}px`);
 

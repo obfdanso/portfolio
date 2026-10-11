@@ -26,11 +26,38 @@ test.describe("page headers", () => {
     }
   });
 
-  test("About's gradient is as tall as the home hero", async ({ page }) => {
-    await page.goto("/");
-    const home = await page.locator("main .mesh-host").first().boundingBox();
-    await page.goto("/about");
-    const about = await page.locator("main .mesh-host").first().boundingBox();
-    expect(Math.abs(about!.height - home!.height)).toBeLessThanOrEqual(2);
+  test("About's header matches Resume's in size and colour", async ({ page }) => {
+    for (const viewport of [
+      { width: 1440, height: 900 },
+      { width: 390, height: 844 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/resume");
+      const resume = await page.locator("main .mesh-host").first().boundingBox();
+      await page.goto("/about");
+      const header = page.locator("main .mesh-host").first();
+      const about = await header.boundingBox();
+      expect(Math.abs(about!.height - resume!.height), `${viewport.width}px`).toBeLessThan(24);
+      // The site's own teal and emerald: no hue shift.
+      await expect(header.locator(".mesh")).toHaveCSS("filter", "hue-rotate(0deg)");
+    }
+  });
+
+  test("every inner page opens on the same gradient header", async ({ page }) => {
+    await page.goto("/resume");
+    const resume = await page.locator("main .mesh-host").first().boundingBox();
+    for (const route of ["/about", "/projects", "/skills", "/contact"]) {
+      await page.goto(route);
+      const header = page.locator("main .mesh-host").first();
+      const box = await header.boundingBox();
+      expect(Math.abs(box!.height - resume!.height), route).toBeLessThan(24);
+      await expect(header.locator(".mesh"), route).toHaveCSS("filter", "hue-rotate(0deg)");
+    }
+    // Case studies carry more in their header, so they may run taller.
+    for (const slug of ["smartsocket", "intercli", "medispace"]) {
+      await page.goto(`/projects/${slug}`);
+      const box = await page.locator("main .mesh-host").first().boundingBox();
+      expect(box!.height, slug).toBeGreaterThanOrEqual(resume!.height - 24);
+    }
   });
 });

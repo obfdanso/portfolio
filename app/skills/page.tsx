@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { SkillSection } from "@/components/skill-section";
-import { MeshGradient } from "@/components/ui/mesh-gradient";
 import { skills } from "@/content/skills";
 import { loadProjects } from "@/lib/content";
 import { resolveEvidence } from "@/lib/skills";
+import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "Skills",
@@ -21,17 +21,14 @@ export default function SkillsPage() {
 
   return (
     <>
-      <section className="mesh-host relative overflow-hidden py-24 md:rounded-2xl">
-        <MeshGradient />
-        <div className="container-page">
-          <h1 className="enter enter--solid text-step-4">Beyond the front end</h1>
-          <p className="mt-5 max-w-2xl text-fg-muted">
-            {
-              "Front-end work is what I do best, and it's what the rest of this site covers. These are my other skills, each shown next to work that uses it."
-            }
-          </p>
-        </div>
-      </section>
+      <PageHeader>
+        <h1 className="enter enter--solid text-step-4">Beyond the front end</h1>
+        <p className="mt-5 max-w-2xl text-fg-muted">
+          {
+            "Front-end work is what I do best, and it's what the rest of this site covers. These are my other skills, each shown next to work that uses it."
+          }
+        </p>
+      </PageHeader>
 
       <div className="container-page space-y-20 py-16">
         {skills.map((section) => (
