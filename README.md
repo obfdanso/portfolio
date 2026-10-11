@@ -30,8 +30,10 @@ skills page, an about page, a resume and a contact form.
   keyboard navigation, both themes, reduced motion, the contact form's failure
   states, and an axe accessibility sweep in light and dark mode.
 
-CI runs Lighthouse on every route and fails the build if accessibility, best
-practices or SEO score below 100. Performance is reported, and warns below 90.
+`npm run lighthouse` runs Lighthouse on every route and fails if
+accessibility, best practices or SEO score below 100. Performance is reported,
+and warns below 90. There is no CI: run `npm run verify` and
+`npm run test:e2e` before pushing.
 
 ## Stack
 
