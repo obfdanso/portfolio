@@ -350,14 +350,12 @@ button,
   box-shadow: 0 0 0 1px color-mix(in oklch, var(--color-emerald) 25%, transparent);
 }
 
-/* A custom property must be registered with a type before it can be
-   animated. Without this @property block the keyframes below do nothing. */
-@property --mesh-hue {
-  syntax: "<angle>";
-  inherits: true;
-  initial-value: 0deg;
-}
-
+/* The hue shift animates `filter` itself, not the --mesh-hue custom
+   property behind it. A custom property animates on the main thread, so
+   every scroll frame restyled the gradient; `filter` can run on the
+   compositor. Measured on an Intel UHD 620: occasional 67-100ms frames while
+   scrolling the home page, none after. It starts from 0deg, the home hero's
+   own hue, the only gradient that is scroll-linked. */
 @supports (animation-timeline: scroll()) {
   .mesh--scroll-linked {
     animation: mesh-hue-shift linear both;
@@ -371,10 +369,10 @@ button,
    visual identity breaks. */
 @keyframes mesh-hue-shift {
   from {
-    --mesh-hue: 0deg;
+    filter: hue-rotate(0deg);
   }
   to {
-    --mesh-hue: 28deg;
+    filter: hue-rotate(28deg);
   }
 }
 

@@ -32,6 +32,28 @@ test("the scroll-linked hue shift is disabled under reduced motion", async ({ br
   await context.close();
 });
 
+test("the scroll-linked hue shift animates filter, which stays off the main thread", async ({
+  page,
+}) => {
+  // Animating the --mesh-hue custom property restyled the gradient on every
+  // scroll frame and dropped frames on an integrated GPU. Pins the fix.
+  await page.goto("/");
+  const mesh = page.locator(".mesh--scroll-linked");
+  await expect(mesh).toHaveCSS("animation-name", "mesh-hue-shift");
+  await page.evaluate(() =>
+    window.scrollTo(0, (document.documentElement.scrollHeight - window.innerHeight) / 2),
+  );
+  await expect
+    .poll(() => mesh.evaluate((el) => getComputedStyle(el).filter))
+    .toMatch(/^hue-rotate\(1[0-9](\.\d+)?deg\)$/);
+  const animatesCustomProperty = await mesh.evaluate((el) =>
+    el
+      .getAnimations()
+      .some((a) => (a.effect as KeyframeEffect).getKeyframes().some((k) => "--mesh-hue" in k)),
+  );
+  expect(animatesCustomProperty).toBe(false);
+});
+
 test("section numerals render their final value without javascript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
