@@ -39,7 +39,7 @@ function NavList({
   glide?: boolean;
 }) {
   return (
-    <ul className="space-y-1.5">
+    <ul className="space-y-2.5">
       {LINKS.map(({ href, label, Icon }) => {
         const active = isActive(pathname, href);
         return (
@@ -49,18 +49,21 @@ function NavList({
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "nav-item relative isolate flex items-center gap-3.5 rounded-xl px-4 py-3 text-step-1",
-                active ? "font-medium text-accent" : "text-fg-muted hover:bg-fg/5 hover:text-fg",
-                // The mobile menu keeps a plain background; only the desktop
-                // sidebar's highlight glides between links.
-                active && !glide && "bg-fg/8",
+                // A bubble each. Resting links are fainter, so the current one
+                // stands out. Its fill stays at 9%: the accent text measured
+                // above 4.5:1 there in the light theme, and fell short of it
+                // on anything more solid.
+                "nav-item bubble relative isolate flex items-center gap-3.5 rounded-full px-4 py-3 text-step-1",
+                active
+                  ? "font-medium text-accent"
+                  : "text-fg-muted [--bubble-fill:4%] hover:text-fg",
               )}
             >
               {active && glide && (
                 <ViewTransition name="nav-highlight" share="morph" default="none">
                   <span
                     aria-hidden="true"
-                    className="nav-highlight absolute inset-0 -z-10 rounded-xl bg-fg/8"
+                    className="nav-highlight absolute -inset-px -z-10 rounded-full border border-accent/50"
                   />
                 </ViewTransition>
               )}

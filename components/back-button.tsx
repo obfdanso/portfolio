@@ -51,7 +51,7 @@ export function BackButton() {
           router.back();
         }}
         title={`Back to ${target.title}`}
-        className="back-button pointer-events-auto grid size-11 place-items-center rounded-full text-fg"
+        className="bubble bubble--glass back-button pointer-events-auto grid size-11 place-items-center rounded-full text-fg"
       >
         <ChevronLeftIcon className="back-button__chevron size-6" />
       </Link>

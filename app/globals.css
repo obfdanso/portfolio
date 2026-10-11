@@ -605,6 +605,7 @@ button,
 .nav-item {
   transition:
     background-color var(--duration-base) var(--ease-brand),
+    border-color var(--duration-base) var(--ease-brand),
     color var(--duration-base) var(--ease-brand),
     transform var(--duration-base) var(--ease-brand);
 }
@@ -1373,30 +1374,52 @@ button,
 }
 
 /* ---------------------------------------------------------------------------
-   Back button
+   Bubble
 
-   iPhone style: a back arrow in a round, frosted-glass bubble that lets the
-   gradient show through. Like iOS it shrinks slightly while pressed, and the
-   arrow nudges left on hover to say which way it goes. The blur covers only
-   the 44px bubble and nothing behind it moves, so it costs next to nothing.
+   The iPhone-style bubble shared by the back button, the sidebar links and
+   the Theme button: a faint fill, a hairline edge, a soft drop shadow and a
+   light catch along the top. --bubble-fill sets how solid it is; hover adds
+   a little. .bubble--glass frosts what is behind it, and is kept for the
+   back button, which floats over the gradient. On the sidebar the panel
+   behind is one even colour, so frosting would look the same while making
+   the GPU redo every bubble on each scroll frame.
 --------------------------------------------------------------------------- */
 
-.back-button {
-  background: color-mix(in oklch, var(--color-fg) 9%, transparent);
+.bubble {
+  background-color: color-mix(in oklch, var(--color-fg) var(--bubble-fill, 9%), transparent);
   border: 1px solid color-mix(in oklch, var(--color-fg) 16%, transparent);
   box-shadow:
-    0 6px 18px -8px color-mix(in oklch, var(--color-ground) 70%, transparent),
-    inset 0 1px 0 color-mix(in oklch, var(--color-fg) 14%, transparent);
+    0 6px 18px -8px oklch(0 0 0 / 0.35),
+    inset 0 1px 0 oklch(1 0 0 / 0.12);
+}
+
+.bubble:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--color-fg) calc(var(--bubble-fill, 9%) + 5%),
+    transparent
+  );
+  border-color: color-mix(in oklch, var(--color-fg) 24%, transparent);
+}
+
+/* The current page's link. On the desktop sidebar the gliding ring sits
+   exactly over this edge, so the two read as one. */
+.nav-item.bubble[aria-current="page"] {
+  border-color: color-mix(in oklch, var(--color-accent) 50%, transparent);
+}
+
+.bubble--glass {
   backdrop-filter: blur(14px) saturate(1.5);
+}
+
+/* Back button: a back arrow in a round glass bubble. Like iOS it shrinks
+   slightly while pressed, and the arrow nudges left on hover to say which
+   way it goes. */
+.back-button {
   transition:
     transform var(--duration-fast) var(--ease-brand),
     background-color var(--duration-base) var(--ease-brand),
     border-color var(--duration-base) var(--ease-brand);
-}
-
-.back-button:hover {
-  background-color: color-mix(in oklch, var(--color-fg) 14%, transparent);
-  border-color: color-mix(in oklch, var(--color-fg) 24%, transparent);
 }
 
 .back-button:active {
