@@ -30,14 +30,17 @@ export default function SkillsPage() {
         </p>
       </PageHeader>
 
-      <div className="container-page space-y-20 py-16">
-        {skills.map((section) => (
-          <SkillSection
-            key={section.id}
-            section={section}
-            evidence={resolveEvidence(section, projects)}
-          />
-        ))}
+      {/* The line down the left draws itself as the sections scroll by. */}
+      <div className="container-page py-16">
+        <div className="scroll-line space-y-20">
+          {skills.map((section) => (
+            <SkillSection
+              key={section.id}
+              section={section}
+              evidence={resolveEvidence(section, projects)}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
