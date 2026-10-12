@@ -1,8 +1,15 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { Mdx } from "@/components/mdx";
 
 describe("Mdx", () => {
+  // Mdx loads the MDX compiler on its first render, and in this test runner
+  // that load alone takes about 5s, the default limit for one test. Loading
+  // it is setup, not the behaviour under test: do it here, with room to spare.
+  beforeAll(async () => {
+    await Promise.all([import("next-mdx-remote/rsc"), import("remark-gfm")]);
+  }, 30_000);
+
   it("renders headings and paragraphs from markdown", async () => {
     const ui = await Mdx({ source: "## Context\n\nSome prose." });
     render(ui);
