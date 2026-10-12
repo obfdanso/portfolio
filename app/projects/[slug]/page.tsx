@@ -97,8 +97,10 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       )}
 
       <div className="container-page py-16">
-        {/* The line down the left draws itself as the write-up is read. */}
-        <div className="scroll-line">
+        {/* The resume's timeline: the line down the left draws itself as
+            the write-up is read, each section heading lights a dot on it,
+            and the text slides in beside it. */}
+        <div className="scroll-line scroll-text">
           <Mdx source={project.body} />
         </div>
       </div>

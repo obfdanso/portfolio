@@ -33,9 +33,9 @@ function Timeline({ number, title, entries }: { number: number; title: string; e
       <SectionHeading number={number} title={title} />
       <ol className="scroll-line mt-10 space-y-6">
         {entries.map((entry) => (
-          <li key={`${entry.org}-${entry.title}`} className="resume-entry">
-            <span aria-hidden="true" className="resume-entry__dot" />
-            <article className="resume-entry__card spotlight relative rounded-2xl border border-fg-muted/15 bg-surface/40 p-6">
+          <li key={`${entry.org}-${entry.title}`} className="scroll-entry">
+            <span aria-hidden="true" className="scroll-dot" />
+            <article className="scroll-slide spotlight relative rounded-2xl border border-fg-muted/15 bg-surface/40 p-6">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
                 <h3 className="text-step-1">
                   {entry.title} · {entry.org}
@@ -46,7 +46,7 @@ function Timeline({ number, title, entries }: { number: number; title: string; e
               </div>
               <ul className="mt-4 space-y-2 text-fg-muted">
                 {entry.points.map((point, i) => (
-                  <li key={point} className="resume-point" style={index(i)}>
+                  <li key={point} className="scroll-point" style={index(i)}>
                     {point}
                   </li>
                 ))}
