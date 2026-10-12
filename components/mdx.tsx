@@ -1,13 +1,8 @@
 import type { MDXComponents } from "mdx/types";
+import { rehypeSections } from "@/lib/rehype-sections";
 
 const components: MDXComponents = {
-  // A dot on the case study's scroll line for every section heading.
-  h2: ({ children, ...props }) => (
-    <h2 className="scroll-heading mt-14 text-step-2" {...props}>
-      <span aria-hidden="true" className="scroll-dot" />
-      <span className="scroll-slide">{children}</span>
-    </h2>
-  ),
+  h2: (props) => <h2 className="mt-14 text-step-2" {...props} />,
   h3: (props) => <h3 className="mt-10 text-step-1" {...props} />,
   p: (props) => <p className="mt-5 text-fg-muted" {...props} />,
   ul: (props) => <ul className="mt-5 list-disc space-y-2 pl-6 text-fg-muted" {...props} />,
@@ -48,6 +43,8 @@ export async function Mdx({ source }: { source: string }) {
     options: {
       mdxOptions: {
         remarkPlugins: [remarkGfm],
+        // Each section into a card beside the scroll line, as on the resume.
+        rehypePlugins: [rehypeSections],
       },
     },
   });

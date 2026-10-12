@@ -32,7 +32,7 @@ export default function SkillsPage() {
 
       {/* The line down the left draws itself as the sections scroll by. */}
       <div className="container-page py-16">
-        <div className="scroll-line space-y-20">
+        <div className="scroll-line space-y-6">
           {skills.map((section) => (
             <SkillSection
               key={section.id}

@@ -18,15 +18,15 @@ export function SkillSection({
   const titleId = `${section.id}-title`;
 
   return (
-    // An entry on the Skills page's scroll line: it slides in like a resume
-    // card, and its heading lights a dot on the line.
+    // An entry on the Skills page's scroll line, as on the resume: a soft
+    // card that slides in, with a dot on the line level with its heading.
     <section
       id={section.id}
       aria-labelledby={titleId}
-      className="scroll-entry scroll-mt-24 [--dot-top:calc(var(--text-step-3)_*_0.525_-_0.6rem)]"
+      className="scroll-entry scroll-mt-24 [--dot-top:calc(1.5rem_+_var(--text-step-3)_*_0.525_-_0.6rem)]"
     >
       <span aria-hidden="true" className="scroll-dot" />
-      <div className="scroll-slide">
+      <div className="scroll-slide spotlight relative rounded-2xl border border-fg-muted/15 bg-surface/40 p-6">
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <h2 id={titleId} className="text-step-3">
             {section.title}

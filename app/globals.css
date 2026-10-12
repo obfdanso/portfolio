@@ -1767,26 +1767,11 @@ button,
   }
 }
 
-/* The resume's entries, dots and points, on the other long pages: each
-   heading on the line gets a dot that lights up as it reaches the middle of
-   the screen, and the text slides in beside the line. Case studies mark
-   their section headings and slide each block in; the Skills page marks and
-   slides each skill. The dot sits level with the heading's first line.
-
-   The dot never rides along with what slides (.scroll-slide): it sits in
-   the entry or heading, which stays put, so it stays on the line. */
-.scroll-heading {
-  position: relative;
-  --dot-top: calc(0.525em - 0.6rem);
-}
-
-.scroll-heading > .scroll-slide {
-  display: inline-block;
-}
-
+/* Case study cards: like the resume's points, each paragraph or list in a
+   card slides in after the card itself. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .scroll-text > :not(.scroll-heading) {
+    .case-card > :not(h2) {
       animation: point-in linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 60%;
