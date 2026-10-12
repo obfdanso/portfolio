@@ -34,9 +34,9 @@ test.describe("scroll line", () => {
       return page.locator("main .scroll-dot").count();
     };
     await page.goto("/projects/medispace");
-    const caseHeadings = await page.locator("main .scroll-text > h2").count();
+    const caseHeadings = await page.locator("main .case-card > h2").count();
     expect(caseHeadings).toBeGreaterThan(3);
-    await expect(page.locator("main .scroll-text > h2 .scroll-dot")).toHaveCount(caseHeadings);
+    await expect(page.locator("main .scroll-entry > .scroll-dot")).toHaveCount(caseHeadings);
     await page.goto("/skills");
     await expect(page.locator("main section .scroll-dot")).toHaveCount(4);
     await page.goto("/resume");
@@ -77,7 +77,7 @@ test.describe("scroll line", () => {
       expect(Math.abs(box!.x + box!.width / 2 - lineX), route).toBeLessThan(1.5);
       // And level with the middle of its heading's first line.
       const offset = await dot.evaluate((el) => {
-        const heading = el.closest("h2") ?? el.parentElement!.querySelector("h2, h3")!;
+        const heading = el.parentElement!.querySelector("h2, h3")!;
         const top = heading.getBoundingClientRect().top;
         const middle = top + parseFloat(getComputedStyle(heading).lineHeight) / 2;
         const d = el.getBoundingClientRect();
