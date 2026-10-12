@@ -7,7 +7,7 @@ import { BackButton } from "@/components/back-button";
 import { JsonLd } from "@/components/json-ld";
 import { mono, sans } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
