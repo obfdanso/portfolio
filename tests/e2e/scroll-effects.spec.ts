@@ -14,7 +14,7 @@ test.describe("reading progress", () => {
     await expect.poll(() => bar.evaluate(scaleX)).toBeGreaterThan(0.95);
   });
 
-  test("only appears on case studies", async ({ page }) => {
+  test("only appears on the long reads: case studies and the resume", async ({ page }) => {
     for (const route of ["/", "/projects", "/skills", "/about"]) {
       await page.goto(route);
       await expect(page.locator(".reading-progress"), route).toHaveCount(0);

@@ -1626,3 +1626,161 @@ button,
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Resume timeline
+
+   The resume reads as a timeline rather than a document. A line runs down
+   the left of each section and draws itself as the section scrolls up the
+   screen; each entry's dot lights up in the accent as the entry reaches the
+   middle; each entry slides in as a card and its points follow one after
+   another; skill chips pop in one by one as their card arrives.
+
+   All scroll-driven CSS: no JavaScript, and simply still where the browser
+   can't drive it. Text only ever moves (translate and scale, never a fade),
+   so its contrast holds at every point of the scroll. Off under reduced
+   motion.
+--------------------------------------------------------------------------- */
+
+.resume-timeline {
+  position: relative;
+  padding-inline-start: 2.25rem;
+}
+
+/* The track, faint, and the line that draws down it. */
+.resume-timeline::before,
+.resume-timeline::after {
+  content: "";
+  position: absolute;
+  inset-block: 0.5rem;
+  inset-inline-start: 0.6rem;
+  width: 2px;
+  border-radius: 9999px;
+}
+
+.resume-timeline::before {
+  background: color-mix(in oklch, var(--color-fg-muted) 22%, transparent);
+}
+
+.resume-timeline::after {
+  background: linear-gradient(to bottom, var(--color-teal), var(--color-accent));
+  transform-origin: 50% 0;
+}
+
+.resume-entry {
+  position: relative;
+}
+
+.resume-entry__dot {
+  position: absolute;
+  top: 1.85rem;
+  inset-inline-start: -2.25rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-inline-start: 0.05rem;
+  border-radius: 9999px;
+  border: 2px solid var(--color-accent);
+  background: var(--color-ground);
+  box-shadow: 0 0 0 4px var(--color-ground);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .resume-timeline::after {
+      animation: timeline-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 75%;
+    }
+
+    .resume-entry {
+      animation: entry-slide linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    .resume-entry__dot {
+      animation: dot-light linear both;
+      animation-timeline: view();
+      animation-range: entry 100% cover 50%;
+    }
+
+    .resume-point {
+      animation: point-in linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 15%) entry calc(60% + var(--i, 0) * 15%);
+    }
+
+    .resume-skills {
+      view-timeline-name: --skills-card;
+    }
+
+    .resume-chip {
+      animation: chip-pop linear both;
+      animation-timeline: --skills-card;
+      animation-range: entry calc(10% + var(--i, 0) * 9%) entry calc(55% + var(--i, 0) * 9%);
+    }
+  }
+}
+
+@keyframes timeline-draw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes entry-slide {
+  from {
+    translate: 2.5rem 0;
+  }
+  to {
+    translate: none;
+  }
+}
+
+@keyframes dot-light {
+  from {
+    background: var(--color-ground);
+    scale: 0.6;
+  }
+  to {
+    background: var(--color-accent);
+    scale: 1;
+  }
+}
+
+@keyframes point-in {
+  from {
+    translate: 1.25rem 0;
+  }
+  to {
+    translate: none;
+  }
+}
+
+@keyframes chip-pop {
+  from {
+    translate: 0 0.6rem;
+    scale: 0.85;
+  }
+  to {
+    translate: none;
+    scale: none;
+  }
+}
+
+/* Where the line can't be drawn by scrolling, it is simply there, and the
+   dots are lit. */
+@supports not (animation-timeline: view()) {
+  .resume-entry__dot {
+    background: var(--color-accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resume-entry__dot {
+    background: var(--color-accent);
+  }
+}
