@@ -67,14 +67,16 @@ test.describe("skills page", () => {
     await expect(nav.locator('[aria-current="page"]')).toHaveCount(0);
   });
 
-  test("sections travel in without fading", async ({ page }) => {
+  test("sections slide in beside the line without fading", async ({ page }) => {
     // Regression: a fading reveal caught at the fold left its text half
     // transparent, and the contrast audit failed on whichever section sat there.
+    // Since 2026-10-12 they slide in like the resume's entries.
     await page.goto("/skills");
     const names = await page
-      .locator("main .reveal")
+      .locator("main .scroll-slide")
       .evaluateAll((els) => els.map((el) => getComputedStyle(el).animationName));
-    expect(new Set(names)).toEqual(new Set(["reveal-in-solid"]));
+    expect(names).toHaveLength(SECTIONS.length);
+    expect(new Set(names)).toEqual(new Set(["entry-slide"]));
   });
 
   for (const route of ["/", "/projects"]) {
@@ -178,7 +180,7 @@ test.describe("skills page, reduced motion", () => {
   test("every section is fully visible under reduced motion", async ({ page }) => {
     await page.goto("/skills");
     const opacities = await page
-      .locator("main .reveal")
+      .locator("main .scroll-entry")
       .evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity));
     expect(opacities).toHaveLength(SECTIONS.length);
     expect(new Set(opacities)).toEqual(new Set(["1"]));
@@ -198,10 +200,10 @@ test.describe("skills page, reduced motion", () => {
     // Opacity alone cannot catch this: the solid reveal never fades, so it
     // reads "1" whether or not the reduced-motion rule wins the cascade.
     await page.goto("/skills");
-    const states = await page.locator("main .reveal").evaluateAll((els) =>
+    const states = await page.locator("main .scroll-slide").evaluateAll((els) =>
       els.map((el) => {
         const style = getComputedStyle(el);
-        // The reveal moves with `translate`; no animation and no offset means
+        // The slide moves with `translate`; no animation and no offset means
         // the section is still. (`transform` may read as an identity matrix.)
         const offset = new DOMMatrix(style.transform);
         return `${style.animationName}|${style.translate}|${offset.e},${offset.f}`;

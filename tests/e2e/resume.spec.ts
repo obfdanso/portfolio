@@ -21,7 +21,7 @@ test.describe("resume timeline", () => {
 
   test("lists every entry as a card on the timeline", async ({ page }) => {
     await page.goto("/resume");
-    await expect(page.locator(".resume-entry")).toHaveCount(
+    await expect(page.locator(".scroll-entry")).toHaveCount(
       resume.experience.length + resume.education.length,
     );
     for (const entry of resume.experience) {
@@ -34,7 +34,7 @@ test.describe("resume timeline", () => {
   test("the line draws and the dots light up as the page scrolls", async ({ page }) => {
     await page.goto("/resume");
     const timeline = page.locator(".scroll-line").first();
-    const lastDot = page.locator(".scroll-line").first().locator(".resume-entry__dot").last();
+    const lastDot = page.locator(".scroll-line").first().locator(".scroll-dot").last();
     expect(await timeline.evaluate(lineProgress)).toBeLessThan(0.5);
     expect(await lastDot.evaluate(progressOf, "dot-light")).toBeLessThan(1);
 
@@ -74,14 +74,29 @@ test.describe("resume timeline", () => {
   });
 });
 
+test.describe("resume timeline, phone", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("cards sliding in never make the page scroll sideways", async ({ page }) => {
+    await page.goto("/resume");
+    for (const y of [0, 600, 1400]) {
+      await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), y);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(overflow, `at ${y}px`).toBe(0);
+    }
+  });
+});
+
 test.describe("resume timeline, reduced motion", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
   test("holds still, with the line drawn and the dots lit", async ({ page }) => {
     await page.goto("/resume");
-    await expect(page.locator(".resume-entry").first()).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".scroll-slide").first()).toHaveCSS("animation-name", "none");
     await expect(page.locator(".resume-chip").first()).toHaveCSS("animation-name", "none");
-    const dot = page.locator(".resume-entry__dot").last();
+    const dot = page.locator(".scroll-dot").last();
     expect(await dot.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(
       await page.evaluate(() => {
         const probe = document.createElement("div");

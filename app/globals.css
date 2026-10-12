@@ -1602,13 +1602,13 @@ button,
    motion.
 --------------------------------------------------------------------------- */
 
-.resume-entry {
+.scroll-entry {
   position: relative;
 }
 
-.resume-entry__dot {
+.scroll-dot {
   position: absolute;
-  top: 1.85rem;
+  top: var(--dot-top, 1.85rem);
   inset-inline-start: -2.25rem;
   width: 1.2rem;
   height: 1.2rem;
@@ -1621,19 +1621,19 @@ button,
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .resume-entry {
+    .scroll-slide {
       animation: entry-slide linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 70%;
     }
 
-    .resume-entry__dot {
+    .scroll-dot {
       animation: dot-light linear both;
       animation-timeline: view();
       animation-range: entry 100% cover 50%;
     }
 
-    .resume-point {
+    .scroll-point {
       animation: point-in linear both;
       animation-timeline: view();
       animation-range: entry calc(var(--i, 0) * 15%) entry calc(60% + var(--i, 0) * 15%);
@@ -1703,13 +1703,13 @@ button,
 /* Where the line can't be drawn by scrolling, it is simply there, and the
    dots are lit. */
 @supports not (animation-timeline: view()) {
-  .resume-entry__dot {
+  .scroll-dot {
     background: var(--color-accent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .resume-entry__dot {
+  .scroll-dot {
     background: var(--color-accent);
   }
 }
@@ -1731,6 +1731,10 @@ button,
 .scroll-line {
   position: relative;
   padding-inline-start: 2.25rem;
+  /* Content sliding in from the right must not widen the page: on a phone
+     it made the whole page scroll sideways. clip, not hidden, so this is no
+     scroll container and the scroll-driven animations inside still work. */
+  overflow-x: clip;
 }
 
 .scroll-line::before,
@@ -1759,6 +1763,33 @@ button,
       animation: line-draw linear both;
       animation-timeline: view();
       animation-range: entry 50% exit 0%;
+    }
+  }
+}
+
+/* The resume's entries, dots and points, on the other long pages: each
+   heading on the line gets a dot that lights up as it reaches the middle of
+   the screen, and the text slides in beside the line. Case studies mark
+   their section headings and slide each block in; the Skills page marks and
+   slides each skill. The dot sits level with the heading's first line.
+
+   The dot never rides along with what slides (.scroll-slide): it sits in
+   the entry or heading, which stays put, so it stays on the line. */
+.scroll-heading {
+  position: relative;
+  --dot-top: calc(0.525em - 0.6rem);
+}
+
+.scroll-heading > .scroll-slide {
+  display: inline-block;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-text > :not(.scroll-heading) {
+      animation: point-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
     }
   }
 }
