@@ -37,8 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SpotlightTracker />
           <div className="relative md:pl-[calc(var(--sidebar-width)+1.5rem)]">
             {/* Over the top-left corner of each page, a little clear of the
-                sidebar. */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-30 px-5 pt-4 md:pl-[calc(var(--sidebar-width)+2.5rem)]">
+                sidebar. On desktop its middle lines up with the sidebar's
+                "Danso": the sidebar's 0.75rem inset, 1px border and 1rem
+                padding, the name's 0.5rem padding and half its line (1.6 x
+                text-step-2), less half the 2.75rem button. */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-30 px-5 pt-4 md:pt-[calc(0.875rem_+_1px_+_var(--text-step-2)_*_0.8)] md:pl-[calc(var(--sidebar-width)+2.5rem)]">
               <BackButton />
             </div>
             <main id="main" tabIndex={-1}>

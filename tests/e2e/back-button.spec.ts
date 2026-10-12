@@ -72,6 +72,20 @@ test.describe("back button", () => {
     expect(style.backdrop).toContain("blur");
   });
 
+  test("lines up with the sidebar's name at every width", async ({ page }) => {
+    for (const width of [1440, 1024, 800]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/about");
+      const name = await page
+        .getByRole("complementary", { name: /main/i })
+        .getByRole("link", { name: "Danso", exact: true })
+        .boundingBox();
+      const button = await back(page).boundingBox();
+      const middle = (box: { y: number; height: number }) => box.y + box.height / 2;
+      expect(Math.abs(middle(button!) - middle(name!)), `${width}px`).toBeLessThan(1.5);
+    }
+  });
+
   test("sits at the left, clear of the sidebar", async ({ page }) => {
     await page.goto("/about");
     const sidebar = await page.getByRole("complementary", { name: /main/i }).boundingBox();
