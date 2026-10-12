@@ -44,6 +44,34 @@ test.describe("magnetic buttons", () => {
     await expect(page).toHaveURL(/\/projects$/);
   });
 
+  test("the About page's buttons match the home hero's and lean too", async ({ page }) => {
+    await page.goto("/");
+    const home = await Promise.all(
+      ["See the work", "Get in touch"].map((name) =>
+        page
+          .getByRole("main")
+          .getByRole("link", { name, exact: true })
+          .first()
+          .getAttribute("class"),
+      ),
+    );
+    await page.goto("/about");
+    const about = page.getByRole("main");
+    for (const [i, name] of ["See the work", "Get in touch"].entries()) {
+      const link = about.getByRole("link", { name, exact: true });
+      await expect(link).toHaveAttribute("class", home[i]!);
+    }
+    await settled(page);
+    const cta = about.getByRole("link", { name: "See the work", exact: true });
+    // Below the fold on About: bring it on screen before pointing at it.
+    await cta.scrollIntoViewIfNeeded();
+    const box = await cta.boundingBox();
+    await page.mouse.move(box!.x + box!.width - 20, box!.y + box!.height / 2 + 8, { steps: 4 });
+    await expect
+      .poll(async () => parseFloat((await cta.evaluate(offset)).split(" ")[0]))
+      .toBeGreaterThan(2);
+  });
+
   test("covers the other calls to action", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("link", { name: "Get in touch" }).first()).toHaveClass(/magnetic/);

@@ -40,18 +40,20 @@ export default function AboutPage() {
             </Link>
             .
           </p>
+          {/* The home hero's pair, exactly: same look, same order, and the
+              same magnetic lean toward the mouse. */}
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/contact"
-              className="btn btn-solid rounded-full bg-accent px-5 py-2.5 text-step-xs font-medium text-ground"
-            >
-              Get in touch
-            </Link>
-            <Link
               href="/projects"
-              className="btn btn-outline rounded-full border border-fg-muted/30 px-5 py-2.5 text-step-xs"
+              className="btn btn-solid magnetic rounded-full bg-fg px-6 py-3 text-step-xs font-medium text-ground"
             >
               See the work
+            </Link>
+            <Link
+              href="/contact"
+              className="btn btn-outline magnetic rounded-full border border-fg-muted/30 px-6 py-3 text-step-xs"
+            >
+              Get in touch
             </Link>
           </div>
         </div>
