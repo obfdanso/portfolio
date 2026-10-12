@@ -7,10 +7,10 @@ import { MeshGradient } from "@/components/ui/mesh-gradient";
  * All motion is CSS (two expanding rings over the gradient), so it costs no
  * JavaScript and stops under prefers-reduced-motion.
  */
-export function RecordingSoon({ hue = 0, repoUrl }: { hue?: number; repoUrl: string }) {
+export function RecordingSoon({ repoUrl }: { repoUrl: string }) {
   return (
     <div className="mesh-host relative grid aspect-video w-full place-items-center overflow-hidden rounded-xl border border-fg-muted/15 bg-surface/40">
-      <MeshGradient hue={hue} />
+      <MeshGradient />
 
       <div className="flex flex-col items-center px-6 text-center">
         <span aria-hidden="true" className="recording-soon__icon">

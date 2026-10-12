@@ -39,7 +39,7 @@ test.describe("page headers", () => {
       const about = await header.boundingBox();
       expect(Math.abs(about!.height - resume!.height), `${viewport.width}px`).toBeLessThan(24);
       // The site's own teal and emerald: no hue shift.
-      await expect(header.locator(".mesh")).toHaveCSS("filter", "hue-rotate(0deg)");
+      await expect(header.locator(".mesh")).toHaveCSS("filter", "none");
     }
   });
 
@@ -51,7 +51,7 @@ test.describe("page headers", () => {
       const header = page.locator("main .mesh-host").first();
       const box = await header.boundingBox();
       expect(Math.abs(box!.height - resume!.height), route).toBeLessThan(24);
-      await expect(header.locator(".mesh"), route).toHaveCSS("filter", "hue-rotate(0deg)");
+      await expect(header.locator(".mesh"), route).toHaveCSS("filter", "none");
     }
     // Case studies carry more in their header, so they may run taller.
     for (const slug of ["smartsocket", "intercli", "medispace"]) {
