@@ -4,7 +4,7 @@ The portfolio of Danso Daniel Kwaku Arnan, a front-end developer based in Accra.
 It presents his front-end projects, each with a written case study, plus a
 skills page, an about page, a resume and a contact form.
 
-**Live site:** [danso.dev](https://danso.dev)
+**Live site:** [www.danso.dev](https://www.danso.dev)
 
 ## How it is built
 
@@ -103,12 +103,14 @@ The site is built for Vercel. For the first deploy:
 
 1. Import the GitHub repository into Vercel.
 2. Set `RESEND_API_KEY` and `CONTACT_TO_EMAIL` for the Production environment.
-3. Add `danso.dev` and `www.danso.dev` as domains, with `www` redirecting to
-   `danso.dev`. Point the name.com DNS records at Vercel as it instructs.
+3. Add `danso.dev` and `www.danso.dev` as domains, with `danso.dev`
+   redirecting to `www.danso.dev`, the site's main address (`SITE.url` in
+   `lib/site.ts` must match it). Point the name.com DNS records at Vercel as it
+   instructs.
 4. Verify `danso.dev` as a sending domain in Resend, by adding the DNS records
    Resend lists at name.com.
 5. After the deploy: send a test message through the contact form, and check
-   that the live site returns the security headers (`curl -I https://danso.dev`).
+   that the live site returns the security headers (`curl -I https://www.danso.dev`).
 
 ## Updating the content
 
