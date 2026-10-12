@@ -11,7 +11,6 @@ const valid = {
   stack: ["TypeScript", "React"],
   featured: true,
   order: 1,
-  accentHue: 0,
   category: "frontend",
   demo: {
     kind: "live",
@@ -123,12 +122,6 @@ describe("projectFrontmatterSchema", () => {
     });
     expect(result.success).toBe(false);
   });
-
-  it("rejects an accentHue outside 0-360", () => {
-    expect(projectFrontmatterSchema.safeParse({ ...valid, accentHue: 400 }).success).toBe(false);
-    expect(projectFrontmatterSchema.safeParse({ ...valid, accentHue: -1 }).success).toBe(false);
-  });
-
   it("rejects a non-url repo", () => {
     const result = projectFrontmatterSchema.safeParse({
       ...valid,

@@ -21,7 +21,7 @@ describe("loadProjects", () => {
   });
 
   it("names the offending field in the error", () => {
-    expect(() => loadProjects(FIXTURES)).toThrowError(/accentHue/);
+    expect(() => loadProjects(FIXTURES)).toThrowError(/order/);
   });
 
   it("ignores non-mdx files", () => {

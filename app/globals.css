@@ -121,7 +121,6 @@ button,
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  filter: hue-rotate(var(--mesh-hue, 0deg));
   opacity: var(--mesh-opacity);
   contain: strict;
   /* The structural wash. Dark at top, saturated toward the bottom. */
@@ -321,12 +320,11 @@ button,
   box-shadow: 0 0 0 1px color-mix(in oklch, var(--color-emerald) 25%, transparent);
 }
 
-/* The hue shift animates `filter` itself, not the --mesh-hue custom
-   property behind it. A custom property animates on the main thread, so
-   every scroll frame restyled the gradient; `filter` can run on the
-   compositor. Measured on an Intel UHD 620: occasional 67-100ms frames while
-   scrolling the home page, none after. It starts from 0deg, the home hero's
-   own hue, the only gradient that is scroll-linked. */
+/* The home hero's hue shift animates `filter` directly. It used to animate
+   a custom property, which runs on the main thread and restyled the gradient
+   on every scroll frame; `filter` can run on the compositor. Measured on an
+   Intel UHD 620: occasional 67-100ms frames while scrolling the home page
+   before, none after. The other gradients carry no filter at all. */
 @supports (animation-timeline: scroll()) {
   .mesh--scroll-linked {
     animation: mesh-hue-shift linear both;

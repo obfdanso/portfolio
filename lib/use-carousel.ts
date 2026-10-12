@@ -11,7 +11,7 @@ import {
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 /** How long each slide shows before the next slides in, in milliseconds. */
-export const SLIDE_INTERVAL = 5000;
+const SLIDE_INTERVAL = 5000;
 
 /**
  * The behaviour behind both project carousels, after the entertainment row on

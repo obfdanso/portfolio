@@ -3,7 +3,7 @@
  * returns to, the way an iPhone's does. Kept in sessionStorage: it survives a
  * reload and is forgotten with the tab.
  */
-export type TrailEntry = { path: string; title: string };
+type TrailEntry = { path: string; title: string };
 
 const KEY = "nav-trail";
 const LIMIT = 50;

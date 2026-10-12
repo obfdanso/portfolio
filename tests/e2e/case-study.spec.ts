@@ -17,7 +17,7 @@ test("every case study header uses the site's own colours", async ({ page }) => 
   // Danso's call, 2026-10-11: one size and one palette on every page.
   for (const slug of SLUGS) {
     await page.goto(`/projects/${slug}`);
-    await expect(page.locator("main .mesh").first(), slug).toHaveCSS("filter", "hue-rotate(0deg)");
+    await expect(page.locator("main .mesh").first(), slug).toHaveCSS("filter", "none");
   }
 });
 
