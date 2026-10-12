@@ -12,7 +12,7 @@ const progressOf = (el: Element, name: string) => {
 const lineProgress = (el: Element) => {
   const animation = el
     .getAnimations({ subtree: true })
-    .find((a) => (a as CSSAnimation).animationName === "timeline-draw");
+    .find((a) => (a as CSSAnimation).animationName === "line-draw");
   return animation?.effect?.getComputedTiming().progress ?? -1;
 };
 
@@ -33,13 +33,13 @@ test.describe("resume timeline", () => {
 
   test("the line draws and the dots light up as the page scrolls", async ({ page }) => {
     await page.goto("/resume");
-    const timeline = page.locator(".resume-timeline").first();
-    const lastDot = page.locator(".resume-timeline").first().locator(".resume-entry__dot").last();
+    const timeline = page.locator(".scroll-line").first();
+    const lastDot = page.locator(".scroll-line").first().locator(".resume-entry__dot").last();
     expect(await timeline.evaluate(lineProgress)).toBeLessThan(0.5);
     expect(await lastDot.evaluate(progressOf, "dot-light")).toBeLessThan(1);
 
     await page
-      .locator(".resume-timeline")
+      .locator(".scroll-line")
       .first()
       .evaluate((el) => el.scrollIntoView({ block: "end", behavior: "instant" }));
     await page.evaluate(() => window.scrollBy({ top: 300, behavior: "instant" }));
@@ -60,11 +60,10 @@ test.describe("resume timeline", () => {
     expect(fades).toBe(false);
   });
 
-  test("shows the skills as chips, and how far through the page you are", async ({ page }) => {
+  test("shows the skills as chips", async ({ page }) => {
     await page.goto("/resume");
     const chips = page.locator(".resume-chip");
     await expect(chips).toHaveCount(resume.skills.flatMap((group) => group.items).length);
-    await expect(page.locator(".reading-progress")).toHaveCSS("animation-name", "reading-progress");
   });
 
   test("the download button leans toward the mouse like the other calls to action", async ({

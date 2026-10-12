@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { resume, type Entry } from "@/content/resume";
 import { PageHeader } from "@/components/page-header";
-import { ReadingProgress } from "@/components/reading-progress";
 import { SectionNumber } from "@/components/ui/section-number";
 
 export const metadata: Metadata = {
@@ -32,7 +31,7 @@ function Timeline({ number, title, entries }: { number: number; title: string; e
   return (
     <section className="mt-20">
       <SectionHeading number={number} title={title} />
-      <ol className="resume-timeline mt-10 space-y-6">
+      <ol className="scroll-line mt-10 space-y-6">
         {entries.map((entry) => (
           <li key={`${entry.org}-${entry.title}`} className="resume-entry">
             <span aria-hidden="true" className="resume-entry__dot" />
@@ -63,7 +62,6 @@ function Timeline({ number, title, entries }: { number: number; title: string; e
 export default function ResumePage() {
   return (
     <>
-      <ReadingProgress />
       <PageHeader>
         <h1 className="enter enter--solid text-step-4">Resume</h1>
         <p className="mt-5 max-w-2xl text-fg-muted">{resume.summary}</p>

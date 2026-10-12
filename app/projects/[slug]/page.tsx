@@ -6,7 +6,6 @@ import { Mdx } from "@/components/mdx";
 import { RecordingSoon } from "@/components/recording-soon";
 import { ProjectShowcase } from "@/components/project-showcase";
 import { projectTransitionName } from "@/lib/transitions";
-import { ReadingProgress } from "@/components/reading-progress";
 import { PageHeader } from "@/components/page-header";
 
 export function generateStaticParams() {
@@ -35,7 +34,6 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <article>
-      <ReadingProgress />
       <PageHeader as="header">
         <p className="enter text-step-xs text-fg-muted">
           {project.timeframe} · {project.contribution}
@@ -99,7 +97,10 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       )}
 
       <div className="container-page py-16">
-        <Mdx source={project.body} />
+        {/* The line down the left draws itself as the write-up is read. */}
+        <div className="scroll-line">
+          <Mdx source={project.body} />
+        </div>
       </div>
     </article>
   );
