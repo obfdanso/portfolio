@@ -1,5 +1,3 @@
-import { MDXRemote } from "next-mdx-remote/rsc";
-import remarkGfm from "remark-gfm";
 import type { MDXComponents } from "mdx/types";
 
 const components: MDXComponents = {
@@ -26,7 +24,18 @@ const components: MDXComponents = {
 // awaiting the result — rather than returning <MDXRemote /> unresolved — means
 // this component hands back plain resolved JSX, which is what makes it
 // renderable in unit tests as well as in the RSC tree.
+//
+// The MDX compiler is loaded here, when a case study renders, not at the top
+// of the file. The case study page imports this file, and the dev server
+// loads that page just to run generateStaticParams; a top-level import made
+// it load the whole compiler for that too, about 0.4s on every first case
+// study after starting `next dev`. Production prerenders every case study,
+// so visitors never pay either cost.
 export async function Mdx({ source }: { source: string }) {
+  const [{ MDXRemote }, { default: remarkGfm }] = await Promise.all([
+    import("next-mdx-remote/rsc"),
+    import("remark-gfm"),
+  ]);
   return MDXRemote({
     source,
     components,
