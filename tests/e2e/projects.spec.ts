@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { getFrontendProjects } from "@/lib/content";
+import { waitForHydration } from "./helpers/hydration";
 
 // Read from the content folder by category, so adding a project needs no test
 // edits. intercli is "other" and appears only on the skills page.
@@ -78,6 +79,7 @@ test.describe("project index", () => {
 
   test("the arrow keys step through the cards", async ({ page }) => {
     await page.goto("/projects");
+    await waitForHydration(page);
 
     const firstCardLink = page.getByRole("article").nth(0).getByRole("link").first();
     await firstCardLink.focus();
@@ -103,6 +105,7 @@ test.describe("project index", () => {
 
   test("the arrow keys hold at the ends", async ({ page }) => {
     await page.goto("/projects");
+    await waitForHydration(page);
 
     const firstCardLink = page.getByRole("article").nth(0).getByRole("link").first();
     await firstCardLink.focus();
