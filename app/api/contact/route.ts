@@ -12,13 +12,6 @@ function requiredEnv(name: string): string {
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 
-  if (!checkRateLimit(ip)) {
-    return NextResponse.json(
-      { error: "Too many messages. Please try again later, or email me directly." },
-      { status: 429 },
-    );
-  }
-
   const contentType = request.headers.get("content-type") ?? "";
   const isJson = contentType.includes("application/json");
 
@@ -40,17 +33,30 @@ export async function POST(request: Request) {
     );
   }
 
+  // Counted only once a message is valid: someone fixing a typo in their
+  // email must not use up the hour's three messages without sending any.
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json(
+      { error: "Too many messages. Please try again later, or email me directly." },
+      { status: 429 },
+    );
+  }
+
   const { name, email, message } = parsed.data;
 
   try {
     const resend = new Resend(requiredEnv("RESEND_API_KEY"));
-    await resend.emails.send({
+    // Resend reports a rejected email (a bad key, an address it won't send
+    // to) in the result rather than by throwing. Unchecked, the visitor was
+    // told the message was sent when it never left.
+    const { error } = await resend.emails.send({
       from: "portfolio@danso.dev",
       to: requiredEnv("CONTACT_TO_EMAIL"),
       replyTo: email,
       subject: `Portfolio message from ${name}`,
       text: `From: ${name} <${email}>\n\n${message}`,
     });
+    if (error) throw new Error(`Resend rejected the message: ${error.message}`);
   } catch {
     return NextResponse.json(
       { error: "Could not send the message. Please email me directly." },
