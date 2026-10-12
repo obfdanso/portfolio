@@ -54,7 +54,10 @@ describe("ProjectShowcase", () => {
     );
     const video = container.querySelector("video");
     expect(video?.getAttribute("preload")).toBe("none");
-    expect(video?.getAttribute("poster")).toBe("/projects/pos-poster.png");
+    // Served through Next's image optimiser, like every other image.
+    expect(video?.getAttribute("poster")).toMatch(
+      /^\/_next\/image\?url=%2Fprojects%2Fpos-poster\.png&w=\d+&q=75$/,
+    );
     expect(video?.getAttribute("aria-label")).toBe("POS walkthrough");
     expect(container.querySelector("source")?.getAttribute("src")).toBe("/projects/pos-demo.mp4");
   });
