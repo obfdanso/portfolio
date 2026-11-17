@@ -135,6 +135,23 @@ test("confirms a message sent without javascript", async ({ browser }) => {
   await context.close();
 });
 
+test("sends the honeypot's real value, so the api can catch a bot", async ({ page }) => {
+  let posted: { website?: string } = {};
+  await page.route("**/api/contact", (route) => {
+    posted = route.request().postDataJSON();
+    return route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' });
+  });
+  await page.goto("/contact");
+  await fill(page);
+  // What a bot does: fill every field it finds, hidden or not.
+  await page.locator('input[name="website"]').evaluate((input: HTMLInputElement) => {
+    input.value = "spam.example";
+  });
+  await page.getByRole("button", { name: /send message/i }).click();
+  await expect(page.getByRole("status")).toContainText(/message sent/i);
+  expect(posted.website).toBe("spam.example");
+});
+
 test("hides the honeypot from assistive technology", async ({ page }) => {
   await page.goto("/contact");
   const honeypot = page.locator('input[name="website"]');

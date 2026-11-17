@@ -17,6 +17,11 @@ export function ContactForm() {
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    // The honeypot is not validated here, only passed on: the API decides
+    // what a filled one means. Sending "" whatever it held let a bot that
+    // drives a real browser straight through.
+    const website = String(new FormData(event.currentTarget).get("website") ?? "");
+
     const parsed = contactSchema.safeParse({ ...values, website: "" });
     if (!parsed.success) {
       setStatus({ kind: "error", message: parsed.error.issues[0]?.message ?? "Invalid input." });
@@ -29,7 +34,7 @@ export function ContactForm() {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify({ ...parsed.data, website }),
       });
 
       if (!response.ok) {

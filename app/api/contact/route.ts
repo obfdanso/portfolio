@@ -57,6 +57,21 @@ export async function POST(request: Request) {
   } catch {
     return failure(isJson, "Invalid submission.", 400);
   }
+
+  // What a real sender gets once the email is away, and what a bot gets
+  // without one being sent.
+  const success = () =>
+    isJson
+      ? NextResponse.json({ ok: true })
+      : // The browser follows this to a page that says the message was sent.
+        NextResponse.redirect(new URL("/contact/sent", request.url), 303);
+
+  // The honeypot, before anything else: people never see that field, so a
+  // value in it means a bot. It is told the message was sent, because an
+  // error would say which field gave it away.
+  const honeypot = (raw as { website?: unknown } | null)?.website;
+  if (typeof honeypot === "string" && honeypot !== "") return success();
+
   const parsed = contactSchema.safeParse(raw);
 
   if (!parsed.success) {
@@ -88,11 +103,5 @@ export async function POST(request: Request) {
     return failure(isJson, "Could not send the message. Please email me directly.", 502);
   }
 
-  if (!isJson) {
-    // A form posted without JavaScript: the browser follows this to a page
-    // that says the message was sent.
-    return NextResponse.redirect(new URL("/contact/sent", request.url), 303);
-  }
-
-  return NextResponse.json({ ok: true });
+  return success();
 }

@@ -83,6 +83,18 @@ describe("POST /api/contact, sending", () => {
     expect(await response.text()).toContain("Could not send the message");
   });
 
+  it("sends nothing for a filled honeypot, and lets the bot think it worked", async () => {
+    // An error would tell a bot which field gave it away.
+    const response = await POST(post({ ...VALID, website: "spam.example" }));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+    expect(send).not.toHaveBeenCalled();
+
+    const form = await POST(postForm({ ...VALID, website: "spam.example" }));
+    expect(form.status).toBe(303);
+    expect(send).not.toHaveBeenCalled();
+  });
+
   it("never claims success when Resend rejects the message", async () => {
     // Resend reports rejections in the result instead of throwing.
     send.mockResolvedValue({
