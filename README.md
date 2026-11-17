@@ -14,7 +14,7 @@ skills page, an about page, a resume and a contact form.
   time. Bad frontmatter fails the build and names the file and the field, so a
   broken project card can never ship.
 - **No dead links by construction.** Each project's `demo` field is a
-  discriminated union (`live`, `repo-only`, `recording`, `recording-pending`).
+  discriminated union (`live`, `repo-only`, `recording-pending`).
   A project without a live URL has no `url` field, so a "Live site" button with
   nothing behind it is a type error rather than something to remember.
 - **CSS-only motion.** The gradient, page entrances, hover and press feedback,
@@ -131,7 +131,8 @@ what they read on the page.
 
 **Add bitby's screen recording.** The steps are in a comment at the top of
 `content/projects/bitby.mdx`: save the video and a still frame under
-`public/projects/`, then change the `demo` block. The tests check that both
+`public/projects/`, add a `showcase` block to the frontmatter, and change
+`demo.kind` to `repo-only`. The tests check that both
 files exist, so a missing file fails loudly instead of shipping a player that
 cannot play.
 
