@@ -17,6 +17,25 @@ describe("contactSchema", () => {
     expect(contactSchema.safeParse({ ...valid, name: "" }).success).toBe(false);
   });
 
+  it("rejects a name that is only spaces", () => {
+    expect(contactSchema.safeParse({ ...valid, name: "   " }).success).toBe(false);
+  });
+
+  it("rejects a message that is only spaces and line breaks", () => {
+    const blank = " \n".repeat(10);
+    expect(contactSchema.safeParse({ ...valid, message: blank }).success).toBe(false);
+  });
+
+  it("drops the spaces around a name and a message", () => {
+    const parsed = contactSchema.parse({
+      ...valid,
+      name: "  Ama ",
+      message: `\n${valid.message}  `,
+    });
+    expect(parsed.name).toBe("Ama");
+    expect(parsed.message).toBe(valid.message);
+  });
+
   it("rejects a message under ten characters", () => {
     expect(contactSchema.safeParse({ ...valid, message: "hi" }).success).toBe(false);
   });

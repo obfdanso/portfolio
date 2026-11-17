@@ -7,10 +7,13 @@ import { z } from "zod";
 z.config({ jitless: true });
 
 export const contactSchema = z.object({
-  name: z.string().min(1, "Please enter your name").max(120),
+  // Trimmed before the length checks: a name of one space, or a message of
+  // ten, used to pass and arrive as an empty email.
+  name: z.string().trim().min(1, "Please enter your name").max(120),
   email: z.email("Please enter a valid email address"),
   message: z
     .string()
+    .trim()
     .min(10, "Please write at least ten characters")
     .max(2000, "Please keep it under 2000 characters"),
   // Honeypot: real people never see this field, so any value means a bot.
