@@ -65,7 +65,9 @@ export async function POST(request: Request) {
   }
 
   if (!isJson) {
-    return NextResponse.redirect(new URL("/contact?sent=1", request.url), 303);
+    // A form posted without JavaScript: the browser follows this to a page
+    // that says the message was sent.
+    return NextResponse.redirect(new URL("/contact/sent", request.url), 303);
   }
 
   return NextResponse.json({ ok: true });

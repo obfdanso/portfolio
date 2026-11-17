@@ -22,6 +22,15 @@ function post(body: unknown, ip = "1.2.3.4") {
   });
 }
 
+/** The body a browser sends when the form posts without JavaScript. */
+function postForm(fields: Record<string, string>, ip = "1.2.3.4") {
+  return new Request("http://localhost/api/contact", {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded", "x-forwarded-for": ip },
+    body: new URLSearchParams(fields).toString(),
+  });
+}
+
 describe("POST /api/contact, sending", () => {
   beforeEach(() => {
     __resetRateLimit();
@@ -40,6 +49,15 @@ describe("POST /api/contact, sending", () => {
     expect(send).toHaveBeenCalledWith(
       expect.objectContaining({ to: "inbox@example.com", replyTo: VALID.email }),
     );
+  });
+
+  it("sends a form post on to a page that confirms the message was sent", async () => {
+    // Without JavaScript the browser follows this redirect, so the page it
+    // lands on is the only confirmation the visitor gets.
+    send.mockResolvedValue({ data: { id: "1" }, error: null, headers: null });
+    const response = await POST(postForm({ ...VALID, website: "" }));
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("http://localhost/contact/sent");
   });
 
   it("never claims success when Resend rejects the message", async () => {

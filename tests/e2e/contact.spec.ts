@@ -123,6 +123,18 @@ test("posts to the api without javascript", async ({ browser }) => {
   await context.close();
 });
 
+test("confirms a message sent without javascript", async ({ browser }) => {
+  // Where the API sends a form post once the email is away.
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto("/contact/sent");
+  await expect(page.getByRole("heading", { level: 1, name: "Message sent" })).toBeVisible();
+  await expect(page.getByText(/I will reply to the address you gave/i)).toBeVisible();
+  // A confirmation is not a page to find in a search.
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await context.close();
+});
+
 test("hides the honeypot from assistive technology", async ({ page }) => {
   await page.goto("/contact");
   const honeypot = page.locator('input[name="website"]');
