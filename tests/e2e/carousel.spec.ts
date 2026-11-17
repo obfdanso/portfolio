@@ -91,4 +91,11 @@ test.describe("project carousel, reduced motion", () => {
     await page.waitForTimeout(6_500);
     await expect(currentDot(page)).toHaveAttribute("aria-label", first!);
   });
+
+  test("offers no pause button for a slideshow that never plays", async ({ page }) => {
+    // It used to say "Pause the slideshow" and do nothing either way.
+    await showCarousel(page);
+    await expect(currentDot(page)).toBeVisible();
+    await expect(carousel(page).getByRole("button", { name: /the slideshow/ })).toHaveCount(0);
+  });
 });

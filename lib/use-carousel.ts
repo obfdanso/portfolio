@@ -31,7 +31,10 @@ export function useCarousel(count: number, resetKey?: unknown) {
   const [focused, setFocused] = useState(false);
   const [visible, setVisible] = useState(false);
   const reduced = usePrefersReducedMotion();
-  const running = playing && !hovered && !focused && visible && !reduced && count > 1;
+  // Whether it could ever advance on its own. Under reduced motion it never
+  // does, so there is nothing for a pause button to pause.
+  const canPlay = !reduced && count > 1;
+  const running = canPlay && playing && !hovered && !focused && visible;
   // Clamped: after a filter there may be fewer slides than before.
   const current = Math.min(nearest, Math.max(count - 1, 0));
 
@@ -116,5 +119,5 @@ export function useCarousel(count: number, resetKey?: unknown) {
     },
   };
 
-  return { trackRef, current, goTo, running, playing, setPlaying, rootProps };
+  return { trackRef, current, goTo, running, playing, setPlaying, canPlay, rootProps };
 }

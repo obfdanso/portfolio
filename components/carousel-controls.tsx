@@ -4,18 +4,23 @@ import { PauseIcon, PlayIcon } from "@/components/icons";
 
 /**
  * The dots and the pause button under a project carousel. The current dot
- * stretches into a pill that fills while its slide is shown.
+ * stretches into a pill that fills while its slide is shown. The pause
+ * button is left out when the slideshow can never play (reduced motion): a
+ * button that says "Pause" over something still, and does nothing, is worse
+ * than none.
  */
 export function CarouselControls({
   labels,
   current,
   playing,
+  canPlay,
   onSelect,
   onTogglePlay,
 }: {
   labels: string[];
   current: number;
   playing: boolean;
+  canPlay: boolean;
   onSelect: (index: number) => void;
   onTogglePlay: () => void;
 }) {
@@ -41,14 +46,16 @@ export function CarouselControls({
           </button>
         ))}
       </div>
-      <button
-        type="button"
-        onClick={onTogglePlay}
-        aria-label={playing ? "Pause the slideshow" : "Play the slideshow"}
-        className="bubble grid size-11 place-items-center rounded-full text-fg"
-      >
-        {playing ? <PauseIcon className="size-4" /> : <PlayIcon className="size-4" />}
-      </button>
+      {canPlay && (
+        <button
+          type="button"
+          onClick={onTogglePlay}
+          aria-label={playing ? "Pause the slideshow" : "Play the slideshow"}
+          className="bubble grid size-11 place-items-center rounded-full text-fg"
+        >
+          {playing ? <PauseIcon className="size-4" /> : <PlayIcon className="size-4" />}
+        </button>
+      )}
     </div>
   );
 }

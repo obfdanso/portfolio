@@ -41,7 +41,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
 
   // The home page carousel's behaviour: it advances on its own, holds under
   // the pointer or focus, and starts over from the first card on a new filter.
-  const { trackRef, current, goTo, running, playing, setPlaying, rootProps } = useCarousel(
+  const { trackRef, current, goTo, running, playing, setPlaying, canPlay, rootProps } = useCarousel(
     visible.length,
     filter,
   );
@@ -166,6 +166,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             labels={visible.map((project) => project.title)}
             current={current}
             playing={playing}
+            canPlay={canPlay}
             onSelect={goTo}
             onTogglePlay={() => setPlaying((value) => !value)}
           />

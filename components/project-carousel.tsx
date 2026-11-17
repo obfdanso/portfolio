@@ -17,7 +17,7 @@ import { cn } from "@/lib/cn";
  * page.
  */
 export function ProjectCarousel({ projects }: { projects: Project[] }) {
-  const { trackRef, current, goTo, running, playing, setPlaying, rootProps } = useCarousel(
+  const { trackRef, current, goTo, running, playing, setPlaying, canPlay, rootProps } = useCarousel(
     projects.length,
   );
 
@@ -49,6 +49,7 @@ export function ProjectCarousel({ projects }: { projects: Project[] }) {
         labels={projects.map((project) => project.title)}
         current={current}
         playing={playing}
+        canPlay={canPlay}
         onSelect={goTo}
         onTogglePlay={() => setPlaying((value) => !value)}
       />
