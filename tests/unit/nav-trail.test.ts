@@ -10,8 +10,16 @@ describe("step", () => {
     expect(step([home], about)).toEqual([home, about]);
   });
 
-  it("takes the current page off when you go back to the one before", () => {
-    expect(step([home, about, resume], about)).toEqual([home, about]);
+  it("takes the current page off when history goes back to the one before", () => {
+    expect(step([home, about, resume], about, true)).toEqual([home, about]);
+  });
+
+  it("puts the page before on top when a link, not history, returns to it", () => {
+    expect(step([home, about, resume], about)).toEqual([home, about, resume, about]);
+  });
+
+  it("puts a page on top when history goes forward to it", () => {
+    expect(step([home, about], resume, true)).toEqual([home, about, resume]);
   });
 
   it("changes nothing on a reload", () => {

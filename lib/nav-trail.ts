@@ -10,12 +10,17 @@ const LIMIT = 50;
 
 /**
  * The trail after arriving at `entry`. Arriving where you just were (a
- * reload) changes nothing; arriving at the page before it is a step back, so
- * the current page comes off; anywhere else goes on top.
+ * reload) changes nothing; going back through history to the page before is
+ * a step back, so the current page comes off; anything else goes on top.
+ *
+ * `traversed` says the browser moved through its history (back or forward)
+ * rather than following a link. The path alone cannot tell: a link to the
+ * page before adds a history entry, and treating it as a step back left the
+ * button naming one page while history's back went to another.
  */
-export function step(trail: TrailEntry[], entry: TrailEntry): TrailEntry[] {
+export function step(trail: TrailEntry[], entry: TrailEntry, traversed = false): TrailEntry[] {
   if (trail.at(-1)?.path === entry.path) return trail;
-  if (trail.at(-2)?.path === entry.path) return trail.slice(0, -1);
+  if (traversed && trail.at(-2)?.path === entry.path) return trail.slice(0, -1);
   return [...trail, entry].slice(-LIMIT);
 }
 
@@ -73,13 +78,25 @@ function arrivedFromElsewhere(): boolean {
 
 let firstOfPageLoad = true;
 
+// The path the browser last reached by moving through its history. popstate
+// fires for back and forward only, before the new page renders and records
+// itself, so a page recorded at this path got there by history, not a link.
+let traversedTo: string | null = null;
+if (typeof window !== "undefined") {
+  window.addEventListener("popstate", () => {
+    traversedTo = window.location.pathname;
+  });
+}
+
 export function record(entry: TrailEntry): void {
   let start = load();
   if (firstOfPageLoad) {
     firstOfPageLoad = false;
     if (arrivedFromElsewhere()) start = [];
   }
-  const trail = step(start, entry);
+  const traversed = traversedTo === entry.path;
+  traversedTo = null;
+  const trail = step(start, entry, traversed);
   try {
     window.sessionStorage.setItem(KEY, JSON.stringify(trail));
   } catch {

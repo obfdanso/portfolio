@@ -31,6 +31,35 @@ test.describe("back button", () => {
     await expect(page).toHaveURL(/\/$/);
   });
 
+  test("goes where its name says after returning to a page by a link", async ({ page }) => {
+    // Home, About, Resume, then About again by its link: a new page on top
+    // of the stack, not a step back. The button used to say "Back to Home"
+    // here and then go to Resume.
+    await page.goto("/");
+    await sidebar(page, "About");
+    await expect(page).toHaveURL(/\/about$/);
+    await sidebar(page, "Resume");
+    await expect(page).toHaveURL(/\/resume$/);
+    await sidebar(page, "About");
+    await expect(page).toHaveURL(/\/about$/);
+
+    await expect(back(page)).toHaveAccessibleName("Back to Resume");
+    await back(page).click();
+    await expect(page).toHaveURL(/\/resume$/);
+  });
+
+  test("the browser's own back button steps the name back too", async ({ page }) => {
+    await page.goto("/");
+    await sidebar(page, "About");
+    await expect(page).toHaveURL(/\/about$/);
+    await sidebar(page, "Resume");
+    await expect(page).toHaveURL(/\/resume$/);
+
+    await page.goBack();
+    await expect(page).toHaveURL(/\/about$/);
+    await expect(back(page)).toHaveAccessibleName("Back to Home");
+  });
+
   test("names a case study by its title", async ({ page }) => {
     await page.goto("/projects");
     await page
