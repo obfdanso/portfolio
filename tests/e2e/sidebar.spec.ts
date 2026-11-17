@@ -166,6 +166,18 @@ test.describe("mobile top bar", () => {
     await expect(page.getByRole("link", { name: "Projects", exact: true })).toBeHidden();
   });
 
+  test("closes the menu when the name in the top bar is tapped", async ({ page }) => {
+    await page.goto("/about");
+    await page.getByRole("button", { name: /open menu/i }).click();
+    await page.getByRole("banner").getByRole("link", { name: "Danso", exact: true }).click();
+
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole("button", { name: /open menu/i })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
   test("closes the menu after navigating", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: /open menu/i }).click();

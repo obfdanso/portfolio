@@ -114,7 +114,13 @@ export function SiteSidebar() {
       {/* Mobile: the same panel collapses to a top bar with a disclosure. */}
       <header className="sticky top-0 z-50 border-b border-fg-muted/12 bg-ground/80 backdrop-blur-xl md:hidden">
         <div className="flex items-center justify-between px-5 py-3.5">
-          <Link href="/" className="font-display text-step-1 font-semibold tracking-tight">
+          <Link
+            href="/"
+            // The layout keeps this bar mounted across pages, so an open
+            // menu would stay open over the home page.
+            onClick={() => setOpen(false)}
+            className="font-display text-step-1 font-semibold tracking-tight"
+          >
             {SITE.shortName}
           </Link>
           <button
