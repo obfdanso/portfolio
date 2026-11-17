@@ -60,6 +60,29 @@ describe("POST /api/contact, sending", () => {
     expect(response.headers.get("location")).toBe("http://localhost/contact/sent");
   });
 
+  it("answers a failed form post with a page a person can read, not JSON", async () => {
+    // The form skips the browser's own validation, so without JavaScript a
+    // mistyped email reaches the API, and its answer is what the visitor sees.
+    const response = await POST(postForm({ ...VALID, email: "not-an-email", website: "" }));
+    expect(response.status).toBe(400);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    const page = await response.text();
+    expect(page).toContain("Please enter a valid email address");
+    expect(page).toContain('href="/contact"');
+  });
+
+  it("tells a form post in a page when the email service fails", async () => {
+    send.mockResolvedValue({
+      data: null,
+      error: { name: "invalid_api_key", message: "API key is invalid" },
+      headers: null,
+    });
+    const response = await POST(postForm({ ...VALID, website: "" }));
+    expect(response.status).toBe(502);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(await response.text()).toContain("Could not send the message");
+  });
+
   it("never claims success when Resend rejects the message", async () => {
     // Resend reports rejections in the result instead of throwing.
     send.mockResolvedValue({
