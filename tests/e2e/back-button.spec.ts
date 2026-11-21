@@ -50,10 +50,14 @@ test.describe("back button", () => {
 
   test("the browser's own back button steps the name back too", async ({ page }) => {
     await page.goto("/");
+    // Wait for each page to settle (its back button named) before moving on:
+    // clicking on before a page lands can leave it out of history entirely.
     await sidebar(page, "About");
     await expect(page).toHaveURL(/\/about$/);
+    await expect(back(page)).toHaveAccessibleName("Back to Home");
     await sidebar(page, "Resume");
     await expect(page).toHaveURL(/\/resume$/);
+    await expect(back(page)).toHaveAccessibleName("Back to About");
 
     await page.goBack();
     await expect(page).toHaveURL(/\/about$/);
