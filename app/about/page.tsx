@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `${SITE.name}, front-end developer.`,
+  description: `${SITE.name}, systems and software developer.`,
   alternates: { canonical: "/about" },
 };
 
@@ -24,7 +24,7 @@ export default function AboutPage() {
       <div className="container-page grid gap-12 py-16 md:grid-cols-[1fr_17rem]">
         <div>
           <p className="text-step-1">
-            {`I'm ${SITE.name}, a front-end developer based in Accra, Ghana. I'm in my final year of a computer science degree at KNUST.`}
+            {`I'm ${SITE.name}, a systems and software developer based in Accra, Ghana. I'm in my final year of a computer science degree at KNUST.`}
           </p>
           <p className="mt-5 text-fg-muted">
             {

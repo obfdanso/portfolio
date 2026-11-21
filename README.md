@@ -1,6 +1,6 @@
 # danso.dev
 
-The portfolio of Danso Daniel Kwaku Arnan, a front-end developer based in Accra.
+The portfolio of Danso Daniel Kwaku Arnan, a systems and software developer based in Accra.
 It presents his front-end projects, each with a written case study, plus a
 skills page, an about page, a resume and a contact form.
 
