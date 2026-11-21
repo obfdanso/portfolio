@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import { now } from "@/content/now";
 import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
@@ -77,6 +78,21 @@ export default function AboutPage() {
               </p>
             </div>
           )}
+
+          <section
+            aria-labelledby="now-heading"
+            className="mt-6 rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
+          >
+            <h2 id="now-heading" className="font-mono text-step-xs uppercase text-fg-muted">
+              Now
+            </h2>
+            <ul className="mt-3 space-y-2 text-step-xs">
+              {now.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className="mt-4 font-mono text-step-xs text-fg-muted">Updated {now.updated}</p>
+          </section>
         </aside>
       </div>
     </>
