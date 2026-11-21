@@ -45,7 +45,7 @@ describe("parentOf", () => {
 
 describe("nameOf", () => {
   it("uses the sidebar names, and a case study's heading", () => {
-    expect(nameOf("/", "Front-end developer building fast, accessible interfaces.")).toBe("Home");
+    expect(nameOf("/", "Systems and software developer, from interface to network.")).toBe("Home");
     expect(nameOf("/skills", "Beyond the front end")).toBe("Skills");
     expect(nameOf("/projects/pos", " POS ")).toBe("POS");
   });

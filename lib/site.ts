@@ -1,7 +1,7 @@
 export const SITE = {
   name: "Danso Daniel Kwaku Arnan",
   shortName: "Danso",
-  role: "Front-end Developer",
+  role: "Systems and Software Developer",
   email: "ddanso3000@gmail.com",
   github: "https://github.com/obfdanso",
   // The address Vercel serves; danso.dev redirects here. Canonical tags, the

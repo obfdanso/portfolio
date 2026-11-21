@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { HeroHeadline } from "@/components/hero-headline";
 
-const TEXT = "Front-end developer building fast, accessible interfaces.";
+const TEXT = "Systems and software developer, from interface to network.";
 
 describe("HeroHeadline", () => {
   it("reads as the whole sentence", () => {
@@ -13,8 +13,8 @@ describe("HeroHeadline", () => {
   it("wraps each word with its place in the stagger", () => {
     const { container } = render(<HeroHeadline text={TEXT} />);
     const words = container.querySelectorAll(".hero-word__inner");
-    expect(words).toHaveLength(6);
-    expect((words[5] as HTMLElement).style.getPropertyValue("--word-index")).toBe("5");
-    expect(words[5].textContent).toBe("interfaces.");
+    expect(words).toHaveLength(8);
+    expect((words[7] as HTMLElement).style.getPropertyValue("--word-index")).toBe("7");
+    expect(words[7].textContent).toBe("network.");
   });
 });

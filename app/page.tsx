@@ -34,13 +34,14 @@ export default function HomePage() {
         <MeshGradient className="mesh--scroll-linked mesh--follow" />
         <HeroGreeting>
           <HeroHeadline
-            text="Front-end developer building fast, accessible interfaces."
+            text="Systems and software developer, from interface to network."
             className="enter enter--solid max-w-[15ch] text-step-5"
             style={stagger(0)}
           />
 
           <p className="enter mt-6 max-w-xl text-step-1 text-fg-muted" style={stagger(80)}>
-            I build interfaces in React and TypeScript.
+            I build front ends in React and TypeScript, backends in Node.js and PostgreSQL, and
+            networked tools in C++.
           </p>
 
           <div className="enter mt-10 flex flex-wrap gap-4" style={stagger(160)}>

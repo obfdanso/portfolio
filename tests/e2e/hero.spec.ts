@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const TEXT = "Front-end developer building fast, accessible interfaces.";
+const TEXT = "Systems and software developer, from interface to network.";
 
 test("the headline reads as one sentence", async ({ page }) => {
   await page.goto("/");
@@ -20,7 +20,7 @@ test("the headline reads as one sentence", async ({ page }) => {
 test("the words rise on transform only, never fading", async ({ page }) => {
   await page.goto("/");
   const words = page.locator(".hero-word__inner");
-  await expect(words).toHaveCount(6);
+  await expect(words).toHaveCount(TEXT.split(" ").length);
   await expect(words.first()).toHaveCSS("animation-name", "word-rise");
   const fades = await words
     .first()

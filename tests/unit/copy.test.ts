@@ -5,8 +5,8 @@ import { loadProjects } from "@/lib/content";
 import { SITE } from "@/lib/site";
 
 describe("site copy", () => {
-  it("presents Danso as a front-end developer", () => {
-    expect(SITE.role).toBe("Front-end Developer");
+  it("presents Danso as a systems and software developer", () => {
+    expect(SITE.role).toBe("Systems and Software Developer");
   });
 
   it("spells front end one way everywhere", () => {
