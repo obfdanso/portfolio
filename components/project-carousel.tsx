@@ -110,6 +110,11 @@ export function ProjectSlide({
             </Link>
           </Heading>
         </ViewTransition>
+        {/* Read straight after the name, shown on its own line under the
+            actions, so a skimming visitor knows what each project is. */}
+        <p className="order-last max-w-2xl basis-full text-step-xs text-fg-muted">
+          {project.summary}
+        </p>
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/projects/${project.slug}`}
