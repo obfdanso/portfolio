@@ -34,7 +34,7 @@ export default function AboutPage() {
           </p>
           <p className="mt-5 text-fg-muted">
             {
-              "Beyond the front end, I have a working knowledge of backend development and databases, and I can query databases with SQL. I know networking fundamentals well, and I'm proficient with AI coding tools, which I use to work faster. The details are on "
+              "Beyond the front end, I have a working knowledge of backend development and databases, and I can query databases with SQL. I know networking fundamentals well, and I use AI tools like Claude and Gemini for research and learning. The details are on "
             }
             <Link href="/skills" className="link-grow text-accent">
               my skills page

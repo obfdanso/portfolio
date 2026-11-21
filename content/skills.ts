@@ -63,8 +63,8 @@ export const skills: SkillSection[] = [
     title: "AI tools",
     level: "Proficient",
     statement:
-      "I use AI coding tools to work faster, and I check what they produce the way I'd check a teammate's code. I built this site with Claude Code. I made the design calls and sent back the changes I didn't like.",
-    tags: ["Claude Code", "Cursor", "GitHub Copilot", "Gemini"],
+      "I use Claude for research and for keeping up with new tools and practices in the industry, and Gemini for research and explaining unfamiliar code. I check what they produce the way I would check a teammate's work.",
+    tags: ["Claude", "Gemini"],
     evidence: [
       { slug: "intercli", note: "Built with an AI assistant throughout" },
       { slug: "smartsocket", note: "Polished with an AI assistant" },

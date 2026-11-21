@@ -21,7 +21,7 @@ type Resume = {
 
 export const resume: Resume = {
   summary:
-    "Systems and software developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and proficiency with some AI coding tools.",
+    "Systems and software developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and proficiency with AI tools for research and learning.",
 
   education: [
     {
@@ -94,7 +94,7 @@ export const resume: Resume = {
       group: "Networking",
       items: ["TCP/IP and the OSI model", "IP addressing and subnetting", "routing and switching"],
     },
-    { group: "AI tools", items: ["Claude Code", "Cursor", "GitHub Copilot", "Gemini"] },
+    { group: "AI tools", items: ["Claude", "Gemini"] },
   ],
 
   pdfPath: "/Danso_Daniel.pdf",
