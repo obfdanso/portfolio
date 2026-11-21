@@ -38,10 +38,12 @@ describe("skills content", () => {
     expect(skills.map((s) => s.id)).toEqual(["backend", "databases", "networking", "ai-tools"]);
   });
 
-  it("gives every section a valid level and at least one piece of evidence", () => {
+  it("gives every section a valid level, and evidence for all but AI tools", () => {
     for (const s of skills) {
       expect(SKILL_LEVELS, s.id).toContain(s.level);
-      expect(s.evidence.length, s.id).toBeGreaterThan(0);
+      // Danso uses AI tools for research and learning, so no project is listed.
+      if (s.id === "ai-tools") expect(s.evidence, s.id).toEqual([]);
+      else expect(s.evidence.length, s.id).toBeGreaterThan(0);
       expect(s.tags.length, s.id).toBeGreaterThan(0);
     }
   });

@@ -49,13 +49,15 @@ export function SkillSection({
           ))}
         </ul>
 
-        <ul aria-label={`${section.title} evidence`} className="mt-8 grid gap-4 sm:grid-cols-2">
-          {evidence.map((item) => (
-            <li key={`${item.href}-${item.note}`}>
-              <EvidenceCard evidence={item} />
-            </li>
-          ))}
-        </ul>
+        {evidence.length > 0 && (
+          <ul aria-label={`${section.title} evidence`} className="mt-8 grid gap-4 sm:grid-cols-2">
+            {evidence.map((item) => (
+              <li key={`${item.href}-${item.note}`}>
+                <EvidenceCard evidence={item} />
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   );

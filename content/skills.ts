@@ -65,9 +65,7 @@ export const skills: SkillSection[] = [
     statement:
       "I use Claude for research and for keeping up with new tools and practices in the industry, and Gemini for research and explaining unfamiliar code. I check what they produce the way I would check a teammate's work.",
     tags: ["Claude", "Gemini"],
-    evidence: [
-      { slug: "intercli", note: "Built with an AI assistant throughout" },
-      { slug: "smartsocket", note: "Polished with an AI assistant" },
-    ],
+    // No project evidence: these are research and learning tools, not part of a build.
+    evidence: [],
   },
 ];

@@ -35,8 +35,6 @@ test.describe("skills page", () => {
       ["Backend", /POS/, "/projects/pos"],
       ["Databases and SQL", /POS/, "/projects/pos"],
       ["Networking", /intercli/, "/projects/intercli"],
-      ["AI tools", /intercli/, "/projects/intercli"],
-      ["AI tools", /Smart Socket/, "/projects/smartsocket"],
     ];
     for (const [section, name, href] of expected) {
       await expect(
