@@ -95,7 +95,11 @@ export function record(entry: TrailEntry): void {
     if (arrivedFromElsewhere()) start = [];
   }
   const traversed = traversedTo === entry.path;
-  traversedTo = null;
+  // A page can record itself after the browser has already gone back past it
+  // (back pressed the moment a link landed). That late record is for a page
+  // no longer shown, so it must not use up the note that history moved, or
+  // the page back is treated as a fresh visit and the button names the wrong page.
+  if (entry.path === window.location.pathname) traversedTo = null;
   const trail = step(start, entry, traversed);
   try {
     window.sessionStorage.setItem(KEY, JSON.stringify(trail));
