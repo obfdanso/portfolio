@@ -76,7 +76,9 @@ test("the no-JavaScript contact form still posts", async ({ browser }) => {
   const posted = page.waitForRequest(
     (request) => request.url().endsWith("/api/contact") && request.method() === "POST",
   );
-  await page.locator('form button[type="submit"]').click();
+  // Submit with Enter rather than clicking: the site's smooth scrolling keeps
+  // the button moving while Playwright scrolls to it, which made clicks flaky.
+  await page.press('input[name="email"]', "Enter");
   await posted;
 
   await context.close();
