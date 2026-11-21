@@ -19,8 +19,8 @@ export function OtherSkillsCta({ className }: { className?: string }) {
       )}
     >
       <p className="max-w-xl text-fg-muted">
-        Front end is my focus, but I also know my way around backends, databases, networking and
-        some AI tools.
+        Interfaces are where I started. I also build backends and databases, work with networks, and
+        use AI coding tools.
       </p>
       <Link
         href="/skills"
