@@ -24,7 +24,7 @@ test("every case study header uses the site's own colours", async ({ page }) => 
 test("links MediSpace to its live site", async ({ page }) => {
   await page.goto("/projects/medispace");
   const link = page.getByRole("link", { name: /live site/i }).first();
-  await expect(link).toHaveAttribute("href", "https://medi-space-xzz7.vercel.app");
+  await expect(link).toHaveAttribute("href", "https://medi-space.vercel.app");
 });
 
 test("offers no live link for a repo-only project", async ({ page }) => {
