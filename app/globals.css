@@ -1502,6 +1502,24 @@ button,
   transform: scale(1.03);
 }
 
+/* A slide arriving in the middle settles in from a slight zoom. On the
+   separate `scale` property, so this fill never overrides the hover zoom on
+   `transform` above; the two simply compose. */
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__slide[data-current] .carousel__media img {
+    animation: cover-settle 1200ms var(--ease-brand) both;
+  }
+}
+
+@keyframes cover-settle {
+  from {
+    scale: 1.06;
+  }
+  to {
+    scale: 1;
+  }
+}
+
 .carousel__dot {
   display: grid;
   place-items: center;
