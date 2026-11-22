@@ -34,8 +34,6 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <article>
-      {/* Fills across the top of the window as the case study is read. */}
-      <div aria-hidden="true" className="reading-progress" />
       <PageHeader as="header">
         <p className="enter text-step-xs text-fg-muted">
           {project.timeframe} · {project.contribution}

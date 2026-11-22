@@ -140,14 +140,3 @@ test("bitby's coming-soon panel sits below its showcase", async ({ page }) => {
   const panel = await page.getByText(/screen recording coming soon/i).boundingBox();
   expect(panel!.y).toBeGreaterThan(showcase!.y + showcase!.height);
 });
-
-test("the reading bar fills as the case study scrolls", async ({ page }) => {
-  await page.goto("/projects/medispace");
-  const bar = page.locator(".reading-progress");
-  const width = () => bar.evaluate((el) => el.getBoundingClientRect().width);
-  expect(await width()).toBeLessThan(5);
-  await page.evaluate(() =>
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
-  );
-  await expect.poll(width).toBeGreaterThan(page.viewportSize()!.width * 0.95);
-});
