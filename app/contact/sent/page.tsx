@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
+import { SentCheck } from "@/components/sent-check";
 
 // Where the contact API sends a form that posted without JavaScript, once
 // the email is away. A page of its own rather than /contact?sent=1: reading
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 export default function ContactSentPage() {
   return (
     <PageHeader>
+      <SentCheck className="mb-6 size-12" />
       <h1 className="enter enter--solid text-step-4">Message sent</h1>
       <p className="mt-5 max-w-xl text-fg-muted">
         Thank you. I will reply to the address you gave.

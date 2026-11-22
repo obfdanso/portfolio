@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { contactSchema } from "@/lib/contact-schema";
+import { SentCheck } from "@/components/sent-check";
 
 type Status =
   { kind: "idle" } | { kind: "sending" } | { kind: "sent" } | { kind: "error"; message: string };
@@ -54,7 +55,11 @@ export function ContactForm() {
 
   if (status.kind === "sent") {
     return (
-      <p role="status" className="rounded-xl border border-accent/40 bg-surface/40 p-6">
+      <p
+        role="status"
+        className="flex items-center gap-4 rounded-xl border border-accent/40 bg-surface/40 p-6"
+      >
+        <SentCheck />
         Message sent. I will reply to the address you gave.
       </p>
     );

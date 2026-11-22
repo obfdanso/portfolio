@@ -679,6 +679,35 @@ button,
   }
 }
 
+/* Contact: the ring, then the tick, draw themselves once a message is sent.
+   Drawn in full straight away under reduced motion. */
+.sent-check circle,
+.sent-check path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sent-check circle {
+    animation: check-draw 600ms var(--ease-brand) both;
+  }
+
+  .sent-check path {
+    animation: check-draw 400ms var(--ease-brand) 450ms both;
+  }
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
 /* Text links: the underline grows from the left rather than snapping on. */
 .link-grow {
   background-image: linear-gradient(currentColor, currentColor);
