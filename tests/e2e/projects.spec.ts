@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { getFrontendProjects } from "@/lib/content";
+import { loadProjects } from "@/lib/content";
 import { waitForHydration } from "./helpers/hydration";
 
 // Read from the content folder by category, so adding a project needs no test
 // edits. intercli is "other" and appears only on the skills page.
-const PROJECT_COUNT = getFrontendProjects().length;
+const PROJECT_COUNT = loadProjects().length;
 
 /** The filter is folded behind a "Stack" pill; open it before using it. */
 const openFilter = (page: import("@playwright/test").Page) =>
@@ -57,7 +57,7 @@ test.describe("project index", () => {
     await page.getByRole("button", { name: "TypeScript", exact: true }).click();
     // Only the projects that use the tag remain. The filter updates inside a
     // view transition, so wait for it to settle.
-    const typescript = getFrontendProjects().filter((p) => p.stack.includes("TypeScript"));
+    const typescript = loadProjects().filter((p) => p.stack.includes("TypeScript"));
     const shown = page.getByRole("article");
     await expect(shown).toHaveCount(typescript.length);
     const titles = await shown.locator("h2").allTextContents();

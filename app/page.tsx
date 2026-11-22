@@ -9,7 +9,7 @@ import { TechMarquee } from "@/components/tech-marquee";
 import { ProjectCarousel } from "@/components/project-carousel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionNumber } from "@/components/ui/section-number";
-import { getFrontendProjects } from "@/lib/content";
+import { loadProjects } from "@/lib/content";
 import { OtherSkillsCta } from "@/components/other-skills-cta";
 
 /** Staggered entrance delay, in the order the eye reads down the hero. */
@@ -20,12 +20,11 @@ const stagger = (ms: number) => ({ "--enter-delay": `${ms}ms` }) as CSSPropertie
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
-  // Front-end work only; the other skills are one click away, on /skills.
-  // Featured first, then by order.
-  const frontend = getFrontendProjects();
+  // Every project, front end and systems alike. Featured first, then by order.
+  const all = loadProjects();
   const projects = [
-    ...frontend.filter((project) => project.featured),
-    ...frontend.filter((project) => !project.featured),
+    ...all.filter((project) => project.featured),
+    ...all.filter((project) => !project.featured),
   ];
 
   return (

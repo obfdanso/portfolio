@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { getFrontendProjects } from "@/lib/content";
+import { loadProjects } from "@/lib/content";
 import { recordTransitions, recorded } from "./helpers/view-transitions";
 
-const TS_COUNT = getFrontendProjects().filter((p) => p.stack.includes("TypeScript")).length;
+const TS_COUNT = loadProjects().filter((p) => p.stack.includes("TypeScript")).length;
 
 /** The filter is folded behind a "Stack" pill; open it before using it. */
 const openFilter = (page: import("@playwright/test").Page) =>
@@ -33,7 +33,7 @@ test.describe("animated project filter", () => {
       "aria-pressed",
       "true",
     );
-    const count = getFrontendProjects().filter((p) => p.stack.includes("JavaScript")).length;
+    const count = loadProjects().filter((p) => p.stack.includes("JavaScript")).length;
     await expect(page.getByRole("article")).toHaveCount(count);
   });
 

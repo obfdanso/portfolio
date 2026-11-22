@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getFrontendProjects } from "@/lib/content";
+import { loadProjects } from "@/lib/content";
 import { ProjectList } from "@/components/project-list";
 import { OtherSkillsCta } from "@/components/other-skills-cta";
 import { PageHeader } from "@/components/page-header";
@@ -20,7 +20,7 @@ export default function ProjectsPage() {
         </p>
       </PageHeader>
       <div className="py-16">
-        <ProjectList projects={getFrontendProjects()} />
+        <ProjectList projects={loadProjects()} />
         <div className="container-page">
           <OtherSkillsCta className="mt-20" />
         </div>

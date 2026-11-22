@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
-import { getFrontendProjects } from "@/lib/content";
+import { loadProjects } from "@/lib/content";
 
-const COUNT = getFrontendProjects().length;
+const COUNT = loadProjects().length;
 
 const carousel = (page: Page) => page.getByRole("region", { name: "Selected work" });
 const currentDot = (page: Page) => carousel(page).locator(".carousel__dot[aria-current]");
@@ -35,7 +35,7 @@ test.describe("project carousel", () => {
 
   test("the dots go straight to a project", async ({ page }) => {
     await showCarousel(page);
-    const last = getFrontendProjects().at(-1)!.title;
+    const last = loadProjects().at(-1)!.title;
     await carousel(page)
       .getByRole("button", { name: `Show ${last}` })
       .click();

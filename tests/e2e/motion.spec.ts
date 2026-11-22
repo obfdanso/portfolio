@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { getFrontendProjects } from "@/lib/content";
+import { loadProjects } from "@/lib/content";
 
 // Entrance animations are covered in animation.spec.ts, across every route.
 // This file covers the scroll-driven reveal, the scroll-linked hue shift, and
@@ -75,5 +75,5 @@ test("Selected work lists the front-end projects and not intercli", async ({ pag
     ).toHaveCount(1);
   }
   await expect(work.getByRole("link", { name: "intercli", exact: true })).toHaveCount(0);
-  await expect(work.getByRole("article")).toHaveCount(getFrontendProjects().length);
+  await expect(work.getByRole("article")).toHaveCount(loadProjects().length);
 });
