@@ -21,7 +21,7 @@ type Resume = {
 
 export const resume: Resume = {
   summary:
-    "Systems and software developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and proficiency with AI tools for research and learning.",
+    "Systems and software developer building interfaces in React and TypeScript, with a working knowledge of backend development and SQL databases, good knowledge of networking fundamentals, and AI tools for research.",
 
   education: [
     {
