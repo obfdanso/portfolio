@@ -639,6 +639,46 @@ button,
   }
 }
 
+/* The about page's Now card: a small accent dot with a ring that pings
+   outward on the ambient-loop timing, to say the card is kept current. The
+   dot stays and only the ring stops under reduced motion. */
+.live-dot {
+  position: relative;
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--color-accent);
+}
+
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: live-ping var(--duration-pulse) ease-out infinite;
+}
+
+@keyframes live-ping {
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70%,
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Text links: the underline grows from the left rather than snapping on. */
 .link-grow {
   background-image: linear-gradient(currentColor, currentColor);

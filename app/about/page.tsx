@@ -83,7 +83,11 @@ export default function AboutPage() {
             aria-labelledby="now-heading"
             className="mt-6 rounded-2xl border border-fg-muted/15 bg-surface/40 p-6"
           >
-            <h2 id="now-heading" className="font-mono text-step-xs uppercase text-fg-muted">
+            <h2
+              id="now-heading"
+              className="flex items-center gap-2 font-mono text-step-xs uppercase text-fg-muted"
+            >
+              <span aria-hidden="true" className="live-dot" />
               Now
             </h2>
             <ul className="mt-3 space-y-2 text-step-xs">
