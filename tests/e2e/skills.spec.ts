@@ -4,7 +4,6 @@ const SECTIONS = [
   { title: "Backend", level: "Working knowledge" },
   { title: "Databases and SQL", level: "Working knowledge" },
   { title: "Networking", level: "Good knowledge" },
-  { title: "AI tools", level: "Proficient" },
 ];
 
 test.describe("skills page", () => {

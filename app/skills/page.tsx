@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/page-header";
 export const metadata: Metadata = {
   title: "Skills",
   description:
-    "Backend, databases and SQL, networking and AI tools, linked to the projects that use them.",
+    "Backend, databases and SQL, and networking, each linked to the projects that use them.",
   alternates: { canonical: "/skills" },
 };
 
@@ -25,7 +25,7 @@ export default function SkillsPage() {
         <h1 className="enter enter--solid text-step-4">Beyond the front end</h1>
         <p className="mt-5 max-w-2xl text-fg-muted">
           {
-            "The projects on this site lean toward front-end work. These are the skills behind the rest: backend, databases, networking, and the AI tools I learn with. Where a project uses one, it is linked."
+            "The projects on this site lean toward front-end work. These are the skills behind the rest: backend, databases and networking, each shown next to a project that uses it."
           }
         </p>
       </PageHeader>

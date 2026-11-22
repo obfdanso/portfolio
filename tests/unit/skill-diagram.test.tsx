@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { SkillDiagram } from "@/components/skill-diagram";
 
-const IDS = ["backend", "databases", "networking", "ai-tools"];
+const IDS = ["backend", "databases", "networking"];
 
 describe("SkillDiagram", () => {
   it.each(IDS)("draws a decorative diagram for %s", (id) => {

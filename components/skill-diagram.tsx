@@ -151,30 +151,8 @@ function Networking() {
   );
 }
 
-// AI tools: a prompt becomes a draft, the draft gets reviewed (the check),
-// and either ships or goes back for another pass.
-function AiTools() {
-  const line = "M 55 60 L 385 60";
-  const loop = "M 275 38 C 260 0, 180 0, 165 38";
-  return (
-    <>
-      <path className="skill-diagram__link" d={line} />
-      <path className="skill-diagram__link" d={loop} />
-      <Packet path={line} delay="0ms" />
-      <Packet path={loop} delay="1400ms" />
-      <Node x={55} label="prompt" width={78} />
-      <Node x={165} label="draft" width={78} n={1} />
-      <Node x={275} label="review" accent width={78} n={2}>
-        <path className="skill-diagram__check" d="M -6 13 l 4 4 l 8 -9" />
-      </Node>
-      <Node x={385} label="ship" width={78} n={3} />
-    </>
-  );
-}
-
 const DIAGRAMS: Record<string, () => ReactNode> = {
   backend: Backend,
   databases: Databases,
   networking: Networking,
-  "ai-tools": AiTools,
 };

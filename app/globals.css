@@ -955,8 +955,7 @@ button,
   }
 }
 
-.skill-diagram__lock,
-.skill-diagram__check {
+.skill-diagram__lock {
   fill: none;
   stroke: var(--color-accent);
   stroke-width: 1.5;

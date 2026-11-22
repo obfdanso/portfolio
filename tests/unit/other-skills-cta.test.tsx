@@ -12,8 +12,6 @@ describe("OtherSkillsCta", () => {
 
   it("says what is on the other side", () => {
     render(<OtherSkillsCta />);
-    expect(
-      screen.getByText(/backends and databases, work with networks, and use AI coding tools/),
-    ).toBeDefined();
+    expect(screen.getByText(/backends and databases, and work with networks/)).toBeDefined();
   });
 });

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { skills } from "@/content/skills";
 
 // The line that draws itself down the left as you scroll, on every long page
 // (Danso's call, 2026-10-12). It replaced the reading bar along the top.
@@ -38,7 +39,7 @@ test.describe("scroll line", () => {
     expect(caseHeadings).toBeGreaterThan(3);
     await expect(page.locator("main .scroll-entry > .scroll-dot")).toHaveCount(caseHeadings);
     await page.goto("/skills");
-    await expect(page.locator("main section .scroll-dot")).toHaveCount(4);
+    await expect(page.locator("main section .scroll-dot")).toHaveCount(skills.length);
     await page.goto("/resume");
     expect(await dotTimings()).toBeGreaterThan(0);
   });

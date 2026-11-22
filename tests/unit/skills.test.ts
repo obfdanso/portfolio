@@ -35,15 +35,13 @@ describe("resolveEvidence", () => {
 
 describe("skills content", () => {
   it("lists the four sections in order", () => {
-    expect(skills.map((s) => s.id)).toEqual(["backend", "databases", "networking", "ai-tools"]);
+    expect(skills.map((s) => s.id)).toEqual(["backend", "databases", "networking"]);
   });
 
-  it("gives every section a valid level, and evidence for all but AI tools", () => {
+  it("gives every section a valid level and at least one piece of evidence", () => {
     for (const s of skills) {
       expect(SKILL_LEVELS, s.id).toContain(s.level);
-      // Danso uses AI tools for research and learning, so no project is listed.
-      if (s.id === "ai-tools") expect(s.evidence, s.id).toEqual([]);
-      else expect(s.evidence.length, s.id).toBeGreaterThan(0);
+      expect(s.evidence.length, s.id).toBeGreaterThan(0);
       expect(s.tags.length, s.id).toBeGreaterThan(0);
     }
   });
@@ -60,7 +58,6 @@ describe("skills content", () => {
       backend: "Working knowledge",
       databases: "Working knowledge",
       networking: "Good knowledge",
-      "ai-tools": "Proficient",
     });
   });
 });

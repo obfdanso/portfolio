@@ -19,8 +19,7 @@ export function OtherSkillsCta({ className }: { className?: string }) {
       )}
     >
       <p className="max-w-xl text-fg-muted">
-        Interfaces are where I started. I also build backends and databases, work with networks, and
-        use AI coding tools.
+        Interfaces are where I started. I also build backends and databases, and work with networks.
       </p>
       <Link
         href="/skills"
