@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, ViewTransition, type CSSProperties } from "react";
+import { useState, ViewTransition } from "react";
 import {
   AboutIcon,
   CloseIcon,
@@ -32,30 +32,19 @@ function isActive(pathname: string, href: string): boolean {
 function NavList({
   pathname,
   onNavigate,
-  deck = false,
+  glide = false,
 }: {
   pathname: string;
   onNavigate?: () => void;
-  /** Desktop sidebar: rest as a deck of cards, fan out on hover or focus. */
-  deck?: boolean;
+  /** Desktop sidebar: the highlight glides to the new page's link. */
+  glide?: boolean;
 }) {
-  const current = LINKS.findIndex(({ href }) => isActive(pathname, href));
-  // A deck needs a card to put in front: on a page with no link of its
-  // own, the links stay a plain list.
-  const stacked = deck && current >= 0;
   return (
-    <ul className={cn("flex flex-col gap-1", stacked && "nav-deck")}>
-      {LINKS.map(({ href, label, Icon }, index) => {
-        const active = index === current;
-        // In the deck every card slides up to the first slot (--i), and only
-        // the current page's card shows there.
+    <ul className="flex flex-col gap-1">
+      {LINKS.map(({ href, label, Icon }) => {
+        const active = isActive(pathname, href);
         return (
-          <li
-            key={href}
-            className={cn(stacked && "nav-deck__card")}
-            data-front={(stacked && active) || undefined}
-            style={stacked ? ({ "--i": index } as CSSProperties) : undefined}
-          >
+          <li key={href}>
             <Link
               href={href}
               onClick={onNavigate}
@@ -68,7 +57,7 @@ function NavList({
                 active ? "font-medium text-accent" : "text-fg-muted hover:text-fg",
               )}
             >
-              {active && deck && (
+              {active && glide && (
                 <ViewTransition name="nav-highlight" share="morph" default="none">
                   <span
                     aria-hidden="true"
@@ -105,7 +94,7 @@ export function SiteSidebar() {
         </Link>
 
         <nav className="mt-8 flex-1">
-          <NavList pathname={pathname} deck />
+          <NavList pathname={pathname} glide />
         </nav>
 
         <ThemeToggle />

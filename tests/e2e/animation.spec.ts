@@ -77,8 +77,6 @@ test("nav items respond to hover", async ({ page }) => {
   const nav = page.getByRole("complementary", { name: /main/i });
   const item = nav.getByRole("link", { name: "Projects", exact: true });
 
-  // The links rest folded in a deck; pointing at the list fans them out.
-  await nav.locator("nav ul").first().hover();
   await item.hover();
   await page.waitForTimeout(260);
   const transform = await item.evaluate((el) => getComputedStyle(el).transform);
