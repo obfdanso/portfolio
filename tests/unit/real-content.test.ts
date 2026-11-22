@@ -6,12 +6,12 @@ import { getFrontendProjects, loadProjects } from "@/lib/content";
 describe("real project content", () => {
   const projects = loadProjects();
 
-  it("loads and validates all three launch projects", () => {
+  it("loads and validates every project, in order", () => {
     expect(projects.map((p) => p.slug)).toEqual([
       "medispace",
+      "intercli",
       "pos",
       "bitby",
-      "intercli",
       "smartsocket",
     ]);
   });
