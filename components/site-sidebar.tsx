@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, ViewTransition } from "react";
+import { useState, ViewTransition, type CSSProperties } from "react";
 import {
   AboutIcon,
   CloseIcon,
@@ -40,11 +40,12 @@ function NavList({
   glide?: boolean;
 }) {
   return (
-    <ul className="flex flex-col gap-1">
-      {LINKS.map(({ href, label, Icon }) => {
+    <ul className={cn("flex flex-col gap-1", glide && "nav-stagger")}>
+      {LINKS.map(({ href, label, Icon }, index) => {
         const active = isActive(pathname, href);
         return (
-          <li key={href}>
+          // --i staggers the desktop links in, one after another, on first load.
+          <li key={href} style={glide ? ({ "--i": index } as CSSProperties) : undefined}>
             <Link
               href={href}
               onClick={onNavigate}

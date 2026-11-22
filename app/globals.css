@@ -577,6 +577,14 @@ button,
   transform: scale(1.12);
 }
 
+/* On first load the desktop links slide in one after another, just behind
+   the sidebar itself. The sidebar stays mounted across pages, so this plays
+   once per visit, not on every navigation. */
+.nav-stagger > li {
+  animation: enter-left var(--duration-slow) var(--ease-brand) both;
+  animation-delay: calc(120ms + var(--i, 0) * 40ms);
+}
+
 /* Text links: the underline grows from the left rather than snapping on. */
 .link-grow {
   background-image: linear-gradient(currentColor, currentColor);
@@ -612,6 +620,7 @@ button,
 
 @media (prefers-reduced-motion: reduce) {
   .enter,
+  .nav-stagger > li,
   .menu-pop {
     animation: none;
     opacity: 1;

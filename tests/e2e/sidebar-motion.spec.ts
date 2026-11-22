@@ -43,12 +43,18 @@ test.describe("sidebar links", () => {
     for (const route of ["/", "/resume", "/projects/pos", "/skills"]) {
       await page.goto(route);
       await page.mouse.move(900, 450);
-      expect(await spread(page), route).toBe(true);
       const nav = page.getByRole("complementary", { name: /main/i });
-      const opacities = await nav
-        .locator("nav li")
-        .evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity));
-      expect(opacities, route).toEqual(["1", "1", "1", "1"]);
+      // Polled: on load the links slide in one after another first.
+      await expect.poll(() => spread(page), route).toBe(true);
+      await expect
+        .poll(
+          () =>
+            nav
+              .locator("nav li")
+              .evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity)),
+          route,
+        )
+        .toEqual(["1", "1", "1", "1"]);
     }
   });
 });
