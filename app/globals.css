@@ -577,6 +577,28 @@ button,
   transform: scale(1.12);
 }
 
+/* Each icon moves its own way: the house lifts, the grid turns a quarter
+   (it looks the same after, so only the motion shows), the person leans in,
+   the page tilts. Inside no-preference so the reduced-motion reset below
+   never has to outrank these more specific selectors. */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-item[href="/"]:hover svg {
+    transform: translate3d(0, -2px, 0) scale(1.12);
+  }
+
+  .nav-item[href="/projects"]:hover svg {
+    transform: rotate(90deg) scale(1.12);
+  }
+
+  .nav-item[href="/about"]:hover svg {
+    transform: scale(1.2);
+  }
+
+  .nav-item[href="/resume"]:hover svg {
+    transform: rotate(-8deg) scale(1.12);
+  }
+}
+
 /* On first load the desktop links slide in one after another, just behind
    the sidebar itself. The sidebar stays mounted across pages, so this plays
    once per visit, not on every navigation. */
