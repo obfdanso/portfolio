@@ -1013,6 +1013,52 @@ button,
   }
 }
 
+/* As a diagram scrolls into view it assembles: the boxes pop in left to
+   right (--n), then the links between them fade in. Driven by the diagram's
+   own view timeline, so it scrubs with the scroll; absent where unsupported
+   and under reduced motion, where the diagram is simply there. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .skill-diagram {
+      view-timeline: --diagram block;
+    }
+
+    .skill-diagram__pop {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: diagram-pop linear both;
+      animation-timeline: --diagram;
+      animation-range: entry calc(10% + var(--n, 0) * 12%) entry calc(45% + var(--n, 0) * 12%);
+    }
+
+    .skill-diagram__link {
+      animation: diagram-fade linear both;
+      animation-timeline: --diagram;
+      animation-range: entry 50% entry 100%;
+    }
+  }
+}
+
+@keyframes diagram-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes diagram-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes packet-travel {
   from {
     offset-distance: 0%;

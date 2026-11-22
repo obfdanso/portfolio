@@ -42,12 +42,15 @@ function Node({
   label,
   accent = false,
   width = 72,
+  n = 0,
   children,
 }: {
   x: number;
   label: string;
   accent?: boolean;
   width?: number;
+  /** Its place, left to right, in the pop-in as the diagram scrolls into view. */
+  n?: number;
   children?: ReactNode;
 }) {
   return (
@@ -55,9 +58,12 @@ function Node({
       className={accent ? "skill-diagram__node skill-diagram__node--accent" : "skill-diagram__node"}
       transform={`translate(${x} 60)`}
     >
-      <rect x={-width / 2} y="-22" width={width} height="44" rx="9" />
-      <text y={children ? -5 : 4}>{label}</text>
-      {children}
+      {/* Inner group: the pop-in scales this, leaving the placement above alone. */}
+      <g className="skill-diagram__pop" style={{ "--n": n } as CSSProperties}>
+        <rect x={-width / 2} y="-22" width={width} height="44" rx="9" />
+        <text y={children ? -5 : 4}>{label}</text>
+        {children}
+      </g>
     </g>
   );
 }
@@ -76,12 +82,12 @@ function Backend() {
       <Packet path={right} delay="1400ms" back />
       <Packet path={left} delay="2100ms" back />
       <Node x={75} label="browser" />
-      <Node x={220} label="express" accent>
+      <Node x={220} label="express" accent n={1}>
         <text className="skill-diagram__glyph" y="13">
           {"{ }"}
         </text>
       </Node>
-      <Node x={365} label="postgres" />
+      <Node x={365} label="postgres" n={2} />
     </>
   );
 }
@@ -99,22 +105,24 @@ function Databases() {
       <Packet path={out} delay="1400ms" />
       <Node x={60} label="SELECT" />
       <g className="skill-diagram__node skill-diagram__table" transform="translate(220 60)">
-        <rect x="-54" y="-34" width="108" height="68" rx="8" />
-        <line x1="-54" y1="-20" x2="54" y2="-20" />
-        {[0, 1, 2, 3].map((row) => (
-          <rect
-            key={row}
-            className="skill-diagram__row"
-            x="-48"
-            y={-15 + row * 12}
-            width="96"
-            height="9"
-            rx="2"
-            style={{ animationDelay: `${row * 350}ms` }}
-          />
-        ))}
+        <g className="skill-diagram__pop" style={{ "--n": 1 } as CSSProperties}>
+          <rect x="-54" y="-34" width="108" height="68" rx="8" />
+          <line x1="-54" y1="-20" x2="54" y2="-20" />
+          {[0, 1, 2, 3].map((row) => (
+            <rect
+              key={row}
+              className="skill-diagram__row"
+              x="-48"
+              y={-15 + row * 12}
+              width="96"
+              height="9"
+              rx="2"
+              style={{ animationDelay: `${row * 350}ms` }}
+            />
+          ))}
+        </g>
       </g>
-      <Node x={380} label="rows" />
+      <Node x={380} label="rows" n={2} />
     </>
   );
 }
@@ -132,13 +140,13 @@ function Networking() {
       <Packet path={right} delay="1400ms" />
       <Packet path={left} delay="700ms" back />
       <Node x={80} label="client" width={68} />
-      <Node x={220} label="server" accent width={80}>
+      <Node x={220} label="server" accent width={80} n={1}>
         <path
           className="skill-diagram__lock"
           d="M -6 11 h 12 v 9 h -12 Z M -4 11 v -3 a 4 4 0 0 1 8 0 v 3"
         />
       </Node>
-      <Node x={360} label="client" width={68} />
+      <Node x={360} label="client" width={68} n={2} />
     </>
   );
 }
@@ -155,11 +163,11 @@ function AiTools() {
       <Packet path={line} delay="0ms" />
       <Packet path={loop} delay="1400ms" />
       <Node x={55} label="prompt" width={78} />
-      <Node x={165} label="draft" width={78} />
-      <Node x={275} label="review" accent width={78}>
+      <Node x={165} label="draft" width={78} n={1} />
+      <Node x={275} label="review" accent width={78} n={2}>
         <path className="skill-diagram__check" d="M -6 13 l 4 4 l 8 -9" />
       </Node>
-      <Node x={385} label="ship" width={78} />
+      <Node x={385} label="ship" width={78} n={3} />
     </>
   );
 }
